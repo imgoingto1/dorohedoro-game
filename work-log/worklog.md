@@ -39,7 +39,7 @@ turn the next sync into one "Update All".
 - Trading, player reports, mute/chat moderation, duels/matchmaking (and the MemoryStore work that depends on it).
 - Sound: no audio assets or sound-trigger system anywhere.
 - Item/move icons (`Items` has no `Icon` field), real equipment meshes, real Smoke VFX.
-- Lizard/Dinosaur forms still reskin the player's rig; `ScaleForm`/`BeastForm`/`SporeTrap` have no animation.
+- Lizard/Dinosaur forms still reskin the player's rig (all 16 Smoke moves have a cast animation as of 2026-09-24).
 - Grudge Monument — built, Jay wants it removed, not yet removed.
 - 13 missing MAP_3 props; unshared asset IDs (e.g. ColorMap 14565342511) causing permission errors.
 - `GhoulProgCheckNPC` floating with no floor — likely intentional, unconfirmed.
@@ -1853,3 +1853,34 @@ both places. Every Academy-only line that was dropped was fight-pit code, which 
 - `Controllers.Gui.Inventory` still logs "Infinite yield possible on GameUI" on slow loads (the
   2026-09-24 timeout pass covered Camera/Hotbar/HealthBar but not this one).
 - Neither place is saved by this pass (`SavePlace` isn't callable from Edit); Team Create syncs edits.
+
+## Last 3 Smoke move animations (2026-09-24)
+
+Jay: "check repo and do smoke move animations". The repo listed `SporeTrap`, `ScaleForm` and
+`BeastForm` as the only Smoke moves with no animation (the 2026-09-17 port covered 13/16). This pass
+fills those three the same way: an `Animation` in `ReplicatedStorage.Assets.Animations.Smoke.<Type>`
+plus a `TrackService.Play(..., "SmokeCast")` at Action priority in the move handler.
+
+| Move | Source (the "animation farm" place, 72078340292677) | AnimationId | Length |
+|---|---|---|---|
+| Mushroom.SporeTrap | `VollstandigAnimations.Power2.Downslam` | rbxassetid://133736526054969 | 0.82 s |
+| Lizard.ScaleForm | `SkillAnimations.Healing.SkillOvercharge` | rbxassetid://123765930470609 | 1.25 s |
+| Dinosaur.BeastForm | `SkillAnimations.Hakuda.SkillBeastialClaws` | rbxassetid://118739676730078 | 1.53 s |
+
+- Picked only full R6 rigs with no prop joints. Rejected `Ink.HandSlam` (numbered VFX-rig joints) and
+  `Horse.Transformation` (9.2 s, with a camera track).
+- Forms play the animation only on toggle-**on** and only if `Forms.enter` succeeded; toggling off
+  stays silent. `ScaleForm`/`BeastForm` now return the `Forms.enter` result through a local.
+- **Source note:** the animation farm looks like a copy of another game (`ServerStorage.CC.GameData`,
+  "spoofanimations" folders). All three IDs loaded in Play (`Loaded (186/186)`, track lengths read
+  back on the server), but Studio can be more lenient than a live server - check once on a live server
+  that they play.
+
+**Tested (Map + Combat, Play):** real `SmokeCast` remote casts. SporeTrap: -40 Smoke, trap placed,
+track `133736526054969` playing. ScaleForm: form Lizard, track `123765930470609`; a 2nd cast at 2.8 s
+was correctly refused by the 3 s cooldown, then it toggled off. BeastForm: scale 0.90 -> 1.62, -40
+Smoke, track `118739676730078`, finished within 1.9 s with idle still running; toggle-off restored
+0.90. SelfTest **38 passed / 0 failed / 0 warnings**. Jay's Smoke type restored to Mushroom.
+**Academy:** mirrored; the 3 scripts and all 16 Smoke animation IDs hash-identical to Map + Combat;
+Play boot `Loaded (186/186)`, the 3 tracks load, SelfTest **37 / 0 / 1 warning** (Rat, expected).
+**Not tested:** how they look by eye; a live server; interaction with a mid-swing M1.
