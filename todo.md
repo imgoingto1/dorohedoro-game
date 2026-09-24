@@ -4,6 +4,8 @@ Tasks and ideas grouped by area. Each item is tagged:
 
 - **[gap]** is a known gap already recorded in [`work-log/worklog.md`](work-log/worklog.md).
 - **[idea]** is a suggestion that has not been agreed. Per the standing rule in `CLAUDE.md`, ask Jay before building it.
+- **[requested]** was asked for directly by Jay. It is approved to work on, but details marked
+  "needs Jay's call" still have to be confirmed first.
 - **needs asset** means it can't be finished from code alone. It needs a model, texture,
   animation or sound uploaded or shared.
 
@@ -19,7 +21,26 @@ Tick items off here and log the work in the work log when done.
 - [ ] `Controllers.Gui.Inventory` still logs "Infinite yield possible on GameUI" on slow loads; give
       it the same timeout as Camera, Hotbar and HealthBar. **[gap]**
 
+## Weapons & items
+- [ ] **Store Knife**: a knife sold in a shop. **[requested]** Needs Jay's call: whether it's its
+      own weapon or a variant of the existing Dagger (which already has a full animation set),
+      which shop sells it, its price and stats.
+
+## Smoke types
+- [ ] **Time Smoke**: a new Smoke type built around time manipulation, like Doppio. **[requested]**
+      Hooks into `SmokeTypes`, `SmokeMoves` and `SmokeMoveService` like the other 7 types. Needs
+      Jay's call: its 2-3 moves, costs and cooldowns. Keep the moves original rather than copying
+      JoJo abilities.
+
+## Map
+- [ ] **Fix the Hole map**: it feels like an ordinary modern city rather than the anime's Hole.
+      **[requested]** Likely cause: much of it came from jjk's Shibuya chunks. Needs Jay's call on
+      art direction, with reference shots of what "anime-accurate" means (cramped hand-built
+      slum, smog, grime, signage). Big map and asset job; redo it on each place's own map.
+
 ## VFX
+- [ ] **New VFX across the game**: Smoke moves, hits, events and world effects. **[requested]**
+      needs asset. Covers the Smoke-move item below.
 - [ ] Replace the flat-colour `Kit.slash` / `Kit.burst` effects on all 16 Smoke moves with real
       particles, beams and trails, one signature look per Smoke type. **[gap]** needs asset
 - [ ] Port VFX from Hollow Lineage. This was skipped because some effects have 100+ parts; use
@@ -29,6 +50,8 @@ Tick items off here and log the work in the work log when done.
 - [ ] Environment art for Hell (currently built from basic parts). **[gap]** needs asset
 
 ## Animations
+- [ ] **Rework all animations**: the 7 weapon sets, the 13 Smoke move animations ported from
+      Hollow Lineage, and movement. **[requested]** needs asset
 - [ ] `Lizard.ScaleForm`, `Dinosaur.BeastForm` and `Mushroom.SporeTrap` have no animation. **[gap]**
 - [ ] Real Lizard and Dinosaur creature rigs and animations (the forms currently reskin the
       player's own rig). **[gap]** needs asset
@@ -39,6 +62,11 @@ Tick items off here and log the work in the work log when done.
 - [ ] Directional hit reactions and a posture-break stun animation. **[idea]**
 
 ## Atmosphere fixes
+- [ ] **Fix the rain**, which doesn't look good. Swap in a weather module's rain for the rain
+      events (ToxicRain etc.). **[requested]** Today's rain is `AtmosphereClient`'s
+      camera-follow `ParticleEmitter` (Rate 900 streaks plus `smoke_main.dds` mist). Keep it
+      compatible with the `AmbientFX` setting (it toggles emitters under `CurrentCamera`) and
+      with the Hell/BlueNight/GhostNight overrides, and check the module's licence.
 - [ ] Asset permission errors, e.g. ColorMap `14565342511` on the Underground Lab. Each asset
       has to be shared from its own asset page. **[gap]**
 - [ ] Restore the 13 missing MAP_3 props (kitchen items and 2 loose parts). **[gap]**
@@ -50,6 +78,9 @@ Tick items off here and log the work in the work log when done.
 - [ ] Decide the default for the Shadows setting per device (e.g. off on mobile). **[idea]**
 
 ## UI
+- [ ] **New UI**: a full redesign. **[requested]** The 2026-09-22/23 pass centralised colours and
+      fonts in `ReplicatedStorage.World.UITheme`, so a new look can start with the tokens there,
+      then layouts. Needs Jay's call on the style direction.
 - [ ] Item icons: `Items` has no `Icon` field. `InventoryClient` already has the one-line hook. **[gap]** needs asset
 - [ ] Smoke move icons in `SmokeMovesHud`, which currently shows colour swatches. **[gap]** needs asset
 - [x] ~~Decide the final HUD~~: `VitalsHud` replaced jjk's Player_Display bars (2026-09-24).
@@ -72,6 +103,11 @@ Tick items off here and log the work in the work log when done.
 - [ ] A mask per Smoke type, since masks are central to a sorcerer's identity in Dorohedoro.
       Keep the designs original, inspired by the series rather than copied from it. **[idea]** needs asset
 - [ ] Show the equipped mask in the inventory and character panel preview. **[idea]**
+
+## Sounds
+- [ ] **New sounds**: a full sound library for combat, Smoke casts, UI, world ambience and
+      events. **[requested]** needs asset. Build the sound-trigger hook service in Quick wins
+      first so sounds only need asset IDs filled in.
 
 ## Combat feel
 - [ ] Hit, block, parry and posture-break sound effects; this is the biggest missing feel
