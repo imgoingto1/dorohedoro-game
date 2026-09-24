@@ -1,6 +1,43 @@
 # Work Log — Map + Combat project
 
-A running list of everything done on this project, pulled from `PROJECT.md`.
+A running list of everything done on this project, pulled from `PROJECT.md`. Entries are
+chronological and kept as history; where a later entry superseded an earlier one, the earlier one
+carries an inline **Update** note rather than being deleted. For what the repo itself is for, see
+[`CLAUDE.md`](../CLAUDE.md).
+
+## Current state (as of 2026-09-23) — read this first
+
+**Places:** Map + Combat (87872916277829) and Zogan's Academy Grounds (127609270845586), same
+universe (GameId 10766477296), shared DataStores. Both kept at code parity; last clean `selftest`
+was 18 passed / 0 failed in both.
+
+**Built but never play-tested in a real match**
+- Progression level-ups ("Level up!" toast, WorldInfo Rank line) from PvP kill / quest / Pit clear.
+- Attribute/Smoke balance numbers (Jay: "seem very high" — first thing to dial back).
+- `!party` / `!clan` chat commands end to end; Rating moving on a real PvP kill; the kill-confirm visual.
+- NPC block-over-parry/dodge tuning — confirm posture actually breaks in a live fight.
+- Slide after a very brief (~0.05s) movement tap.
+
+**Waiting on a decision from Jay**
+- Whether the `Adv4` quest chain continues (`Adv5`+) — story call.
+- Zogan's has 0 staffed shops; Academy players have nowhere to spend Yen.
+- Tags have almost nothing to buy at high levels (Grave Keeper is the only sink).
+- M1 reach is tight (whiffs at 6 studs, lands at 4.3).
+- Spore Burst: 24 Smoke for 6.8 dmg vs M1's free 10.2 — check vs a group (AoE).
+- Holding LeftControl both fires Slide and arms the M1→Uppercut modifier.
+- `Lighting.Technology` — if Unified, ShadowMap is likely the biggest cheap perf win (can't read it from script).
+- Final HUD look: GameUI and jjk's Player_Display both draw a health bar/hotbar.
+
+**Not built / blocked**
+- Trading, player reports, mute/chat moderation, duels/matchmaking (and the MemoryStore work that depends on it).
+- Sound: no audio assets or sound-trigger system anywhere.
+- Item/move icons (`Items` has no `Icon` field), real equipment meshes, real Smoke VFX.
+- Lizard/Dinosaur forms still reskin the player's rig; `ScaleForm`/`BeastForm`/`SporeTrap` have no animation.
+- Grudge Monument — built, Jay wants it removed, not yet removed.
+- 13 missing MAP_3 props; unshared asset IDs (e.g. ColorMap 14565342511) causing permission errors.
+- `GhoulProgCheckNPC` floating with no floor — likely intentional, unconfirmed.
+- Hell and the Sorcerer world as separate places via package links — not started.
+- Smoke-cast screen tint (optional follow-up); tokenise `POIGuideClient` waypoint colours if more types are added.
 
 ## Merge (three places into one)
 - Merged **combat test** (combat framework) and **jjk combat game** (map + UI) into **Map + Combat** (target place, 87872916277829).
@@ -47,17 +84,18 @@ A running list of everything done on this project, pulled from `PROJECT.md`.
 - Rumor board + Fortune Teller NPC; Smoke-related combat hooks (M1 refund, M2 silence).
 - Zombie job board + hospital director NPC, CleanupDay/GhostNight/RuleOfHour events.
 - War meter (Boiling Point) driving timed Riot events; PartyMishap and KillingField world events.
-- Split off **Zogan's Academy Grounds** (127609270845586) as a second place from the old JJK School Map, with a gate + travel service linking it to the main place; not yet published with systems.
+- Split off **Zogan's Academy Grounds** (127609270845586) as a second place from the old JJK School Map, with a gate + travel service linking it to the main place; not yet published with systems. **Update 2026-09-17:** brought to full parity with Map + Combat (see "Zogan's Academy Grounds brought up to parity").
 
-## Open / outstanding items (from PROJECT.md, still unresolved)
+## Open / outstanding items (from PROJECT.md, as of 2026-09-16)
+*Snapshot — see "Current state" at the top for what is still open today.*
 - 13 missing MAP_3 props (kitchen items, 2 loose parts) not yet restored.
 - Unshared asset IDs still causing permission errors (list in PROJECT.md).
 - `GhoulProgCheckNPC` floating with no floor nearby — likely an intentional hidden check NPC, unconfirmed.
-- `Lab2` teleport script error (`Triggered` not a member of Part).
-- Missing `ReplicatedStorage.Weather`, `Remotes.Progression`, `Remotes.CombatTag`.
-- GameUI and jjk's Player_Display/Custom Inventory both draw a health bar/hotbar — final HUD look not decided.
+- ~~`Lab2` teleport script error (`Triggered` not a member of Part).~~ **Resolved** — already fixed 2026-09-16 (confirmed 2026-09-22).
+- ~~Missing `ReplicatedStorage.Weather`, `Remotes.Progression`, `Remotes.CombatTag`.~~ **Resolved as harmless** (2026-09-22): `WeatherManager`/`DaylightManager` are disabled, `Remotes.Progression` was only used by the now-disabled jjk `ProgressionService`, and both `CombatTag` users degrade safely.
+- GameUI and jjk's Player_Display/Custom Inventory both draw a health bar/hotbar — final HUD look not decided. (Custom Inventory itself was later rebuilt as the single real inventory.)
 - Grudge Monument mechanic built but Jay doesn't want it — pending removal.
-- Zogan's Academy Grounds place published but has no game systems yet.
+- ~~Zogan's Academy Grounds place published but has no game systems yet.~~ **Resolved** 2026-09-17 — ported to parity.
 - Hell and the Sorcerer world are planned to become separate places sharing data via package links — not started.
 
 ## Backend hardening / PvP & Smoke optimization pass (2026-09-17, in progress)
@@ -98,6 +136,8 @@ making the **PvP** and **Smoke** systems more optimal. Confirmed in-game by scri
   `Setting_ScreenShake` player attribute (shake/FOV off, hitstop always on).
 
 ### Not yet found in the place (likely the next steps)
+**Update:** addressed by the next entry ("PvP / Smoke optimization pass").
+
 - No script dated 2026-09-17 touches `ServerStorage.Packages.DamageLogic`, `Smoke`,
   `SmokeService`, or `SmokeMoveService` directly yet — those are still at their 2026-09-15/16
   state. If "make Smoke more optimal" means the Smoke *system's* performance/logic (not just the
@@ -137,27 +177,38 @@ check to confirm nothing broke):
   tick body, or `SmokeMoveService`'s cast handler — read through all of them, didn't find another
   change worth making without more direction (e.g. is "optimize Smoke" about raw performance, or
   about rebalancing costs/cooldowns/regen numbers? those are different asks).
-- Not yet play-tested. Run a playtest + Cmdr `selftest` before considering this pass done, then
-  save the place.
+- ~~Not yet play-tested. Run a playtest + Cmdr `selftest` before considering this pass done, then
+  save the place.~~ **Update:** `selftest` 18/0 in both places from 2026-09-17 onward, and a clean
+  live playtest on 2026-09-22.
 
 ## Deferred — reminders for later (2026-09-17)
 
-Jay: skip for now, revisit later. Not started.
+Jay: skip for now, revisit later. Not started. **Update:** most of this list was built later the
+same day — status per item below.
 
 - **Combat anti-cheat / server-side movement & hit validation.** `DamageLogic` trusts whatever
   hit lands; nothing checks for impossible speed/teleport/reach. Pairs with RemoteGuard.
+  **Done:** reach check (`MAX_HIT_DISTANCE = 45`) and movement-speed check (`MAX_IMPLIED_SPEED = 150`).
 - **DataStore write queue / backoff.** Saves, `LeaderboardService` writes, etc. fire directly
   today; no queue to smooth out throttling under load.
+  **Done (backoff):** `DataStoreRetry` wraps Leaderboard/Moderation/Clan calls. A write queue was
+  deliberately not built — no load problem to justify it.
 - **Moderation / report system.** No persisted ban/mute system exists yet.
+  **Partly done:** persisted bans (`ModerationService`, Cmdr `ban`/`unban`). Reports and mute not built.
 - **PvP ranking (ELO/MMR).** `PlayerKilled` fires (WarService, EconomyLog-adjacent) but nothing
-  turns kills into a ranking.
+  turns kills into a ranking. **Done:** `RankingService` (Elo, K=24) + `Rating` leaderboard.
 - **MemoryStoreService for live matchmaking/party state**, if parties/duels get planned — cheaper
-  and faster than DataStore for short-lived cross-server state.
+  and faster than DataStore for short-lived cross-server state. **Skipped:** parties are
+  in-memory per server; no duel/matchmaking feature exists to need it.
 
 ## Backend content gaps — placeholder/stub systems still needing real work (2026-09-17)
 
 Found by grepping the codebase for `placeholder` / incomplete comments. These are gameplay
 *content* backends (not infra) that already have scaffolding but are running on stand-in data:
+
+**Update:** all resolved by the following entries except Lizard/Dinosaur forms — progression
+built, attribute/Smoke numbers tuned, loot table + DevilMask added, and the persistence question
+answered (saves do persist via ProfileService; the `PlayerStatsBridge` comment is stale).
 
 - **Character progression (Level, LevelExp, Experiance, Rolls, Points, AuraColor, Title,
   Faction).** `ServerScriptService.PlayerStatsBridge`'s own header says these are jjk-UI concepts
@@ -209,6 +260,7 @@ numbers/behavior aren't derivable from the code - they're decisions.
   granted it alongside the existing Tags/Yen payout in `HellService.recordEntrance`.
 
 ### Needs your call before I build it
+**Update:** both answered — see "Progression system built" and "Attribute tree / Smoke balance pass" below.
 
 - **#1 Progression (Level/XP/Faction/Title).** Bigger finding: the jjk HUD's
   `StarterGui.Hud.ProgressionService` (and its `ProgressionRankRequirements` /
@@ -309,9 +361,10 @@ first thing to dial back if a playtest confirms it feels too strong.
   `Player_Display.Handler` already branches its whole UI on Faction (Sorcerer/Human/Bounty
   Hunter/Criminal vs Curse), so the client is ready for a real faction system; there's just no
   server logic that assigns or changes one. Worth deciding if this is meant to be real
-  gameplay (a Sorcerer vs Curse PvP split) or just flavor text.
+  gameplay (a Sorcerer vs Curse PvP split) or just flavor text. **Update:** Jay declined — not needed.
 - The infra list from earlier today (anti-cheat, DataStore write queue, moderation, PvP ranking,
-  MemoryStore matchmaking) is all still open and untouched.
+  MemoryStore matchmaking) is all still open and untouched. **Update:** built in the next entries —
+  see the status notes on the "Deferred" list above.
 
 ### Everything that needs a real asset (grouped)
 
@@ -662,7 +715,8 @@ at parity all session).
   the whole time (read the edited script back successfully after the hang started). **Known issue:
   restart the Map + Combat Studio window and re-run Cmdr `selftest` there to get a clean live
   confirmation** - the code is identical to what already passed cleanly in Zogan's, but it hasn't
-  been independently exercised live in Map + Combat this session.
+  been independently exercised live in Map + Combat this session. **Update:** resolved — the
+  hang cleared and Map + Combat ran `selftest` 18/0 live during the atmosphere pass the same day.
 - ClanService's `!clan create`/etc. chat commands specifically weren't triggered live in either
   place (no easy way to simulate a real chat message through this session's tools) - confidence
   there comes from the module-load self-test check passing (no syntax/require errors) plus the
@@ -1136,7 +1190,7 @@ remote invoked from the Client datamodel, or Cmdr) rather than requiring it.
 
 **Still worth doing:** an actual clean `selftest` run (Cmdr `selftest`, or the workspace attribute
 in a session where SelfTest was never required from injected code) to confirm it is back to 18/18.
-Blocked today only by the Studio Play hang below.
+Blocked today only by the Studio Play hang below. **Update:** done — 18/0, see "Clean selftest" below.
 
 ### Audits - all clean, no action taken
 
