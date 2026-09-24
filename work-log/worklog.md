@@ -1913,7 +1913,8 @@ React and ReactRoblox now load.
 
 **Tested (Place1, Play):** HUD mounts with no console errors; every widget renders (screen
 captures); the left column (quest, party, controls) no longer overlaps at a 665 px-tall viewport.
-**Not tested:** clicking the buttons or pressing keys 1-3 (the action handlers aren't exercised),
+**Also tested:** clicking Accept (invite closed, inviter added to the party) and key 2 (slot 2 selected).
+**Not tested:** the other buttons,
 other resolutions, and mobile. The rebuilt polyfills cover only what React calls.
 **Not done:** porting into Map + Combat / Academy, or wiring the widgets to the real game systems
 (VitalsHud, party attributes, quests). Waiting on Jay.
