@@ -34,9 +34,11 @@ Tick items off here and log the work in the work log when done.
 
 ## Map
 - [ ] **Fix the Hole map**: it feels like an ordinary modern city rather than the anime's Hole.
-      **[requested]** Likely cause: much of it came from jjk's Shibuya chunks. Needs Jay's call on
-      art direction, with reference shots of what "anime-accurate" means (cramped hand-built
-      slum, smog, grime, signage). Big map and asset job; redo it on each place's own map.
+      **[requested]** Likely cause: much of it came from jjk's Shibuya chunks. Jay shared
+      reference images on 2026-09-24; the brief is in
+      [`art-direction/hole.md`](art-direction/hole.md), with steps ordered from code-only
+      (smog lighting, overhead wires) to a full blockout. Big map and asset job; redo it on each
+      place's own map.
 
 ## VFX
 - [ ] **New VFX across the game**: Smoke moves, hits, events and world effects. **[requested]**
