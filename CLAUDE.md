@@ -36,3 +36,9 @@ it as input. Record new work here so the next session starts with it.
 - **Don't take OS screenshots while Jay is at the machine.** Use MCP `screen_capture` instead.
 - Prefer disabling over deleting (reversible), and log every change in the work log with what
   was and wasn't tested.
+
+## Working on this repo
+
+Jay has approved Claude opening and merging pull requests in this repo without asking first
+(2026-09-24). Commit changes to the work log, `todo.md` and these docs, open a pull request, and
+merge it once it's mergeable.
