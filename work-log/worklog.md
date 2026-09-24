@@ -5,28 +5,35 @@ chronological and kept as history; where a later entry superseded an earlier one
 carries an inline **Update** note rather than being deleted. For what the repo itself is for, see
 [`CLAUDE.md`](../CLAUDE.md).
 
-## Current state (as of 2026-09-23) — read this first
+## Current state (as of 2026-09-24) — read this first
 
 **Places:** Map + Combat (87872916277829) and Zogan's Academy Grounds (127609270845586), same
-universe (GameId 10766477296), shared DataStores. Both kept at code parity; last clean `selftest`
-was 18 passed / 0 failed in both.
+universe (GameId 10766477296), shared DataStores. **Back at code parity on 2026-09-24: 525/525 game
+scripts identical** (hash-checked). Last `selftest`: Map + Combat 38 passed / 0 failed (combat-depth
+pass), Academy 37 passed / 0 failed / 1 warning (the Rat NPC only exists in the Hole). The shared
+folders are Roblox Packages whose Map + Combat edits were never published — publishing them would
+turn the next sync into one "Update All".
 
 **Built but never play-tested in a real match**
-- Progression level-ups ("Level up!" toast, WorldInfo Rank line) from PvP kill / quest / Pit clear.
+- Progression level-ups ("Level up!" toast, WorldInfo Rank line) from PvP kill / quest.
 - Attribute/Smoke balance numbers (Jay: "seem very high" — first thing to dial back).
 - `!party` / `!clan` chat commands end to end; Rating moving on a real PvP kill; the kill-confirm visual.
-- NPC block-over-parry/dodge tuning — confirm posture actually breaks in a live fight.
+- A real parry into a riposte, and M2 guard-breaking the Ashmask Shieldbearer (scripted input can't
+  time these).
+- Blue Night contracts with two real players (only the pure-rule SelfTest covers pairing).
+- The 2026-09-24 lamp pass *by eye* — logic verified in Play, but the Studio viewport rendered blank.
 - Slide after a very brief (~0.05s) movement tap.
 
 **Waiting on a decision from Jay**
 - Whether the `Adv4` quest chain continues (`Adv5`+) — story call.
 - Zogan's has 0 staffed shops; Academy players have nowhere to spend Yen.
 - Tags have almost nothing to buy at high levels (Grave Keeper is the only sink).
-- M1 reach is tight (whiffs at 6 studs, lands at 4.3).
+- What a Blue Night pact actually does, how long it lasts, whether it can be broken.
+- Devil trial stage content (all 4 stages are TODO scaffolds); a real tumor-transplant mechanic.
 - Spore Burst: 24 Smoke for 6.8 dmg vs M1's free 10.2 — check vs a group (AoE).
 - Holding LeftControl both fires Slide and arms the M1→Uppercut modifier.
-- `Lighting.Technology` — if Unified, ShadowMap is likely the biggest cheap perf win (can't read it from script).
-- Final HUD look: GameUI and jjk's Player_Display both draw a health bar/hotbar.
+- `Lighting.Technology` still can't be read from script; `LightingStyle` is now Realistic.
+- Whether to publish the shared Packages from Map + Combat (UI action only).
 
 **Not built / blocked**
 - Trading, player reports, mute/chat moderation, duels/matchmaking (and the MemoryStore work that depends on it).
@@ -37,7 +44,12 @@ was 18 passed / 0 failed in both.
 - 13 missing MAP_3 props; unshared asset IDs (e.g. ColorMap 14565342511) causing permission errors.
 - `GhoulProgCheckNPC` floating with no floor — likely intentional, unconfirmed.
 - Hell and the Sorcerer world as separate places via package links — not started.
+- `Controllers.Gui.Inventory` still logs "Infinite yield possible on GameUI" on slow loads.
 - Smoke-cast screen tint (optional follow-up); tokenise `POIGuideClient` waypoint colours if more types are added.
+
+**Resolved since the 2026-09-23 snapshot:** M1/fist reach (Fist hitbox (5,6,5), 3/3 hits at 6 studs);
+final HUD look (VitalsHud replaced jjk's Player_Display bars); the fight pit was removed; Academy
+parity; lamps without a visible source; animations freezing after a perfect dodge.
 
 ## Merge (three places into one)
 - Merged **combat test** (combat framework) and **jjk combat game** (map + UI) into **Map + Combat** (target place, 87872916277829).
@@ -1705,3 +1717,139 @@ still read purple / orange / blue / green against the new accent.
 **Trade-off worth noting:** blue-grey buttons are more muted than the gold was, so interactive
 elements are slightly less eye-catching. That is inherent to a strictly-Hud palette, since Hud has
 no call-to-action colour of its own. Reverting is the same one line in `UITheme`.
+
+## Catch-up: 2026-09-23 / 2026-09-24 passes recorded only in PROJECT.md
+
+Added to the log on 2026-09-24 so the repo has them; `PROJECT.md` has the full code map for each.
+
+### AI and combat flow (2026-09-23)
+Pre-change copies: `ServerStorage.Backup_AI_2026-09-23`, `ServerStorage.Backup_Combat_2026-09-23`.
+- **AI crowds** (`Services.AI.AI.NPCSwarm`): separation steering (NPC<->NPC collision stays off),
+  surround slots (attack ring 4 studs, slowly orbiting waiting ring 10+), rotating attack tokens (2 per
+  target for full AI, 3 for `M1Only`), 0.35 s swing spacing. Replaced the "Agro" TagService tag, which
+  leaked a never-expiring tag per NPC per frame.
+- **AI fairness** (`NPCBehaviors.PerceivedAction`): 0.18-0.3 s reaction time, guard budget of 3
+  block/parry/dodge/evasive (+1 per 1.6 s), Evasive only after 3 hits in a combo. Wind-up tells
+  (`Indicators.WindupIndicator`) before mob punches, full-AI string openers and uppercuts; a stun cancels
+  them. `NPCNavigation` pathfinds when line of sight is blocked, the height gap is > 6 studs, or stuck.
+- **Combat flow:** 0.6 s input buffer (`ActionManager:Request`); Dodge/Block can cancel an attack's
+  recovery after its hit frame; Block/Sprint remotes only accept Activate/Release/Cancel; posture drains
+  12/s after 2 s; perfect dodge now fires its effect, skips Dodge's cooldown and makes the next hit a
+  x1.3 counter; soft lock-on (`Functions.SoftLock`, setting `SoftLock`); combo counter (`Misc.ComboHit`).
+- **Smoke moves** live in `player.SmokeMoves`, cast on Z/X/C without equipping; a cast pressed mid-swing
+  waits for the swing (`SWING_WAIT` 1 s) and drops queued M1s. Hotbar keys 1-9 owned by Custom Inventory.
+- **Swing prediction** (`Functions.SwingPredict`): your ground M1 plays locally on click and hands over
+  to the server's swing; tested at 0 and 150 ms lag. Server states mirrored to clients as `State_<Name>`
+  character attributes; M1 animation lists sorted by numeric name.
+- **Lighting:** `AtmosphereClient` is the only ClockTime writer (the jjk "Day/Night Cycle" fought it);
+  Hole runs one 24 h day per 35 min off the server clock. Academy keeps 9-15.
+- **Ghost toasts:** UIThemeClient no longer puts chrome on self-sizing / laid-out frames.
+
+### Overnight build (2026-09-24)
+Pre-change copies: `ServerStorage.Backup_Overnight_2026-09-24`. SelfTest 35/35 at the time.
+- **En's Gang rep** (`World.Reputation`, `ReputationService`, `ReputationConfig`): earned from Ashmask
+  raiders (+2), captains (+5), breaking the sweep (+4); no decay for 24 h after the last gain, then
+  -5/day, floor 0. Admin `rep`.
+- **Rep gates:** Rat (BackAlley) needs rep 10, else a brush-off tree with a lock badge; his Black Smoke x3
+  needs rep 30 and still costs ¥330.
+- **Tumor debuff** (`TumorService`, `TumorConfig`): Artificial = Smoke regen -40%, fading to a permanent
+  -10% over 10 h of playtime; purple head tag. No transplant mechanic yet — set with admin `tumor`.
+- **Blue Night contracts** (`ContractService`, `Contracts`): "The Broker" appears only during BlueNight;
+  signing pairs you with a waiting signer you've never been bound to. The pact has no effect yet.
+- **Devil trial** (`DevilTrial`, `DevilTrialService`, `DevilTrialConfig`): 4-stage scaffold entered via
+  Madame Ise; dying mid-trial resets to stage 1. Stage content is TODO.
+- Save changes are additive (defaults + `Profile:Reconcile()`, `DataMigrations.sanitize`).
+
+### Day pass (2026-09-24) — Jay's picks "1-3 8-10"
+Pre-change copies: `ServerStorage.Backup_HUD_2026-09-24`; archived objects in
+`ServerStorage.Archive_2026-09-24` (each has `ArchivedFrom` / `ArchivedReason`).
+- **Cleanup:** archived `Map.WeatherManager`, the jjk "Day/Night Cycle" and `Hud.ProgressionService`;
+  `Visuals.Rocks` crater no longer errors without `Assets.Effects.Slash2.Slam`.
+- **Slow-spawn warnings:** `Gui.Camera`, `Gui.Hotbar`, `Gui.HealthBar` wait with timeouts.
+- **Fist reach:** Fist hitbox (4,5,4) -> (5,6,5); 3/3 hits at 6.0 studs.
+- **Performance:** `CastShadow = false` on 19,418 map parts under 1 cubic stud (tag `PerfNoShadow`).
+- **New HUD:** `WorldClient.VitalsHud` draws HEALTH / GUARD (and later STAGGER) under the Smoke bar;
+  `Player_Display` stays enabled for the number-key hotbar but its jjk bars are hidden.
+
+### Combat depth (2026-09-24)
+Pre-change copies: `ServerStorage.Backup_CombatDepth_2026-09-24`. SelfTest 38/38, clean console.
+- **Parry payoff:** a clean parry gives a 1 s Riposte (next hit x1.25, counts as a counter, adds
+  stagger); the parrier's own stun drops 0.4 -> 0.2 s.
+- **Stagger meter** (Humanoid attr `Stagger`): built by being parried (+40), eating a counter (+30), an
+  unblocked heavy (+20), or being hit out of a swing/wind-up (+12); drains 15/s after 2.5 s. At 100: the
+  guard-break stun plus a Finisher window (next hit x1.5 heavy / x1.25 other).
+- **Enemy archetypes** (`Config.NPCArchetypes`): Shield, Rusher, Thrower (`NPCRanged` stone), Flanker.
+  The Ashmask Sweep's grunts now use them. Verified live except a real parry into a riposte and M2
+  guard-breaking the Shieldbearer.
+
+## Lamp lighting, animation breakage, Academy sync (2026-09-24)
+
+Jay: "fix the lighting thats emitted from light sources (makes the game seem flat since the lamps are
+emitting light straight down with no source), animations break out of nowhere for npcs and players
+randomly, apply past changes / updates to Zogan's Academy Place". Pre-change copies:
+`ServerStorage.Backup_AnimLight_2026-09-24` (Map + Combat) and `ServerStorage.Backup_Sync_2026-09-24`
+(Academy, the 60 scripts overwritten by the sync).
+
+### Lighting (Map + Combat)
+Cause: lamp bulbs were plain Plastic parts (no visible source), all 6,998 lights had `Shadows = false`
+(light passed through the lamp itself, a flat disc on the road), `Lighting.LightingStyle` was `Soft`,
+and the Hole's night ambient only dropped 45%, so lamp pools had nothing to stand out against.
+- 473 outdoor lamp lights (models named *lamp* / High_Mast, above y = -50, Range >= 12) tagged
+  `StreetLamp`, `Shadows = true`; their bulbs (<= 8 studs) tagged `StreetLampBulb`, set Neon + light colour.
+- 484 other small (<= 4 studs, opaque) light-source parts tagged `LampGlow`, set Neon permanently.
+- Originals in attrs `LampOrigMaterial` / `LampOrigColor`; revert snippet in workspace attr `LampPassNote`.
+- New `WorldClient.LampClient`: street lamps on (Neon bulb, light on, shadows if `Setting_Shadows` isn't
+  false) from ClockTime 17.6 to 6.4, off with the original bulb by day - so the shadow cost only
+  applies at night. Streamed-in lamps handled through tag signals.
+- `LightingStyle` Soft -> Realistic (old value kept in Lighting attr `PreLampPassLightingStyle`).
+- `AtmosphereClient`: Hole-only night fill 0.45/0.4 -> 0.65/0.6 (Academy's 9-15 cycle unaffected).
+- Verified in Play: 97 streamed lamps, forced night -> 97 on / 97 shadows / 97 neon bulbs, forced
+  day -> 0 / 0 / 0. Not verified by eye: the Studio viewports rendered blank all session, so the
+  look (brightness, bloom on the bulbs, how dark night is) still needs Jay's eyes.
+
+### Animations
+Two real bugs and one cleanup:
+1. `StateController.Misc.Perfect Dodge` stopped **every** playing track on the dodger, idle/walk
+   included. `AnimationController.PlayTrack` only acts on a pose *change*, so the loop stayed dead -
+   the character slid or T-posed until it changed pose. NPC perfect dodges are broadcast to all
+   clients, so NPCs froze on every screen the same way. Now only Action-layer tracks stop.
+2. `AnimationController`: `PlayTrack` restarts the current pose's track if something stopped it, plus a
+   0.3 s watchdog that restarts a stopped looping pose. Verified: stopping the idle track by hand ->
+   restarted after 0.10-0.17 s, 3/3 trials.
+3. `HitWeight` hit-stop froze walk cycles too: `Enum.AnimationPriority.Core` has value 1000, so the
+   `>= Action` check caught Core-priority movement tracks. Core is now excluded explicitly (same fix
+   in Perfect Dodge).
+4. Cleanup, **not proven to be a cause**: `TrackService.Play` loaded a new AnimationTrack per call
+   (every swing, every hit react) and kept it in its store forever (`CleanOnStop` was never used);
+   `SwingPredict` leaked one per click; `GetKeyframeTime` one per call. Tracks are now released on
+   `Ended`. I first blamed Roblox's 256-tracks-per-Animator cap, but 300 loaded tracks held alive
+   played fine on both server and client with no warning - so that cap is not what breaks animations.
+   Verified: 320 plays through TrackService -> 0 failures, 1 wrapper left in the store (was 320).
+
+### Zogan's Academy Grounds brought up to date
+Compared every script (hash per file) in both places. Academy was missing everything since roughly
+2026-09-22: 60 scripts differed and 30 were missing. All copied (line-level hunks for changed files,
+whole files for new ones), each verified by hash. Final check: **525/525 game scripts identical** in
+both places. Every Academy-only line that was dropped was fight-pit code, which Map + Combat removed on
+2026-09-23.
+- Archived to Academy `ServerStorage.Archive_2026-09-24`: `World.PitService`, `WorldClient.PitClient`,
+  `World.Remotes.PitAction`, `StarterGui.Hud.ProgressionService` (all with ArchivedFrom/ArchivedReason).
+- GUI: `Player_Display.Player` hidden, `Custom Inventory` DisplayOrder 10, `Transition` DisplayOrder
+  100 + IgnoreGuiInset. `LightingStyle` -> Realistic (Academy's own bright Lighting values kept).
+- Map: 67 candle flames ("Bougie") set Neon (`LampGlow`); 4,148 parts < 1 stud^3 `CastShadow = false`
+  (`PerfNoShadow`, same revert note). Academy has no street lamps, so LampClient has nothing to switch.
+- Academy Play test: clean boot, `Animations Loaded (183/183)`, SelfTest **37 passed / 0 failed /
+  1 warning** (Rat NPC only exists in the Hole). One error in the log,
+  `LinearVelocity:31 ... LinearStore`, comes from SelfTest's unregistered dummy rigs in an unchanged
+  file - pre-existing, not from this pass.
+- Left alone on purpose: Academy's Lighting values, `FallenPartsDestroyHeight` (-2000 vs -500),
+  `ServerStorage.DevRigs`.
+
+### Still open
+- The 8 shared folders are Roblox Packages (`ServerScriptService.World`, `ReplicatedStorage.World`,
+  `WorldClient`, `PlayerData`, 4 GUIs) at the same published version in both places, but Map + Combat's
+  edits were never published. Publishing them (right-click -> Publish to Package) would make future
+  syncs one "Update All" instead of a copy - it can't be done from script.
+- `Controllers.Gui.Inventory` still logs "Infinite yield possible on GameUI" on slow loads (the
+  2026-09-24 timeout pass covered Camera/Hotbar/HealthBar but not this one).
+- Neither place is saved by this pass (`SavePlace` isn't callable from Edit); Team Create syncs edits.

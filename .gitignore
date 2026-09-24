@@ -1,0 +1,9 @@
+# The local project folder is a checkout of this repo. Only the brain files are tracked;
+# everything else in the folder (place/model exports, tools, captures) stays local.
+/*
+!/.gitignore
+!/README.md
+!/CLAUDE.md
+!/PROJECT.md
+!/work-log/
+!/claude-memory/
