@@ -20,6 +20,8 @@ it as input. Record new work here so the next session starts with it.
   models, masks, combat feel). Items tagged **[idea]** still need Jay's approval.
 - [`art-direction/`](art-direction/): the visual target for each area: `hole.md` (the Hole
   map) and `sorcerer-world.md` (the planned Sorcerer World place). Reference images stay local in `reference/` (git-ignored; the repo is public).
+- [`tasks/`](tasks/): ready-to-run task briefs for the local station, one file per job. Work
+  through any that aren't marked done, then log the result.
 - [`PROJECT.md`](PROJECT.md): the detailed code map (where each system lives, how the merge was
   done, admin commands). The log is the history; this is the reference.
 - [`claude-memory/`](claude-memory/): Claude's notes on Studio/tooling quirks (Play-mode wedge,
