@@ -59,7 +59,13 @@ Tick items off here and log the work in the work log when done.
 ## Animations
 - [ ] **Rework all animations**: the 7 weapon sets, the 13 Smoke move animations ported from
       Hollow Lineage, and movement. **[requested]** needs asset
-- [ ] `Lizard.ScaleForm`, `Dinosaur.BeastForm` and `Mushroom.SporeTrap` have no animation. **[gap]**
+- [ ] **New Smoke move animations (IDs supplied 2026-09-24)**: SmokeShot, ChargedBlast, Curse
+      (Hex assumed), Cling, SporeBurst, SporeTrap, Unravel, SplitCut, Mend (self and others) and
+      Surge. Unravel is reworked to turn the caster invisible for a moment, with all other effects
+      removed. **[requested]** Full instructions and the ID table are in
+      [`tasks/smoke-move-animations.md`](tasks/smoke-move-animations.md).
+- [ ] `Lizard.ScaleForm` and `Dinosaur.BeastForm` have no animation. `Mushroom.SporeTrap` gets one
+      from the task above. **[gap]**
 - [ ] Real Lizard and Dinosaur creature rigs and animations (the forms currently reskin the
       player's own rig). **[gap]** needs asset
 - [ ] Idle animations for world NPCs. **[gap]** needs asset
