@@ -1966,3 +1966,25 @@ textured squares poking in and out of the frames.
 **Tested (Place1, Play):** no console errors; all new assets `PreloadAsync` Success; full-screen
 and zoomed captures (vitals, In Combat, left column, player list).
 **Not tested:** mobile, other resolutions, a published server.
+
+### React HUD back-to-basics pass (2026-09-24)
+
+Jay sent a close crop of the reference's vitals and toolbar: better, but go back to the basics of
+the reference. The UI should be **square, not rounded**, and the horns have to go (nothing in
+the reference has them).
+
+- **Generator:** new rectangular frames: `health_frame` (1024x96), `slim_frame` (9-slice, for
+  parry/stamina/party bars) and `button_frame` (9-slice, with a taller fill for text). Each has
+  compact iron **end caps** (a plate with a gem, knobs, tight curls and a short point) instead of
+  horns, square **teeth** alternately biting into and poking out of the rails, chevrons, and centre
+  knots. `center_knot` splits the parry bar and `sub_ornament` is the scrolled line hanging under the
+  health bar. `slot_frame` is square with corner brackets, mid-edge notches, a smoky red well and a
+  faint sigil. `badge` is the square key tab. The fill is now smoky and mottled and **tiles without
+  seams** (periodic noise). The skull's horns are removed. The old pill/ornament assets are unused.
+- **Code:** every `UICorner` removed. Bars use `style = "health"` or the slim default. `OrnateButton`
+  uses the button frame. Vitals are laid out like the reference (parry + knot, health, hanger,
+  stamina); slots are 70x70 with the square tab.
+
+**Tested (Place1, Play):** no console errors; all assets `PreloadAsync` Success; a zoomed capture of
+vitals + toolbar compared against Jay's crop, and a full-screen capture.
+**Not tested:** mobile, other resolutions, a published server.
