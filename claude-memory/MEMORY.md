@@ -3,3 +3,4 @@
 - [Playtest prompts don't fire](playtest-prompts-dont-fire.md) — tool-driven playtests can't press ProximityPrompts; open NPC dialogue via WorldSignals.DebugTalk
 - [Cross-place script sync](cross-place-script-sync.md) — Academy mirrors Map + Combat via hash-diff + hunks over execute_luau; the Packages were never published
 - [Animator track cap isn't the cause](animator-track-cap-not-real.md) — 300 held tracks played fine; animation breakage was Perfect Dodge stopping idle loops
+- [Brain repo](brain-repo.md) — notes live in github.com/imgoingto1/dorohedoro-game; the project folder is a checkout, so commit + push log updates
