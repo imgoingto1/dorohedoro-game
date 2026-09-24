@@ -1884,3 +1884,36 @@ Smoke, track `118739676730078`, finished within 1.9 s with idle still running; t
 **Academy:** mirrored; the 3 scripts and all 16 Smoke animation IDs hash-identical to Map + Combat;
 Play boot `Loaded (186/186)`, the 3 tracks load, SelfTest **37 / 0 / 1 warning** (Rat, expected).
 **Not tested:** how they look by eye; a live server; interaction with a mid-swing M1.
+
+## React HUD prototype in a scratch place (2026-09-24)
+
+Jay sent a reference screenshot and asked for a HUD built with the react-lua model in the open
+Studio. The open Studio was a **blank `Place1`** (not Map + Combat or Academy), holding only the
+`Roblox/react-lua` package, so this is a standalone prototype. Nothing was touched in either game place.
+
+**What was built (Place1):**
+- `ReplicatedStorage.ReactLua` is the package, moved from Workspace and renamed.
+- `ReplicatedStorage.HudUI`: `Theme` (colours/fonts), `HudState` (store: `set`, `subscribe`,
+  `onAction`, `action`), `Primitives` (diamond caps, ornate pill bar with smooth + damage-lag fill,
+  ornate button, fade line), `Widgets`, `App`.
+- `StarterPlayerScripts.HudClient` mounts it with `ReactRoblox.createRoot`. Health and the player
+  list are live (Humanoid, Players/Teams); everything else is demo data behind `DEMO = true`.
+- Widgets: Upper Buttons (settings/menu/leave), In Combat (warning, countdown), Boss HP Bar, Quest
+  UI (objectives, strike-through when done, Abandon), Party List (members with HP bars), Search
+  player / Leave / Disband, Player List (team groups, scrollable), Invite (Accept/Reject), Parry,
+  Health and Stamina bars, Toolbar (3 slots, keys 1-3 select). Icons come from the package's
+  `BuilderIcons` font.
+
+**Package fix:** the published react-lua package (asset 15621638430 v5) is **broken**: it is
+missing 9 luau-polyfill modules (Boolean, Console, ES7Types, InstanceOf, Math, Number, String,
+Symbol, Timers), and their link stubs returned the ModuleScript instead of requiring it. A fresh
+insert has the same gap. Fix: removed the `PackageLink` (the linked copy auto-reverts local edits),
+added minimal implementations of those 9 under `_Index`, and changed 14 link stubs to `require()`.
+React and ReactRoblox now load.
+
+**Tested (Place1, Play):** HUD mounts with no console errors; every widget renders (screen
+captures); the left column (quest, party, controls) no longer overlaps at a 665 px-tall viewport.
+**Not tested:** clicking the buttons or pressing keys 1-3 (the action handlers aren't exercised),
+other resolutions, and mobile. The rebuilt polyfills cover only what React calls.
+**Not done:** porting into Map + Combat / Academy, or wiring the widgets to the real game systems
+(VitalsHud, party attributes, quests). Waiting on Jay.
