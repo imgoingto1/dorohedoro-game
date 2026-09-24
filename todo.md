@@ -39,6 +39,11 @@ Tick items off here and log the work in the work log when done.
       [`art-direction/hole.md`](art-direction/hole.md), with steps ordered from code-only
       (smog lighting, overhead wires) to a full blockout. Big map and asset job; redo it on each
       place's own map.
+- [ ] **Build the Sorcerer World** as its own place, sharing data with the Hole via package
+      links (planned, not started). **[gap]** Jay shared reference images on 2026-09-24; the
+      brief is in [`art-direction/sorcerer-world.md`](art-direction/sorcerer-world.md): ornate
+      old-world city in partial ruin by day, saturated carnival by night. Needs Jay's call on
+      how players get there and what it's for in gameplay. needs asset
 
 ## VFX
 - [ ] **New VFX across the game**: Smoke moves, hits, events and world effects. **[requested]**
