@@ -16,6 +16,12 @@ it as input. Record new work here so the next session starts with it.
 - [`work-log/worklog.md`](work-log/worklog.md): the running log of everything done, newest at
   the bottom. Start with its **"Current state"** section at the top for open items, untested
   work and decisions waiting on Jay.
+- [`todo.md`](todo.md): the ideas and task list by area (VFX, animations, atmosphere, UI,
+  models, masks, combat feel). Items tagged **[idea]** still need Jay's approval.
+- [`art-direction/`](art-direction/): the visual target for each area: `hole.md` (the Hole
+  map) and `sorcerer-world.md` (the planned Sorcerer World place). Reference images stay local in `reference/` (git-ignored; the repo is public).
+- [`tasks/`](tasks/): ready-to-run task briefs for the local station, one file per job. Work
+  through any that aren't marked done, then log the result.
 - [`PROJECT.md`](PROJECT.md): the detailed code map (where each system lives, how the merge was
   done, admin commands). The log is the history; this is the reference.
 - [`claude-memory/`](claude-memory/): Claude's notes on Studio/tooling quirks (Play-mode wedge,
@@ -48,3 +54,9 @@ the graphify output stay local (see `.gitignore`).
 - **Don't take OS screenshots while Jay is at the machine.** Use MCP `screen_capture` instead.
 - Prefer disabling over deleting (reversible), and log every change in the work log with what
   was and wasn't tested.
+
+## Working on this repo
+
+Jay has approved Claude opening and merging pull requests in this repo without asking first
+(2026-09-24). Commit changes to the work log, `todo.md` and these docs, open a pull request, and
+merge it once it's mergeable.

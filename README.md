@@ -6,5 +6,6 @@ for context and input before acting.
 
 - [`CLAUDE.md`](CLAUDE.md): the repo's purpose and standing rules
 - [`work-log/worklog.md`](work-log/worklog.md): full history. Start at "Current state".
+- [`todo.md`](todo.md): ideas and task list by area.
 - [`PROJECT.md`](PROJECT.md): detailed code map of the place
 - [`claude-memory/`](claude-memory/): tooling quirks and lessons from past sessions
