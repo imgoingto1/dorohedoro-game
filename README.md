@@ -6,3 +6,4 @@ for context and input before acting.
 
 - [`CLAUDE.md`](CLAUDE.md): the repo's purpose and standing rules
 - [`work-log/worklog.md`](work-log/worklog.md): full history. Start at "Current state".
+- [`todo.md`](todo.md): ideas and task list by area.

@@ -17,6 +17,8 @@ it as input. Record new work here so the next session starts with it.
   the bottom. Start with its **"Current state"** section at the top for open items, untested
   work and decisions waiting on Jay. `PROJECT.md` (on the local station) is the more detailed
   source the log was pulled from.
+- [`todo.md`](todo.md): the ideas and task list by area (VFX, animations, atmosphere, UI,
+  models, masks, combat feel). Items tagged **[idea]** still need Jay's approval.
 
 ## Standing rules learned from the log
 
