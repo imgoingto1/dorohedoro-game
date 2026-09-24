@@ -1918,3 +1918,28 @@ captures); the left column (quest, party, controls) no longer overlaps at a 665 
 other resolutions, and mobile. The rebuilt polyfills cover only what React calls.
 **Not done:** porting into Map + Combat / Academy, or wiring the widgets to the real game systems
 (VitalsHud, party attributes, quests). Waiting on Jay.
+
+### React HUD art pass (2026-09-24)
+
+Jay: the first version looked like "a way worse version" of the reference. It was all flat
+frames. This pass added real art and rebuilt the widgets around it.
+
+- **Art:** 14 PNGs drawn procedurally with C#/GDI+ (`tools/hud-art/` in the local project folder, not tracked by the repo; there's no Python on the
+  station). They're uploaded to Jay's account as image assets; the ids are in `HudUI.Assets`:
+  an ornate health-bar frame (filigree horns, jewel caps, chevrons, crests), a 9-slice pill frame
+  for the small bars and buttons, a grey marble fill and a highlight layer (tinted per bar), the
+  crowned, horned skull, ink smoke, the diamond menu button, the spiked ring emblem, the toolbar
+  slot (chamfered frame, red wing sigil), dividers, glow and streak sprites.
+- **Code:** `Primitives.Bar` puts the marble inside a clip frame so the texture doesn't squash as
+  the fill shrinks. It has a lag layer, a hot glow at the fill edge and flickering embers above
+  the frame. All pulsing glows share one clock binding. `OrnateButton` uses the marble fill and
+  the pill frame. The font is Garamond, which Roblox resolves to the `Guru` family
+  (`Garamond.json` doesn't exist; the first try at a bold variant failed to load).
+- **Gotcha:** with `ZIndexBehavior.Sibling`, children of a low-ZIndex frame always draw under a
+  higher sibling. The embers sat inside the fill region, so the metal frame hid them. They're now
+  in an overlay frame above it.
+
+**Tested (Place1, Play):** no console errors; all 14 images load (`PreloadAsync` Success);
+full-screen and zoomed captures of every widget.
+**Not tested:** mobile or very wide screens, and a published server (the images may need
+moderation there).
