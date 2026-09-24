@@ -19,17 +19,17 @@ From `PROJECT.md` and the work log (check it's still current before editing):
 |---|---|---|---|
 | Shooting Skill | `Gun.SmokeShot` | `rbxassetid://84898578407762` | |
 | ChargedBlast | `Gun.ChargedBlast` | `rbxassetid://117021544752937` | |
-| Curse | `Curse.Hex` *(assumed)* | `rbxassetid://111120682208388` | Jay said "Curse". Curse has two moves (Hex, Wither); ask which one it's for. Leave the other move's animation unchanged. |
+| Curse | `Curse.Hex` | `rbxassetid://111120682208388` | Confirmed by Jay: Hex. Leave Wither's animation unchanged. |
 | Cling | `Mushroom.Cling` | `rbxassetid://92421614207420` | |
 | Spore Burst | `Mushroom.SporeBurst` | `rbxassetid://130349660804168` | |
-| SporeTrap | `Mushroom.SporeTrap` | `rbxassetid://130349660804168` | **Same ID as Spore Burst.** Possibly a copy-paste slip; apply as given but ask Jay to confirm. SporeTrap had no animation before, so it needs a new Animation instance and a `TrackService.Play` call in its handler. |
+| SporeTrap | `Mushroom.SporeTrap` | `rbxassetid://130349660804168` | Same ID as Spore Burst, on purpose (confirmed by Jay). SporeTrap had no animation before, so it needs a new Animation instance and a `TrackService.Play` call in its handler. |
 | Unravel | `Split.Unravel` | `rbxassetid://132885200996279` | Also gets new behaviour; see section 2. |
 | SplitCut | `Split.SplitCut` | `rbxassetid://138813793759050` | |
 | Mend (heal self) | `Regeneration.Mend` | `rbxassetid://98692159434381` | Two animations; see section 3. |
 | Mend (heal others) | `Regeneration.Mend` | `rbxassetid://104356504502793` | |
 | Surge | `Regeneration.Surge` | `rbxassetid://116967723321316` | |
 
-Not covered by this list, so leave as they are: `Curse.Wither` (if Curse means Hex),
+Not covered by this list, so leave as they are: `Curse.Wither`,
 `Lizard.TailSweep`, `Dinosaur.Stomp`, `Dinosaur.Bite`, and the form toggles `ScaleForm` and `BeastForm`.
 
 ## 2. Unravel: invisible for a moment
