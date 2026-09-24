@@ -1943,3 +1943,26 @@ frames. This pass added real art and rebuilt the widgets around it.
 full-screen and zoomed captures of every widget.
 **Not tested:** mobile or very wide screens, and a published server (the images may need
 moderation there).
+
+### React HUD grit pass (2026-09-24)
+
+Jay: the reference is "way more gritty"; ours looked cartoonish, flat and plasticky, and needed
+textured squares poking in and out of the frames.
+
+- **Generator** (`tools/hud-art`, local): a `Grunge` pass on every frame, skull and divider
+  (blotches, grain, scratches, pits, chipped soft edges). The chrome is now darker worn iron. The
+  fill is rebuilt with fibres, blotches and cracks, and the highlight layer is now hot cracks and
+  square specks instead of gloss. New images: `flecks_a`/`flecks_b` (square and diamond flecks
+  scattered around a line) and `ember` (a square spark). The health frame has square studs biting
+  into and poking out of its rails. The skull is darker, with cracks and square debris. The smoke
+  has fibres and ink spatter. 15 new assets uploaded; ids in `HudUI.Assets`. The old ids are unused.
+- **Code:** fills, buttons and panels **tile** their texture at its drawn aspect (`P.tile`) instead
+  of stretching, so the grit reads the same on every bar. Bars get two flickering fleck layers that
+  spill above and below the frame over the filled part, and square embers instead of round glows.
+  Flecks were also added along the player-list lines, under player rows, around "In Combat", under
+  the invite, and on the Leave/Disband/Abandon/Accept/Reject buttons. Colours are a little less
+  saturated.
+
+**Tested (Place1, Play):** no console errors; all new assets `PreloadAsync` Success; full-screen
+and zoomed captures (vitals, In Combat, left column, player list).
+**Not tested:** mobile, other resolutions, a published server.
