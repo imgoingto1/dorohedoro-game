@@ -1,0 +1,6 @@
+- [execute_luau module cache is isolated](execute-luau-module-cache-is-isolated.md) — requiring a game module from injected code creates a second instance that shadows the real one and fakes bugs
+- [Studio Play mode hangs on this place](dorohedoro-studio-play-mode-hangs.md) — Map + Combat is heavy enough to wedge the Play toggle; it can't be unstuck from outside Studio
+- [Playtest prompts don't fire](playtest-prompts-dont-fire.md) — tool-driven playtests can't press ProximityPrompts; open NPC dialogue via WorldSignals.DebugTalk
+- [Cross-place script sync](cross-place-script-sync.md) — Academy mirrors Map + Combat via hash-diff + hunks over execute_luau; the Packages were never published
+- [Animator track cap isn't the cause](animator-track-cap-not-real.md) — 300 held tracks played fine; animation breakage was Perfect Dodge stopping idle loops
+- [Brain repo](brain-repo.md) — notes live in github.com/imgoingto1/dorohedoro-game; the project folder is a checkout, so commit + push log updates

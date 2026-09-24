@@ -13,8 +13,11 @@ Tick items off here and log the work in the work log when done.
 - [ ] Smoke-cast screen tint: a per-type colour flash on cast, reusing `SmokeTypes.Types[id].Color`. **[gap]**
 - [ ] Sound-trigger hook service: named hooks (hit, block, parry, cast, level-up, buy, event
       start/end) so dropping in audio later only means filling in IDs. **[gap]**
-- [ ] Check `Lighting.Technology` in the Properties panel. If it is Unified, test ShadowMap. **[gap]**
-- [ ] Decide what to do with M1 reach (whiffs at 6 studs, lands at 4.3). **[gap]**
+- [ ] Check `Lighting.Technology` in the Properties panel. If it is Unified, test ShadowMap.
+      `LightingStyle` is now Realistic. **[gap]**
+- [x] ~~Decide what to do with M1 reach~~: Fist hitbox widened, 3/3 hits at 6 studs (2026-09-24).
+- [ ] `Controllers.Gui.Inventory` still logs "Infinite yield possible on GameUI" on slow loads; give
+      it the same timeout as Camera, Hotbar and HealthBar. **[gap]**
 
 ## VFX
 - [ ] Replace the flat-colour `Kit.slash` / `Kit.burst` effects on all 16 Smoke moves with real
@@ -31,13 +34,17 @@ Tick items off here and log the work in the work log when done.
       player's own rig). **[gap]** needs asset
 - [ ] Idle animations for world NPCs. **[gap]** needs asset
 - [ ] Cast animations ignore the equipped weapon and don't cut into combos; tune priority and blending. **[gap]**
+- [x] ~~Animations breaking at random~~: fixed 2026-09-24 (perfect dodge and hit-stop no longer
+      stop movement tracks, and a watchdog restarts a stopped looping pose).
 - [ ] Directional hit reactions and a posture-break stun animation. **[idea]**
 
 ## Atmosphere fixes
 - [ ] Asset permission errors, e.g. ColorMap `14565342511` on the Underground Lab. Each asset
       has to be shared from its own asset page. **[gap]**
 - [ ] Restore the 13 missing MAP_3 props (kitchen items and 2 loose parts). **[gap]**
-- [ ] `WeatherManager` / `SmallClouds`: remove the disabled jjk leftovers or restore them properly. **[gap]**
+- [x] ~~`WeatherManager` / `SmallClouds`~~: archived 2026-09-24 along with the jjk day/night cycle.
+- [ ] Check the 2026-09-24 street-lamp pass by eye: bulb brightness, bloom and how dark night is.
+      The logic was verified in Play, but the viewport rendered blank. **[gap]**
 - [ ] Per-danger-zone variation of the day-night cycle and ash layer (currently set per place only). **[gap]**
 - [ ] Ambient sound loops for the city, Hell and rain. **[gap]** needs asset
 - [ ] Decide the default for the Shadows setting per device (e.g. off on mobile). **[idea]**
@@ -45,11 +52,12 @@ Tick items off here and log the work in the work log when done.
 ## UI
 - [ ] Item icons: `Items` has no `Icon` field. `InventoryClient` already has the one-line hook. **[gap]** needs asset
 - [ ] Smoke move icons in `SmokeMovesHud`, which currently shows colour swatches. **[gap]** needs asset
-- [ ] Decide the final HUD, since GameUI and Player_Display both draw a health bar and hotbar. **[gap]**
+- [x] ~~Decide the final HUD~~: `VitalsHud` replaced jjk's Player_Display bars (2026-09-24).
 - [ ] Party and clan UI, which are chat commands only today. The `PartyLeader` and
       `PartyMembersJSON` attributes are ready for it. **[idea]**
 - [ ] Buttons are low-contrast since the switch to the blue-grey accent; decide on a call-to-action colour. **[gap]**
-- [ ] Damage numbers, a combo counter, and the target's posture bar. **[idea]**
+- [ ] Damage numbers and the target's guard/stagger bar. The combo counter already exists
+      (`Misc.ComboHit`). **[idea]**
 
 ## Models
 - [ ] Outfits for the world NPCs, which are grey R6 rigs today: Street Informant, Shopkeeper,
@@ -70,8 +78,10 @@ Tick items off here and log the work in the work log when done.
       lever. Depends on the sound-trigger hooks above. **[gap]** needs asset
 - [ ] Holding LeftControl both fires Slide and arms the M1→Uppercut modifier; decide whether to split them. **[gap]**
 - [ ] Spore Burst costs 24 Smoke for 6.8 damage, against 10.2 for a free M1. Test it against a group. **[gap]**
-- [ ] Play-test the NPC tuning (more blocking, less dodging) and confirm posture actually breaks. **[gap]**
+- [ ] Play-test with real input: a clean parry into a riposte, and M2 guard-breaking the Ashmask
+      Shieldbearer (scripted input can't time these). **[gap]**
 - [ ] Play-test the balance numbers (a maxed character gets about +70% damage; Jay said they
       "seem very high"). **[gap]**
 - [ ] Hitstop scaled by weapon weight, and knockback on heavy hits and finishers. **[idea]**
-- [ ] Lock-on camera for 1v1 fights. **[idea]**
+- [x] ~~Lock-on camera~~: soft lock-on built (`Functions.SoftLock`, setting `SoftLock`), along with
+      the stagger meter, finishers and enemy archetypes (2026-09-24).
