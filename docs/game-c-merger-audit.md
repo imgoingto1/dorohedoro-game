@@ -845,6 +845,18 @@ never said how any of them play out.
 | 126 | How long does an execution take? | **3 s**, and a hit on the executioner cancels it. |
 | 127 | How much health does a spared player get up with? | **25% of max HP.** |
 
+### Round 31 — faction seats and rep (asked while building, 2026-09-25)
+
+Asked during build list step 6 (the faction system), where the design said "a handful" of seats
+awarded weekly but not how many, what ranks players, or what a seat gives.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 128 | How many seats per faction? | **5, with canon-flavored names** (drafted, Jay to edit). |
+| 129 | What decides who wins the seats each week? | **All-time rep with decay**, so standing builds up but reflects recent play. |
+| 130 | Does faction rep decay? | **Yes, slowly, after a week idle.** |
+| 131 | What does holding a seat give? | **Nothing mechanical yet**: just the seat on the faction panel. Perks can come later. |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -937,9 +949,15 @@ gang/organization names, allowed under the closed-community rule.
 - **Switching:** allowed, at a cost — a Yen fee, losing all rep and any held seat, and a
   roughly one-week cooldown before rejoining a faction (round 21 #84). **[draft]** fee = 2,000
   Yen, cooldown = 7 real days.
-- **Seats:** a handful of named positions per faction, awarded weekly to the top rep earners —
-  not challenged by duel (round 21 #85, supersedes the duel idea in round 10 #38). Seat
-  standings are a **faction panel**, not a public leaderboard (round 22 #89).
+- **Seats:** **5** named positions per faction (round 31 #128), awarded weekly (Monday 00:00
+  UTC) to the top rep earners — not challenged by duel (round 21 #85, supersedes the duel idea
+  in round 10 #38). Standing is **all-time rep with decay** (#129): rep starts falling after a
+  week without earning any (#130; **[draft]** 10 rep/day), so a seat needs rep kept alive rather
+  than a weekly-only race. Seats carry **no perk yet** (#131). Seat standings are a **faction
+  panel**, not a public leaderboard (round 22 #89). **[draft]** seat names (canon-flavored, Jay
+  to edit):
+  - En's Family: En's Right Hand, Cleaner ×2, Mushroom Keeper, Enforcer.
+  - Cross-Eyes: Boss's Lieutenant, One of the Five ×4.
 - **Turf:** the open world in both hubs — everywhere outside a safe zone, not a separate
   "danger zone" subset (round 28 #119) — is contested faction territory; a faction's HQ is its
   only guaranteed-safe ground. See Visuals below for how each hub shows (or deliberately

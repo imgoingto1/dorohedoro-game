@@ -171,10 +171,28 @@ NPCs, and mock data to drive against.
         count.*
 - [ ] **Temperament**: one good + one bad roll, bonus (not gated) progress on favored activities
       (round 5 #19, round 6 #23).
-- [ ] **Faction system**: join on character creation/first Sorcerer World visit, rep from
+- [x] **Faction system**: join on character creation/first Sorcerer World visit, rep from
       missions and enemy-faction grips, switching (Yen fee + rep/seat loss + ~1 week cooldown),
       weekly seat calculation from top rep earners (round 10, round 21 #83–85). **[draft]** rep
-      gain amounts, switch fee/cooldown.
+      gain amounts, switch fee/cooldown. *Built in Doro (`Config.Factions`,
+      `Services.Player.Faction`, `World.FactionSeats`; round 31 answers):*
+      - *Join / Leave / Seats / Info go over the `FactionRequest` remote. Leaving costs
+        ¥2,000, wipes rep and any seat, and blocks rejoining for 7 days. That's how a switch
+        works.*
+      - *An enemy-faction grip gives +5 rep. `Faction.AddRep` is ready for missions (+8) and
+        objectives (+3).*
+      - *Decay: after 7 idle days, 10 rep/day, worked out from when rep was last earned. That
+        lets the seat job rank offline players.*
+      - *Each Monday the first server to notice ranks both factions' rep boards and saves the
+        top 5 as that week's seats. `Seats` only answers for the asker's own faction.*
+      - *Downed's grip rule now uses real factions. Rank 7 shows Family Blade / Cross-Eyed Blade.*
+      - *Playtested in Studio: joining, rep, decay, the rank title, leaving (fee, cooldown,
+        rejoin), and the seat ranking.*
+      - ***Not tested:** the DataStore side (rep boards, weekly award). Doro has Studio API
+        access off, so it needs Game Settings → Security → "Enable Studio Access to API
+        Services", or a live server.*
+      - ***Not built:** the join picker (character creation / first Sorcerer World visit). That's
+        UI (step 10). Parties aren't in this step either.*
 - [ ] **Mission queue**: rank-gated queue for higher-tier repeatables and the raid; low-tier and
       tutorial quests stay direct-from-NPC (round 25 #104). **[draft]** solo vs. party matching.
 - [ ] **The raid — skeleton**: voting on entry, `CreditRange`-style contribution tracking, a
