@@ -639,6 +639,53 @@ Round 1 covers the decisions everything else depends on. Answers get recorded he
 
 **Watch:** with no new-player protection, 25% drops, no bank and near-universal PvP, the first hour is the biggest retention risk. It is worth playtesting early.
 
+### Round 21 — ranks and factions (asked 2026-09-25)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 82 | Ranks: how many, what names? | **10 ranks with sorcerer-underworld names.** Drafted in the design doc for Jay to edit. |
+| 83 | Which factions? | **En's Family vs Cross-Eyes.** |
+| 84 | Can players switch factions? | **Yes, at a cost:** a Yen fee, losing all faction rep and any seat, and a cooldown of about a week. |
+| 85 | How are seats won? | **Leaderboard.** Seats go to the top faction-rep earners each week. This replaces the duel-challenge idea in answer 38. |
+
+**Project rule (from 83):** canon Dorohedoro names and characters are allowed. The game will run as a **closed community** first, and everything will be redone and sanitized for a public release. Drop Game A's "original name, not canon" workarounds, such as "the Eyeless" gang name in `WorldConfig.Law`.
+
+### Round 22 — Blue Night, rain, combat log, leaderboards (asked 2026-09-25)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 86 | How often does Blue Night happen? | **Copy Game B's real-time timer** for events and raids (below). |
+| 87 | Toxic Rain? | **Keep as is.** |
+| 88 | Combat-log penalty? | **Bigger than an execution** (e.g. 40% of carried Yen and Tags). |
+| 89 | Which leaderboards? | **Top 10 Elo only.** Seat standings (85) are a faction panel, not a public board. |
+
+**How Game B times raids and events:**
+
+- **Raids:** a real-world cooldown of 12.5 minutes since the last raid (Unix timestamp, originally shared across servers through a DataStore), checked every 60 s.
+- **Events:** start only when both sides have players online, and last 300 s.
+- **Weekends:** the real UTC weekday drives a bonus. Saturday and Sunday double rare-box odds; Friday to Sunday raise the reward multiplier.
+
+**Blue Night in Game C (proposed):** it can start once enough real time has passed since the last one (tunable; 12.5 min in B), if both factions have players online, and lasts about 5 minutes. Whether to add B's weekend bonus is asked in round 23.
+
+### Round 23 — weekend, respawn, crafting, Tag shop (asked 2026-09-25)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 90 | Weekend bonus? | **Yes.** Rare-drop odds double on Saturday and Sunday (real UTC weekday), rare drops only. |
+| 91 | Respawn? | **Keep 3 s + spawn grace.** Grace ends when you land a hit. |
+| 92 | Crafting? | **No crafting.** |
+| 93 | Tag shop contents? | **Accessories and less-rare rerolls, like Game B.** The rarest items (Smoke reroll, devil-buff reroll) stay drop-only. The shop holds accessories for the 10 slots plus minor rerolls (e.g. looks). |
+
+### Walkthrough status
+
+Every system in the comparison table now has a decision.
+
+**Still open for the design doc:**
+
+- the 10 rank names
+- which story bosses exist
+- the exact numbers (Blue Night cooldown, rep gains, Yen prices, drop rates)
+
 ### Next rounds (planned)
 
 - **Progression:** named ranks vs levels, how grindy, whether transformations (Sorcerer → Devil) are the endgame.
