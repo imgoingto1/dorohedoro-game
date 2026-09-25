@@ -28,8 +28,12 @@ sits directly next to real danger — that contrast is part of the point, not so
    towers and spires, dwarfed by colossal rock-and-stone needles.
 3. **Beauty in decay.** By day the city is partly ruined: crumbled arches, rubble, broken stairs,
    and nature reclaiming it with trees, vines and roots.
-4. **Two moods.** Day is bright, clear and teal-skied, with soft light rays. Night is a
-   carnival: saturated colour, string lights on everything, searchlights, stars and aurora.
+4. **Two moods — and the carnival is an event, not every night** (resolved round 29). Day is
+   bright, clear and teal-skied, with soft light rays. An ordinary night is just dark and starry
+   — the full carnival (saturated colour, string lights on everything, searchlights, aurora)
+   switches on specifically during **Blue Night**, Sorcerer World's manifestation of the global
+   Blue Night event (the Hole gets its own manifestation, renamed Night of the Living Dead — see
+   `docs/game-c-merger-audit.md`, Events). This is also when Blue Night contracts are formed.
 5. **Whimsy that's not safety.** Striped towers, onion domes, fairground rides — sorcerers live
    in luxury and treat the world as a playground, but this same gorgeous ground is fully PvP the
    moment you step outside a faction HQ or the Academy (round 28). The prettier it looks, the
@@ -94,8 +98,6 @@ Beams especially, since they're always-on effects across the whole hub at night.
 
 ## Open questions for Jay
 
-- Is the night carnival always on, or does it come and go (e.g. tied to Blue Night, round 24
-  #86, rather than running independently)?
 - Where do the two faction HQs sit relative to each other and to the Academy — adjacent
   districts, opposite ends, something else?
 - Does the raid (round 24 #96) live in Sorcerer World, the Hole, or its own instanced space? Not

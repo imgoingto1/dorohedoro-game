@@ -15,12 +15,14 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (28 rounds, 120 questions), Game C design
-drafted and updated through rounds 24–28's reconsideration of where Game B's approach — not
+**Status:** Phases 1–2 done, interview complete (29 rounds, 120 questions), Game C design
+drafted and updated through rounds 24–29's reconsideration of where Game B's approach — not
 code — should lead instead of just filling gaps in Game A's, including systems the original
 comparison table had simply marked "Keep A" with no pushback, a previously-undefined gap in
-what a weapon's actual moveset is (now one tree rooted at the weapon choice), and the visual
-target for both hubs (see [`art-direction/`](../art-direction/)). Everything in the design
+what a weapon's actual moveset is (now one tree rooted at the weapon choice), the visual
+target for both hubs (see [`art-direction/`](../art-direction/)), and Blue Night's split into a
+Sorcerer World carnival/contract event and the Hole's renamed Night of the Living Dead.
+Everything in the design
 section is either a direct interview
 answer or a **[draft]** value proposed for Jay to tune from
 playtesting — nothing is final until he says so.
@@ -801,6 +803,29 @@ are landmarks, not colour-coded; Sorcerer World's are the one place a faction vi
 ground; the Academy (also a Sorcerer World safe zone) stays neutral like the Hole, for a
 different reason — it's shared ground, not gang turf.
 
+### Round 29 — Blue Night splits into two hub manifestations (instructed 2026-09-25)
+
+Not a Q&A round — a direct build instruction, prompted by an open question round 28 raised
+(does the Sorcerer World carnival run all the time, or tie to an event?). Jay: the carnival
+**is** Blue Night, just experienced in Sorcerer World specifically — same global clock as the
+Hole's Blue Night, but the Hole's version should be renamed **Night of the Living Dead**, and
+the Sorcerer World version is where **Blue Night contracts** (parked since round 17 #67) are
+actually formed.
+
+**Resolved into the design (see Events, Economy and The Devil path, below):**
+- One global clock (round 22 #86's timing, unchanged) fires **both hubs' manifestations at
+  once**, not one event in one place.
+- **Sorcerer World: kept the name "Blue Night."** No zombies — this is the night carnival from
+  `art-direction/sorcerer-world.md`, which only runs during the event rather than every night.
+  This is also where Blue Night contracts are formed, so that system is reactivated, not parked.
+- **The Hole: renamed to "Night of the Living Dead."** The zombie-combat event Game A always
+  had, unchanged in substance — every existing "Blue Night kills" reference in this design
+  (rank rewards, the Devil-path counter, Tags/rare-gear drops) meant this side specifically,
+  since the carnival side has nothing to kill. Renamed throughout for clarity.
+- **What a formed contract actually does is still unspecified** — reactivating the system
+  answered *where* it happens, not *what it grants*. Flagged in Open numbers rather than
+  invented here.
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -948,12 +973,12 @@ max rank for an average player (round 6 #24).
 | 2 | Streetwise | 5 quests or jobs | 1 attribute point |
 | 3 | Smoke-Touched | 15 quests/jobs, first Smoke move cast | 2 attribute points |
 | 4 | Alley Regular | 30 quests/jobs, 5 faction missions | 2 attribute points, 1 Tag shop slot unlocked |
-| 5 | Blade for Hire | 50 quests/jobs, 10 faction missions, 3 Blue Night kills | 3 attribute points, cosmetic |
+| 5 | Blade for Hire | 50 quests/jobs, 10 faction missions, 3 Night of the Living Dead kills | 3 attribute points, cosmetic |
 | 6 | Marked | 15 faction missions, 5 enemy-faction grips | 3 attribute points |
 | 7 | Family Blade *(or Cross-Eyed Blade)* | 25 faction missions, 15 grips | 4 attribute points, title |
-| 8 | Underboss's Ear | 15 Blue Night kills, 30 grips | 4 attribute points |
+| 8 | Underboss's Ear | 15 Night of the Living Dead kills, 30 grips | 4 attribute points |
 | 9 | Ghoul-Killer | 50 grips, first-clear on a story boss | 5 attribute points, cosmetic |
-| 10 | Devil's Door | 75 grips, 10 Blue Night kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
+| 10 | Devil's Door | 75 grips, 10 Night of the Living Dead kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
 
 Rank 10 unlocks *eligibility* for the Devil trial, not the Devil form itself — reaching it opens
 the counters described under The Devil path below, which is its own, longer arc on top of the
@@ -1184,8 +1209,9 @@ rep are the only PvP-consequence systems.
 ### Economy
 
 **Currencies:** Yen (everyday spending) and Burial Tags, repurposed from an attribute-point
-currency into a **rare Blue-Night-only currency** for the Tag shop (round 11 #42 — attribute
-points now come from rank-ups instead, round 6 #21).
+currency into a **rare currency earned from Night of the Living Dead** (round 29 — the Hole's
+zombie-combat manifestation of the global Blue Night clock, see Events below) for the Tag shop
+(round 11 #42 — attribute points now come from rank-ups instead, round 6 #21).
 
 **Yen sinks** (round 11 #43): the gear shop and the rotating market (see below), cosmetics
 (barber, outfits), and an **endgame exchange** — a large Yen-plus-rare-item cost gating part of
@@ -1195,10 +1221,11 @@ A's existing price bands (250–500 Yen per piece) as the launch baseline.
 
 **Loot** (round 11 #41, narrowed by round 20 #80 once field bosses were cut, extended by round
 24's raid): mobs drop Yen, Tags and sometimes gear; **rare gear and the rare Smoke-reroll item
-come from Blue Night drops, rare mob drops, the rotating market (Tags, see below) and now the
-raid's own loot pool** (see Raids below) — not from bosses, since bosses are story-only now (see
-below). **[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke reroll ~0.1% (Blue
-Night kills only) — retune once the drop-table sizes below are picked.
+come from Night of the Living Dead drops, rare mob drops, the rotating market (Tags, see below)
+and now the raid's own loot pool** (see Raids below) — not from bosses, since bosses are
+story-only now (see below). **[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke
+reroll ~0.1% (Night of the Living Dead kills only, round 29 — the Sorcerer World side of Blue
+Night has no zombies to farm) — retune once the drop-table sizes below are picked.
 
 **Equipment: 10 slots** (round 14 #55, matching Game B's loot chase — needs roughly 10 slots ×
 3–4 rarity tiers of gear to fill meaningfully).
@@ -1250,12 +1277,28 @@ uniquely drove (round 9):
 | Toxic Rain | Ghost Night, Rule of the Hour, Party Mishap | Drove the Ghost-shy quirk and Party Cake buff, both removed with them |
 | — | Smoke Surge, Supply Cache, Whisper, Cleanup Day | No longer fit — the loot table (above) replaces most of what these gave |
 
-**Blue Night timing** copies Game B's real-time event pattern (round 22 #86, #92 note):
-**[draft]** can start once ~15 minutes of real time have passed since the last one (checked
-every 60 s, a jump from Game B's 12.5 min since Game C only has one event doing this job), only
-if both factions have players online, and lasts about **5 minutes**.
+**Blue Night is one global event with two hub manifestations** (round 29), not a single event
+confined to the Hole. One clock, same trigger, fires **both hubs at once**:
 
-**Toxic Rain is kept exactly as it is today** in Game A (round 22 #87) — no changes.
+| | Sorcerer World: **Blue Night** | The Hole: **Night of the Living Dead** |
+| --- | --- | --- |
+| What happens | The night carnival switches on — Ferris wheel, roller coaster, string lights, aurora (`art-direction/sorcerer-world.md`, ref 3). No zombies. | Game A's original zombie event, kept and renamed — a wave of zombies (the "fist-only" fight per the old design) hits the streets. |
+| What it's for | **Blue Night contracts are formed here** (round 17 #67, reactivated — no longer parked). Two players can form a contract during the window. What a contract actually *does* mechanically is still open — see Open numbers. | Kills feed the Devil-path counter, the rank ladder (rank 5/8/10, above) and Tag/rare-gear drops (Economy, above). |
+| Currency/loot | None — this side is a social/contract event, not a farming one. | Tags and rare-gear drops (see Loot, above). |
+
+This also answers the open question in `art-direction/sorcerer-world.md`: the night carnival
+isn't always running — it's specifically what Blue Night looks like there, so it's on exactly
+as often as the event fires.
+
+**Timing** copies Game B's real-time event pattern (round 22 #86, #92 note), and now governs
+both manifestations at once: **[draft]** can start once ~15 minutes of real time have passed
+since the last one (checked every 60 s, a jump from Game B's 12.5 min since Game C only has one
+event doing this job), only if both factions have players online, and lasts about **5
+minutes** — during which Sorcerer World is carnival-lit and the Hole is under siege,
+simultaneously.
+
+**Toxic Rain is kept exactly as it is today** in Game A (round 22 #87) — no changes, and stays
+Hole-only; it was never a Sorcerer World event and round 29 didn't touch it.
 
 ### Bosses
 
@@ -1310,10 +1353,12 @@ The proposed structure from round 15, confirmed as-is in round 16 #62, with roun
 refinements folded in, plus round 24's addition of a fourth eligibility counter and a
 post-unlock evolution stage:
 
-1. **Eligibility:** max rank (10) **and** four counters — enemy-faction grips, Blue Night
-   kills, time spent at max rank (field-boss kills dropped from the original four-counter
-   list once field bosses were removed, round 20 #79), and **raid contribution** (added round
-   24 #96 follow-up, restoring the counter count to four without bringing field bosses back) —
+1. **Eligibility:** max rank (10) **and** four counters — enemy-faction grips, Night of the
+   Living Dead kills (round 29 — the Hole's manifestation of Blue Night; Sorcerer World's
+   carnival side has no kills to count), time spent at max rank (field-boss kills dropped from
+   the original four-counter list once field bosses were removed, round 20 #79), and **raid
+   contribution** (added round 24 #96 follow-up, restoring the counter count to four without
+   bringing field bosses back) —
    **plus** the endgame Yen exchange (above). **Top-10 Elo players skip the four counters** but
    still need max rank and the exchange (round 16 #63).
 2. **Madame Ise** — the existing trial NPC — is the gatekeeper. Her dialogue hints at whichever
@@ -1328,7 +1373,8 @@ post-unlock evolution stage:
 7. **True Devil (round 24 #94):** after the base form is unlocked and mastered, a further
    evolution stage becomes available — mirroring Game B's Bankai → True Bankai step. **[draft]**
    gated by the same four counters as base eligibility, at higher thresholds (e.g. double the
-   grip/Blue Night/raid-contribution counts, plus additional time at max rank with the base form
+   grip/Night-of-the-Living-Dead/raid-contribution counts, plus additional time at max rank
+   with the base form
    already mastered), fought the same way as step 3 (a second, harder inner-world duel). Using
    it is stronger than the base form but on a **much longer cooldown**, the same shape as Game
    B's 30 min (Bankai) → 12 h (True Bankai) jump. Exact thresholds and the cooldown length are
@@ -1338,9 +1384,14 @@ post-unlock evolution stage:
 only. Rerolling the **buffs** needs the rare drop item — keeps the whole path free of
 pay-to-win.
 
-**Parked for later, not in this design:** Blue Night partner contracts (round 17 #67), the
-artificial tumor system (round 17 #69, revisited if/when a new origin needs it), and Hell as a
-place (round 8 #32 — the Devil path doesn't depend on it).
+**No longer parked:** Blue Night partner contracts (round 17 #67) are reactivated as of round
+29 — see Events, above — now that they have a real home in the Sorcerer World side of Blue
+Night. What forming a contract actually *does* mechanically is still unspecified; see Open
+numbers.
+
+**Still parked for later, not in this design:** the artificial tumor system (round 17 #69,
+revisited if/when a new origin needs it), and Hell as a place (round 8 #32 — the Devil path
+doesn't depend on it).
 
 ### New players
 
@@ -1404,10 +1455,14 @@ Every **[draft]** figure above, plus:
   branches to fit how each weapon feels.
 - Whether a player who respecs their root pick keeps anything from the old branch (a partial
   Yen refund, a cosmetic memento) or loses it outright — not addressed yet.
-- Whether Sorcerer World's night carnival is always on or tied to an event like Blue Night —
-  raised as an open question in `art-direction/sorcerer-world.md`, not yet asked.
+- ~~Whether Sorcerer World's night carnival is always on or tied to an event~~ — **resolved
+  round 29:** tied to Blue Night specifically.
+- **What a Blue Night contract actually does mechanically** (round 29) — a buff for the pair, a
+  cosmetic bond, a matchmaking flag for a future party/duel feature, something else entirely.
+  Reactivating the system only answered where and when it happens.
 - Where each faction's two HQs (one per hub) actually sit on the map, and what makes the Hole's
   specifically read as "defensible" architecturally.
 - Where the raid (round 24 #96) is physically set — neither hub's art-direction file nor the
-  Raids section commits to a location or its own visual identity yet.
+  Raids section commits to a location or its own visual identity yet, and it isn't tied to
+  either Blue Night manifestation.
 - Both files' existing open questions (prototype order, asset sourcing) carry over unresolved.

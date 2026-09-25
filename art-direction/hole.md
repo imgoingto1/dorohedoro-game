@@ -49,6 +49,15 @@ open PvP by default (round 19 #74) — the grit and menace *this brief already d
 danger looks like here; it doesn't need a second, extra-hazardous treatment layered on top. The
 only place that needs to look **different** from the rest of the Hole is a **safe zone**.
 
+## Night of the Living Dead (round 29)
+
+The Hole's manifestation of the global Blue Night event — renamed so it doesn't share a name
+with Sorcerer World's carnival version, see `docs/game-c-merger-audit.md`, Events. Zombies hit
+the streets for the event's ~5-minute window; no visual identity for it is designed yet beyond
+"the same Hole, now with zombies in it" — worth its own pass later (fog thickening, maybe a
+colour-correction shift) once the base look above is built and there's something to react
+against.
+
 ## Faction HQs stay visually neutral (round 28)
 
 Unlike Sorcerer World, **the Hole's faction HQs get no faction colour or banner treatment** —
