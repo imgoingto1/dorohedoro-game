@@ -187,13 +187,39 @@ NPCs, and mock data to drive against.
       duel (even against a placeholder "devil" built from stub Smoke+weapon data), the one-time
       buff/downside roll, the mastery duel that removes the downside (round 15–17, round 20 #79,
       round 24 #96 follow-up).
-- [ ] **Death/PvP**: the downed state (spare/carry/execute), 25% carried Yen/Tags on execution,
+- [x] **Death/PvP**: the downed state (spare/carry/execute), 25% carried Yen/Tags on execution,
       a flat PvE death Yen loss (**[draft]** 500), a 40% combat-log penalty, the anti-farming
       guards (enemy-faction-only grip credit, 2-rank floor, ~1 h per-victim Elo cooldown, a
       **[draft]** 1,000 Yen/day transfer cap) (round 1 #2, round 12, round 13, round 14 #54,
-      round 15 #58).
-- [ ] **Elo**: hidden per-player rating, a public top-10 leaderboard only (round 13 #53, round 22
-      #89).
+      round 15 #58). *Built in Doro (`Services.Player.Downed`, the `Grip` action; details from
+      round 30):*
+      - *`DamageLogic` downs players at 0 HP instead of killing them. A downed player takes no
+        damage and can't act, then gets up after 12 s at 25% HP with 1 s of i-frames.*
+      - *G grips (the 3 s channel; a hit cancels it). V carries or drops (a hit on the carrier
+        drops them).*
+      - *A player executioner gets 25% of the victim's Yen and Tags. The grip goes to rank only
+        against an enemy faction within 2 ranks; until factions exist (step 6) it counts in
+        Studio only.*
+      - *Mobs walk over and grip the players they downed; that costs the victim the PvE loss,
+        reduced by Vitality.*
+      - *Combat log: leaving within 60 s of a PvP hit, or while downed by a player, destroys 40%.
+        It's applied through a new `Data.LeaveHooks` before the save is released, and the
+        player is told on their next join.*
+      - *Spawn grace was ported (3 s, ends when you land a hit). Messages go to chat for now
+        (`Misc.Notice`).*
+      - ***Playtested:** a mob downed and executed a player (¥1,000 → ¥500), and hits on the
+        mob cancelled its grip so the player got up after 12 s at 25/100 HP. **Not yet
+        playtested:** a player executing a player (money, grip credit, Elo), carry, and combat
+        log. All three need two players (Studio: Test → Clients and Servers → 2 players).*
+      - ***Not built:** the Yen transfer cap. There's no give/drop feature yet, so it belongs
+        with the economy step.*
+      - ***needs asset:** downed, grip and carry animations. The placeholders are a frozen
+        knockback pose and a slowed uppercut.*
+- [x] **Elo**: hidden per-player rating, a public top-10 leaderboard only (round 13 #53, round 22
+      #89). *Standard Elo, K=24 (Game A's), updated on player executions; the 1 h per-victim
+      cooldown is saved per executioner (`EloCooldowns`). `World.EloBoard` writes ratings to
+      the OrderedDataStore `GameC_Elo_v1` and publishes the top 10 as names and rank titles
+      only, never the number (workspace attribute `EloTop10`, for the UI step).*
 - [ ] **Economy — loot and the market**: mob/raid drop tables (**[draft]** ~3%/~0.5%/~0.1%
       common/rare/Smoke-reroll odds), the merged rotating market (Yen for common/uncommon, Tags
       required for rare+), the weekend rare-drop-odds doubling, the purchase ledger and code

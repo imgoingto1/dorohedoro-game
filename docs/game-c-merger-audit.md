@@ -830,6 +830,21 @@ actually formed.
   answered *where* it happens, not *what it grants*. Flagged in Open numbers rather than
   invented here.
 
+### Round 30 — the downed/execute details (asked while building, 2026-09-25)
+
+Asked during build list step 5 (Death/PvP), where the design named spare / carry / execute but
+never said how any of them play out.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 121 | How long does a downed player stay down if nobody acts? | **12 s** (Game B's knockout), then they get up. |
+| 122 | Who can execute or carry a downed player? | **Anyone at all**, allies included. |
+| 123 | Where does the 25% execution drop go? | **Straight to the executioner**, not a physical drop. |
+| 124 | What happens when a mob brings a player to 0 HP? | **Downed, then executed by the mob.** Mobs grip players too; the victim takes the flat PvE death loss. Players can still grip or carry them first. |
+| 125 | Where does the 40% combat-log penalty go? | **Always destroyed**, a pure sink. Nobody profits from someone else disconnecting. |
+| 126 | How long does an execution take? | **3 s**, and a hit on the executioner cancels it. |
+| 127 | How much health does a spared player get up with? | **25% of max HP.** |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -1170,16 +1185,21 @@ never turns into a long bench sit for anyone.
 
 ### Death, PvP and combat log
 
-At 0 HP a player is **downed**, not killed (round 1 #2). The attacker chooses:
+At 0 HP a player is **downed**, not killed (round 1 #2), for **12 s** (round 30 #121). A downed
+player can't act and takes no damage. **Anyone at all** can act on them, allies included (#122):
 
-- **Spare** — the downed player recovers normally.
+- **Spare** — nobody acts, and they get up after 12 s with **25% of max HP** (#127).
 - **Carry** — pick them up and move them; this only repositions them (e.g. away from allies
   before an execution). There is no reward for turning a captive in anywhere — the "bonus
   reward" and "no reward for turning players in" language in round 13 #51 replaces the fuller
-  Game B captive system floated in round 12 #46.
-- **Execute** — counts toward the attacker's rank progress (subject to the grip rules below) and
-  drops **25% of the victim's carried Yen and Tags** (round 12 #47, the newer, harsher answer
-  that supersedes round 1 #2's original "soft loss" framing).
+  Game B captive system floated in round 12 #46. A hit on the carrier drops them.
+- **Execute** — a **3 s** channel that a hit on the executioner cancels (#126). It counts toward
+  the attacker's rank progress (subject to the grip rules below) and takes **25% of the victim's
+  carried Yen and Tags**, paid **straight to the executioner** (#123; round 12 #47, the newer,
+  harsher answer that supersedes round 1 #2's original "soft loss" framing).
+
+**Mobs down and execute players too** (#124): a mob that downs a player walks over and grips them,
+and that costs the flat PvE death loss below. Other players can grip or carry the victim first.
 
 **No bank exists — all money is always at risk** (round 13 #50). This is deliberate: it pushes
 spending (into the endgame Yen exchange, gear, cosmetics) rather than hoarding, and it's the
@@ -1190,7 +1210,9 @@ reason the grip-farming guards below matter so much.
 amount, Game B uses 1,000" without confirming the exact figure).
 
 **Combat-log penalty is worse than an execution** — **[draft] 40%** of carried Yen and Tags
-(round 22 #88 confirms "bigger than an execution," e.g. 40%).
+(round 22 #88 confirms "bigger than an execution," e.g. 40%). The loss is **always destroyed**
+(round 30 #125). It applies when a player leaves within 60 s of a PvP hit, or while downed by a
+player. Leaving while downed by a mob counts as that mob's execution instead.
 
 **Anti-farming guards** (round 6 note, round 12 #49, round 14 #54, round 15 #58):
 - Only **enemy-faction grips** count toward rank progress — same-faction executions give
