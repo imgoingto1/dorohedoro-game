@@ -209,12 +209,20 @@ NPCs, and mock data to drive against.
       a flat PvE death Yen loss (**[draft]** 500), a 40% combat-log penalty, the anti-farming
       guards (enemy-faction-only grip credit, 2-rank floor, ~1 h per-victim Elo cooldown, a
       **[draft]** 1,000 Yen/day transfer cap) (round 1 #2, round 12, round 13, round 14 #54,
-      round 15 #58). *Built in Doro (`Services.Player.Downed`, the `Grip` action; details from
-      round 30):*
-      - *`DamageLogic` downs players at 0 HP instead of killing them. A downed player takes no
-        damage and can't act, then gets up after 12 s at 25% HP with 1 s of i-frames.*
-      - *G grips (the 3 s channel; a hit cancels it). V carries or drops (a hit on the carrier
-        drops them).*
+      round 15 #58). *Built in Doro as Game B's knock → carry → grip, rebuilt from how B plays
+      (`Services.Player.Downed`, the `Grip` action, `ServerStorage.Packages.Ragdoll`; rounds 30
+      and 32):*
+      - *`DamageLogic` knocks players out at 0 HP instead of killing them: a limp ragdoll (the
+        owning client puts the Humanoid into Physics), immune to damage, for 12 s. Then they
+        come to with +10% max HP and 1 s of i-frames.*
+      - *V carries or drops within 6 studs (0.5 s toggle cooldown). A dropped body lands 3.5
+        studs ahead with its knockout restarted.*
+      - *G grips within 6 studs, only a body on the ground and not carried. Both players snap
+        face to face 2.75 studs apart and are held in place. The kill lands on the grip
+        animation's `EventFrame` keyframe (3 s fallback). A hit cancels it and restarts the
+        knockout.*
+      - *Grip animations are looked up per weapon at `Animations.Weapons.<weapon>.Grip` /
+        `.Gripped`, falling back to `Animations.Default.Grip` / `.Gripped`.*
       - *A player executioner gets 25% of the victim's Yen and Tags. The grip goes to rank only
         against an enemy faction within 2 ranks; until factions exist (step 6) it counts in
         Studio only.*
@@ -225,14 +233,17 @@ NPCs, and mock data to drive against.
         player is told on their next join.*
       - *Spawn grace was ported (3 s, ends when you land a hit). Messages go to chat for now
         (`Misc.Notice`).*
-      - ***Playtested:** a mob downed and executed a player (¥1,000 → ¥500), and hits on the
-        mob cancelled its grip so the player got up after 12 s at 25/100 HP. **Not yet
-        playtested:** a player executing a player (money, grip credit, Elo), carry, and combat
-        log. All three need two players (Studio: Test → Clients and Servers → 2 players).*
+      - ***Playtested:** a mob knocked out, ragdolled and gripped a player (¥1,000 → ¥500),
+        with both freed after. A hit on the mob cancelled its grip; the body went back to the
+        ragdoll, and the player came to 12 s later at 11 HP (1 + 10%). **Not yet playtested:**
+        a player gripping a player (money, grip credit, Elo), carry, and combat log. All three
+        need two players (Studio: Test → Clients and Servers → 2 players).*
       - ***Not built:** the Yen transfer cap. There's no give/drop feature yet, so it belongs
         with the economy step.*
-      - ***needs asset:** downed, grip and carry animations. The placeholders are a frozen
-        knockback pose and a slowed uppercut.*
+      - ***needs asset:** Game C's own grip / gripped pair (one per weapon, or one shared
+        Default pair) and carrying / carried animations. The grip pair needs an `EventFrame`
+        keyframe where the kill lands. Game B's animations can't be used. The current
+        placeholder is a slowed uppercut on the executioner, with the victim held still.*
 - [x] **Elo**: hidden per-player rating, a public top-10 leaderboard only (round 13 #53, round 22
       #89). *Standard Elo, K=24 (Game A's), updated on player executions; the 1 h per-victim
       cooldown is saved per executioner (`EloCooldowns`). `World.EloBoard` writes ratings to

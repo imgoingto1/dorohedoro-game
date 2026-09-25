@@ -857,6 +857,19 @@ awarded weekly but not how many, what ranks players, or what a seat gives.
 | 130 | Does faction rep decay? | **Yes, slowly, after a week idle.** |
 | 131 | What does holding a seat give? | **Nothing mechanical yet**: just the seat on the faction panel. Perks can come later. |
 
+### Round 32 — Game B's knock and grip (instructed 2026-09-25)
+
+Jay, after round 30's version was built: "the gripping and knocking system from game b should be
+used." B's code and animations stay off-limits (ripped from another developer's game), so B's
+knock/carry/grip was read for how it behaves and rebuilt in Doro to match. Round 30's answers
+stand except where B's behavior replaced them:
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 132 | Whose knock/grip system? | **Game B's**, rebuilt: a limp ragdoll while knocked out; carry and grip within 6 studs; carry toggled with a 0.5 s cooldown; a carried body can't be hit; setting a body down (or the carrier being hit) drops it 3.5 studs ahead and restarts the knockout; grip only on a body on the ground and not carried; both snap face to face 2.75 studs apart, held in place for paired animations; a hit on the executioner cancels and restarts the knockout. |
+| 133 | Get-up health (B heals +10% of max HP; round 30 said 25%)? | **Game B: +10% of max HP.** |
+| 134 | Grip length (B kills on the grip animation's keyframe; round 30 said 3 s)? | **Animation-driven, like B:** the kill lands on the grip animation's `EventFrame` keyframe; about 3 s, and exactly 3 s until real grip animations exist. |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -1203,18 +1216,27 @@ never turns into a long bench sit for anyone.
 
 ### Death, PvP and combat log
 
-At 0 HP a player is **downed**, not killed (round 1 #2), for **12 s** (round 30 #121). A downed
-player can't act and takes no damage. **Anyone at all** can act on them, allies included (#122):
+**Game B's knock → carry → grip system, rebuilt** (round 32 #132). It plays the way B's does,
+built from how B behaves — none of B's code or animations. At 0 HP a player is **knocked out**,
+not killed (round 1 #2): a limp ragdoll for **12 s** (round 30 #121), immune to damage, unable to
+act. **Anyone at all** can act on them, allies included (#122):
 
-- **Spare** — nobody acts, and they get up after 12 s with **25% of max HP** (#127).
-- **Carry** — pick them up and move them; this only repositions them (e.g. away from allies
-  before an execution). There is no reward for turning a captive in anywhere — the "bonus
-  reward" and "no reward for turning players in" language in round 13 #51 replaces the fuller
-  Game B captive system floated in round 12 #46. A hit on the carrier drops them.
-- **Execute** — a **3 s** channel that a hit on the executioner cancels (#126). It counts toward
-  the attacker's rank progress (subject to the grip rules below) and takes **25% of the victim's
-  carried Yen and Tags**, paid **straight to the executioner** (#123; round 12 #47, the newer,
-  harsher answer that supersedes round 1 #2's original "soft loss" framing).
+- **Spare** — nobody acts, and they come to after 12 s with **+10% of max HP** (#133, B's value,
+  replacing round 30 #127's 25%).
+- **Carry** — within 6 studs, picked up over the shoulder; toggled, with a 0.5 s cooldown. It only
+  repositions them (e.g. away from allies before an execution). There is no reward for turning a
+  captive in anywhere — the "bonus reward" and "no reward for turning players in" language in
+  round 13 #51 replaces the fuller Game B captive system floated in round 12 #46. Setting the
+  body down — or the carrier being hit — drops it 3.5 studs in front of the carrier, and **the
+  knockout timer starts over**.
+- **Grip (execute)** — within 6 studs, only a body lying on the ground and not carried. Both
+  players snap face to face 2.75 studs apart and are held in place while a paired grip / gripped
+  animation plays (per weapon, like B); **the kill lands on the grip animation's `EventFrame`
+  keyframe** (#134), about 3 s (round 30 #126). A hit on the executioner cancels it, and the body
+  drops back with its knockout timer restarted. The grip counts toward the attacker's rank
+  progress (subject to the grip rules below) and takes **25% of the victim's carried Yen and
+  Tags**, paid **straight to the executioner** (#123; round 12 #47, the newer, harsher answer
+  that supersedes round 1 #2's original "soft loss" framing).
 
 **Mobs down and execute players too** (#124): a mob that downs a player walks over and grips them,
 and that costs the flat PvE death loss below. Other players can grip or carry the victim first.
