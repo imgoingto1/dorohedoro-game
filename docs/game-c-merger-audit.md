@@ -15,7 +15,9 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done; interview round 1 answered; Game C design comes after the interview.
+**Status:** Phases 1–2 done, interview complete (23 rounds, 93 questions), Game C design drafted.
+Everything in the design section is either a direct interview answer or a **[draft]** value
+proposed for Jay to tune from playtesting — nothing is final until he says so.
 
 ## Game A — "The Hole" (Map + Combat)
 
@@ -680,11 +682,9 @@ Round 1 covers the decisions everything else depends on. Answers get recorded he
 
 Every system in the comparison table now has a decision.
 
-**Still open for the design doc:**
-
-- the 10 rank names
-- which story bosses exist
-- the exact numbers (Blue Night cooldown, rep gains, Yen prices, drop rates)
+**Drafted below, for Jay to confirm or edit:** the 10 rank names and their gates/rewards, which
+story bosses exist, and the numbers marked **[draft]** throughout the design section (Blue Night
+timing, rep gains, Yen prices, drop rates, and the rest listed in "Open numbers" at the end).
 
 ### Next rounds (planned)
 
@@ -695,4 +695,316 @@ Every system in the comparison table now has a decision.
 
 ## Game C design
 
-Filled in after the interview.
+Everything below is pulled from the 93 interview answers into one coherent spec. Where the
+interview left a number open, a draft value is proposed and marked **[draft]** — Jay's to tune
+from playtesting, same as the rank names in round 21. Nothing marked draft is a firm decision;
+everything else quotes an interview answer.
+
+### Pillars
+
+1. **The Hole supplies the engine, Game B supplies the stakes.** Every mechanic below is Game
+   A's code, rebuilt or extended — no Game B code, assets or files enter this place (see
+   Provenance and the migration verdict above).
+2. **Hardcore, zone-free PvP.** No safe grinding lane. Danger is opt-out only inside a few named
+   safe zones, not opt-in via a toggle or instance.
+3. **Everything is always at risk.** No bank, real Yen and Tag loss on death, a hard faction
+   line. The tension is the point (round 13 note).
+4. **Rank is earned, not rolled.** Smoke type is the one permanent roll; power comes from named
+   ranks, gear and skill.
+5. **Closed community first.** Canon Dorohedoro names and characters are fair game while the
+   game is unlisted; a sanitized public pass happens before any wider release (round 21).
+
+### World
+
+Two hubs at launch, linked only by Smoke doors — no teleporting within a hub (round 8 #31):
+
+| Hub | Role | PvP | Safe zones |
+| --- | --- | --- | --- |
+| **Sorcerer World** | Home hub. The Academy district is the tutorial; a Smoke door out opens once it's done. | Fully PvP outside faction HQs (round 19 #75) | Faction HQs, the Academy (round 20 #81) |
+| **The Hole** | The open city, PvP endgame. | PvP everywhere except safe zones (round 19 #74) | Faction HQs only — the Diner is no longer safe (round 20 #81) |
+
+Cut entirely (round 17 #68): POI discovery, secrets, the rumor board, the Grudge Monument. Their
+code (`RumorService`, `POIIndexService`, `POIGuideClient`, `GrudgeService`) is not ported. The
+**zone-tracking** half of `WorldService` (danger/safe zone attributes) is kept — zoned safety
+still depends on it.
+
+**Hell and the Sorcerer world's other regions** are future places, built and revealed later
+(round 8 #32). The Devil path does not depend on Hell existing.
+
+### Factions
+
+**En's Family vs. Cross-Eyes** (round 10 #37, confirmed round 21 #83) — canon Dorohedoro
+gang/organization names, allowed under the closed-community rule.
+
+- **Joining:** pick one on character creation (or first Sorcerer World visit). No neutral option.
+- **Rep:** earned from faction missions and enemy-faction grips (replaces the cut Ashmask
+  Sweep as a rep source, round 10 note). **[draft]** grip +5 rep, mission turn-in +8 rep,
+  danger-zone objective +3 rep.
+- **Switching:** allowed, at a cost — a Yen fee, losing all rep and any held seat, and a
+  roughly one-week cooldown before rejoining a faction (round 21 #84). **[draft]** fee = 2,000
+  Yen, cooldown = 7 real days.
+- **Seats:** a handful of named positions per faction, awarded weekly to the top rep earners —
+  not challenged by duel (round 21 #85, supersedes the duel idea in round 10 #38). Seat
+  standings are a **faction panel**, not a public leaderboard (round 22 #89).
+- **Turf:** danger zones in both hubs are contested faction territory; a faction's HQ is its
+  only guaranteed-safe ground.
+- **Clans are removed** (round 10 #39) — factions and parties are the only grouping.
+- **Parties:** members near each other share kill and quest credit and cannot damage one
+  another (round 10 #40). No mission queue, no cross-faction parties.
+
+### Progression: 10 named ranks
+
+Named ranks, not levels — no wall-clock timers, a mix of activities per rank, a visible reward
+every time (round 2 #6). Attribute points are granted in a batch on each rank-up, which is also
+what makes every rank feel like something (round 6 #21, resolving the round 4 tension). The top
+ranks require PvP — enemy-faction grips specifically (round 6 #22, round 15 #58) — so the danger
+zones are where rank progress is made at the high end (round 6 note). Target: **40–60 hours** to
+max rank for an average player (round 6 #24).
+
+**[draft] rank names and gates**, sorcerer-underworld themed, for Jay to edit (round 21 #82):
+
+| # | Rank | Gate (mix of activities) | Reward |
+| --- | --- | --- | --- |
+| 1 | Newblood | Finish the Academy tutorial | 1 attribute point, Katana or Fist |
+| 2 | Streetwise | 5 quests or jobs | 1 attribute point |
+| 3 | Smoke-Touched | 15 quests/jobs, first Smoke move cast | 2 attribute points |
+| 4 | Alley Regular | 30 quests/jobs, 5 faction missions | 2 attribute points, 1 Tag shop slot unlocked |
+| 5 | Blade for Hire | 50 quests/jobs, 10 faction missions, 3 Blue Night kills | 3 attribute points, cosmetic |
+| 6 | Marked | 15 faction missions, 5 enemy-faction grips | 3 attribute points |
+| 7 | Family Blade *(or Cross-Eyed Blade)* | 25 faction missions, 15 grips | 4 attribute points, title |
+| 8 | Underboss's Ear | 15 Blue Night kills, 30 grips | 4 attribute points |
+| 9 | Ghoul-Killer | 50 grips, first-clear on a story boss | 5 attribute points, cosmetic |
+| 10 | Devil's Door | 75 grips, 10 Blue Night kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
+
+Attribute total at max rank: 30 points (30-point pool), matching the round 5 #18 call to keep
+the 4 attributes but pull the ceiling from ~70% down to **~30%** at max, so skill matters more
+than the grind. **[draft]** 0.01/rank (was 0.02–0.035 in Game A) keeps the same shape at a lower
+ceiling; retune from a playtest once the new combat numbers (hyperarmor, silence) are in.
+
+**Temperament** replaces quirks (round 5 #19): still one good + one bad roll, but instead of a
+flat stat modifier, it decides which activities give **bonus** rank progress — never a lock,
+every activity still counts (round 6 #23). Example: a "Vengeful" temperament gives extra rank
+progress from grips; a "Squeamish" one gives extra from quests and jobs.
+
+**Removed:** Vows (round 5 #20), the four use-based stats (`Stats`/`StatConfig` — folded away,
+not rebuilt; the round 5 attribute rework replaces their role), the Ghoul/CCG
+`ProgressionService`, `SkillTree` and its dead `PurchaseSkill`/`DevProductNotif` remotes.
+
+**Origins:** Sorcerer only at launch. Human, a lesser devil, or other Dorohedoro-based origins
+are a later addition (round 5 #17), not blocked by anything in this design.
+
+### Combat
+
+Keep all of Game A's kit as-is: parry → Riposte, perfect dodge → counter, stagger → Finisher,
+feints, air juggles, the 0.6 s input buffer (round 3 #9). Two additions from Game B, both
+scoped narrowly:
+
+- **Hyperarmor** for bosses and heavy/slow weapon swings only (e.g. Axe) — those hits can't be
+  flinched. **No clash system** (round 3 #10).
+- **The 2.5 s Smoke silence on a landed M2 stays** — melee's answer to a Smoke-heavy opponent
+  (round 3 #11).
+
+**Mobility** stays shared at the base movement speed; only Smoke type or gear grants extra
+mobility, never a stat (round 3 #12) — this also keeps the lowered attribute ceiling from
+becoming a mobility tax.
+
+**Weapons at launch: Katana and Fist only** (round 4 #13). No mastery — every weapon is equally
+strong from the moment it's equipped; only player skill differentiates them (round 4 #14). More
+weapons (the other five from Game A, or new ones) are a post-launch content update, animated
+properly rather than shipped as placeholders (keeps the "ship 3–4 finished weapons" triage call
+even tighter: 2 finished weapons at launch).
+
+**Smoke moves are granted all at once**, same as Game A today — every move of your rolled type
+from the start, no unlock path (round 4 #15). Rarer types are **flashier, not stronger**: keep
+the existing roll odds (Split 20, Gun 20, Regen 18, Mushroom 18, Curse 12, Lizard 8, Dinosaur 4),
+but rebalance every type's numbers to be equally viable (round 4 #16) — this is what removes the
+round 2 tension between a permanent roll and weapons being an equal partner, without needing
+weapon mastery to compensate.
+
+### Respawn
+
+Kept as-is: 3 s respawn + spawn grace, but grace now ends the moment you land a hit rather than
+on a timer (round 23 #91) — matches the drop of the old 3 s flat spawn-grace window with an
+action-gated one instead.
+
+### Death, PvP and combat log
+
+At 0 HP a player is **downed**, not killed (round 1 #2). The attacker chooses:
+
+- **Spare** — the downed player recovers normally.
+- **Carry** — pick them up and move them; this only repositions them (e.g. away from allies
+  before an execution). There is no reward for turning a captive in anywhere — the "bonus
+  reward" and "no reward for turning players in" language in round 13 #51 replaces the fuller
+  Game B captive system floated in round 12 #46.
+- **Execute** — counts toward the attacker's rank progress (subject to the grip rules below) and
+  drops **25% of the victim's carried Yen and Tags** (round 12 #47, the newer, harsher answer
+  that supersedes round 1 #2's original "soft loss" framing).
+
+**No bank exists — all money is always at risk** (round 13 #50). This is deliberate: it pushes
+spending (into the endgame Yen exchange, gear, cosmetics) rather than hoarding, and it's the
+reason the grip-farming guards below matter so much.
+
+**PvE death:** a flat, much smaller Yen loss. **[draft]** 500 Yen (half of Game B's reference
+1,000, since Game C's death is otherwise so much harsher — round 12 #48 only specifies "a flat
+amount, Game B uses 1,000" without confirming the exact figure).
+
+**Combat-log penalty is worse than an execution** — **[draft] 40%** of carried Yen and Tags
+(round 22 #88 confirms "bigger than an execution," e.g. 40%).
+
+**Anti-farming guards** (round 6 note, round 12 #49, round 14 #54, round 15 #58):
+- Only **enemy-faction grips** count toward rank progress — same-faction executions give
+  nothing, closing the friend-farming loop entirely rather than relying on a cooldown.
+- A **2-rank floor**: the victim must be within 2 ranks of the attacker for the grip to count.
+- Elo (see below) is protected by a roughly **1-hour per-victim cooldown** — regripping the same
+  player sooner doesn't move their hidden Elo. This cooldown does **not** gate rank credit or
+  money drops (round 14 #54 explicitly narrows round 12 #49's original 24 h cooldown down to
+  Elo only).
+- **Per-day cap on Yen transfers** (drop/give) to blunt scam and alt-farming abuse — round 11
+  #44 flags the need, no figure given. **[draft]** 1,000 Yen/day given or dropped outside combat.
+
+**Elo is hidden** (round 13 #53) — players never see their own number. **Only the top 10 Elo is
+public**, as a leaderboard (round 22 #89); QuestsDone and BurialTags boards from Game A are
+dropped along with the War meter and Riots, which are **removed entirely** (round 13 #52).
+
+**No bounty/jail system, no arena betting** (round 11 #44) — the grip/execute loop and faction
+rep are the only PvP-consequence systems.
+
+### Economy
+
+**Currencies:** Yen (everyday spending) and Burial Tags, repurposed from an attribute-point
+currency into a **rare Blue-Night-only currency** for the Tag shop (round 11 #42 — attribute
+points now come from rank-ups instead, round 6 #21).
+
+**Yen sinks** (round 11 #43): the gear shop and a rotating market, cosmetics (barber, outfits),
+and an **endgame exchange** — a large Yen-plus-rare-item cost gating part of the Devil path. No
+rank-up toll (Game B charges one; Game C doesn't). **[draft]** endgame exchange = 50,000 Yen +
+1 Devil-eligibility item (see Devil path below); gear shop keeps Game A's existing price bands
+(250–500 Yen per piece) as the launch baseline.
+
+**Loot** (round 11 #41, narrowed by round 20 #80 once field bosses were cut): mobs drop Yen,
+Tags and sometimes gear; **rare gear and the rare Smoke-reroll item drop from Blue Night, rare
+mob drops, and the Tag shop** — not from bosses, since bosses are story-only now (see below).
+**[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke reroll ~0.1% (Blue Night kills
+only) — retune once the drop-table sizes below are picked.
+
+**Equipment: 10 slots** (round 14 #55, matching Game B's loot chase — needs roughly 10 slots ×
+3–4 rarity tiers of gear to fill meaningfully).
+
+**Tag shop** (round 20 #80, round 23 #93): a Game-B-style rotating market — 4 items live at
+once, refreshed on a timer, some slots faction-exclusive (a `RaidPool`-style tag). Holds
+accessories for the 10 equipment slots and **less-rare rerolls only** (cosmetic look rerolls).
+The rarest items — the Smoke reroll and the Devil-buff reroll — **stay drop-only**, never
+purchasable with Tags.
+
+**Black Smoke:** kept, **PvE only** — disabled in PvP zones (round 14 #56).
+
+**Food buffs are removed entirely**, along with the 8 food shops; Black Smoke is the only
+survivor of that system (round 15 #61).
+
+**No crafting** (round 23 #92). **No trading at launch** — added later, once the loot table
+exists, with anti-dupe safeguards on the save write (round 11 #45).
+
+**Weekend bonus:** rare-drop odds **double on Saturday and Sunday**, real UTC weekday, rare
+drops only — no reward-multiplier or box-odds bonus beyond that (round 23 #90).
+
+**Monetization (Robux):** cosmetics, quality-of-life, and Smoke rerolls (round 14 #57) — but the
+Smoke reroll bought with Robux (and the Devil reroll bought with Robux, round 17 #66) **only
+rerolls the look**, never the balance-affecting buffs. Buff rerolls need the rare drop item.
+This keeps every paid reroll cosmetic, not power (round 14 note, round 17 #66).
+
+### Events
+
+Two of Game A's twelve random events survive; the rest are cut along with the systems they
+uniquely drove (round 9):
+
+| Kept | Cut | Cut because |
+| --- | --- | --- |
+| Blue Night | Field Boss, Killing Field, Ashmask Sweep | War meter/Riots removed (#52); gang rep now comes from factions (#37, #10 note); field bosses removed entirely (#76–77) |
+| Toxic Rain | Ghost Night, Rule of the Hour, Party Mishap | Drove the Ghost-shy quirk and Party Cake buff, both removed with them |
+| — | Smoke Surge, Supply Cache, Whisper, Cleanup Day | No longer fit — the loot table (above) replaces most of what these gave |
+
+**Blue Night timing** copies Game B's real-time event pattern (round 22 #86, #92 note):
+**[draft]** can start once ~15 minutes of real time have passed since the last one (checked
+every 60 s, a jump from Game B's 12.5 min since Game C only has one event doing this job), only
+if both factions have players online, and lasts about **5 minutes**.
+
+**Toxic Rain is kept exactly as it is today** in Game A (round 22 #87) — no changes.
+
+### Bosses
+
+**Story bosses only — no field bosses, no dungeons** (round 19 #76–77, round 8 #26). Quest
+content overall stays light: mostly repeatable boards, jobs and events, with minimal story
+(round 7 #28), so the story-boss roster should stay small rather than trying to fill a raid
+tier. **[draft]** reuse Game A's two existing bosses rather than building new ones, since
+`BossService`'s phase framework is already a keep:
+
+1. **Proctor Dunmore** (420 HP) as the Academy graduation boss, ending the tutorial in the one
+   place in the game where losing has no PvP stakes — the natural spot to teach the full combat
+   kit safely.
+2. **The Skinner** (800 HP, already scales with nearby players) recast as a Hole story boss tied
+   to a faction-conflict chapter, gating a meaningful chunk of faction-mission content rather
+   than respawning on a timer.
+
+Both keep `MobScaling`'s per-player scaling and `BossService`'s phase-at-health-threshold
+support unchanged — only their placement and framing move from "field encounter" to "story
+milestone."
+
+### The Devil path (endgame)
+
+The proposed structure from round 15, confirmed as-is in round 16 #62, with round 17–20's
+refinements folded in:
+
+1. **Eligibility:** max rank (10) **and** three counters — enemy-faction grips, Blue Night
+   kills, and time spent at max rank (field-boss kills dropped from the original four-counter
+   list once field bosses were removed, round 20 #79) — **plus** the endgame Yen exchange
+   (above). **Top-10 Elo players skip the three counters** but still need max rank and the
+   exchange (round 16 #63).
+2. **Madame Ise** — the existing trial NPC — is the gatekeeper. Her dialogue hints at whichever
+   requirement is still missing, same pattern as Game B's gatekeeper.
+3. **Meet your devil:** a timed inner-world duel against a devil built from the player's own
+   Smoke type and weapon. A loss puts the trial on cooldown; enemy-faction grips shorten that
+   cooldown.
+4. **Devil form roll** (Visored-style, one-time): a horns/mask look plus 2 buffs and 1 downside.
+5. **Mastery duel:** a second inner-world fight against the same devil removes the downside.
+6. **Using it:** a toggleable transformation, its own moves on top of the base Smoke kit,
+   limited by a meter or cooldown; activation heals a little before the cooldown starts.
+
+**Rerolls** (round 16 #65, round 17 #66): the form is never lost. Robux rerolls the **look**
+only. Rerolling the **buffs** needs the rare drop item — keeps the whole path free of
+pay-to-win.
+
+**Parked for later, not in this design:** Blue Night partner contracts (round 17 #67), the
+artificial tumor system (round 17 #69, revisited if/when a new origin needs it), and Hell as a
+place (round 8 #32 — the Devil path doesn't depend on it).
+
+### New players
+
+**No protection — hardcore from the first minute** (round 20 #78). Given near-universal PvP,
+25% execution drops and no bank, this is flagged as the biggest retention risk in the whole
+design (round 20 note) and is worth an early, dedicated playtest of just the first hour before
+committing further art or content to the rest of the build.
+
+### Technical plan
+
+- **A fresh place.** Game C is not a copy of Map + Combat — it's a new place that Game A's kept
+  modules are ported into one at a time (round 18 #70).
+- **Cleanup happens on the way in, not as a separate pass.** Each module gets audited as it's
+  ported: bring in only what this design keeps, and strip dead references (the JJK kit
+  remnants, any code for a system this design cuts) at the same time (round 18 #73).
+- **Fresh DataStore at launch.** No migration path for removed fields or systems — old Map +
+  Combat saves do not carry over (round 18 #71).
+- **UI is React-only.** `ReactHudClient`/`HudUI` is the one UI generation; no legacy ScreenGui
+  code is ported (round 18 #72).
+- **Everything above goes in the public repo**, including the Game B provenance and security
+  sections (round 1 #4) — nothing in this document is held back.
+
+### Open numbers to confirm from playtesting
+
+Every **[draft]** figure above, plus:
+
+- The exact attribute-per-rank curve once the new hyperarmor/silence/mobility rules are live.
+- Blue Night's real cooldown and duration — 15 min / 5 min above is a starting guess, not a
+  measurement.
+- Whether 500 Yen is the right PvE death penalty once the 25%-of-carried execution number is
+  felt in practice — the two should probably scale together.
+- The Tag shop's refresh interval and exact `RaidPool`-style faction split.
