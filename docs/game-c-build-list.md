@@ -40,7 +40,13 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
       (round 24 combat-depth carryover, unchanged from Game A). *Ported with `DamageLogic`.*
 - [ ] **Hyperarmor** on bosses and heavy/slow weapon swings only (round 3 #10) — no clash system.
       *The hook is in: `DamageLogic` skips flinch and knockback while the target has the
-      `HyperArmor` state. Nothing grants that state yet.*
+      `HyperArmor` state. Nothing grants that state yet.* **Next:** neither launch weapon is
+      heavy (Katana and Gauntlets, round 4 #13 — Axe was the "heavy/slow" example and isn't
+      shipping), so there's no player swing to grant it to yet. Grant `HyperArmor` from
+      `BossService` instead — flag it per swing in each boss's phase config, defaulting to "on"
+      for the heavier/slower attacks in whatever boss is being tested (Proctor Dunmore or The
+      Skinner, round 25 #110) — so the hook has something real to prove against. Revisit
+      weapon-side hyperarmor once a heavy weapon ships post-launch.
 - [ ] **The 2.5 s Smoke silence** on a landed M2 (round 3 #11).
 - [x] **Bare-handed baseline**: the shared kit with no weapon equipped, always available, no
       signature techniques (round 26 #111). *Fist is the default weapon. A sheathed Katana
