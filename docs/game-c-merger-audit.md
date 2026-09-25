@@ -1457,7 +1457,13 @@ Every **[draft]** figure above, plus:
   PvE-death resistance %, Smoke regen bonus) — all **[draft]** placeholders pending a playtest.
 - The weapon skill tree's exact rank gates (drafted rank 4–5 for Specialization, rank 8+ for
   Capstone), per-node respec cost/cooldown, and the full weapon-respec (root pick) cost/cooldown
-  — drafted only as "noticeably more than a normal respec," no figure yet.
+  — **drafted while building** (Doro, 2026-09-25, `Config.SkillTree`):
+  - Specialization at rank 4, Capstone at rank 8.
+  - Node respec: first free, then ¥250 with a 10 min cooldown (mirrors the attribute respec).
+  - Root respec: ¥1,000 with a 60 min cooldown.
+  - Stub technique numbers per tier, Damage/Posture/Cooldown: 8/20/8 s, 11/28/12 s,
+    16/40/25 s.
+  - All untuned.
 - Every technique's actual effect, animation and balance numbers — only names and tree position
   are drafted above; none of the seven-per-branch techniques has a designed effect yet.
 - Whether the tree template (2 Foundation / 3-pick-2 Specialization / 2-pick-1 Capstone) is the
