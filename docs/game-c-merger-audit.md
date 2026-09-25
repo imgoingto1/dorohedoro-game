@@ -15,12 +15,13 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (27 rounds, 116 questions), Game C design
-drafted and updated through rounds 24–27's reconsideration of where Game B's approach — not
+**Status:** Phases 1–2 done, interview complete (28 rounds, 120 questions), Game C design
+drafted and updated through rounds 24–28's reconsideration of where Game B's approach — not
 code — should lead instead of just filling gaps in Game A's, including systems the original
-comparison table had simply marked "Keep A" with no pushback, and a previously-undefined gap:
-what a weapon's actual moveset is beyond the shared combat kit, now built out as one tree rooted
-at the weapon choice itself. Everything in the design section is either a direct interview
+comparison table had simply marked "Keep A" with no pushback, a previously-undefined gap in
+what a weapon's actual moveset is (now one tree rooted at the weapon choice), and the visual
+target for both hubs (see [`art-direction/`](../art-direction/)). Everything in the design
+section is either a direct interview
 answer or a **[draft]** value proposed for Jay to tune from
 playtesting — nothing is final until he says so.
 
@@ -780,6 +781,26 @@ names as placeholder.
 - Everything below the node names — technique effects, animations, balance numbers — is
   explicitly placeholder, as instructed, and stays flagged in Open Numbers.
 
+### Round 28 — visuals: lighting, atmosphere, faction identity (asked 2026-09-25)
+
+The two hubs already had real art-direction briefs from before the restart, built from
+reference images Jay shared — [`art-direction/hole.md`](../art-direction/hole.md) and
+[`art-direction/sorcerer-world.md`](../art-direction/sorcerer-world.md). This round decided
+whether to reuse them and closed the visual gaps Game C's new systems opened up (faction
+identity, PvP-everywhere zoning) that neither brief had addressed.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 117 | Should Game C reuse the old Hole/Sorcerer World briefs as-is, revise them, or start fresh? | **Carry over, revise for the new tone.** Both briefs' core look rules stay; both are updated (this round) for the harsher, near-universal-PvP identity Game C has now that they didn't have when written. |
+| 118 | Should faction identity show up in the world itself, beyond player cosmetics? | **Split by hub, "like in Dorohedoro."** The Hole stays **completely neutral** — no faction colour anywhere, including HQs. Sorcerer World's faction HQs **do** get real colour/banner identity; everywhere else in Sorcerer World stays neutral too. |
+| 119 | Should PvP areas get a distinct visual treatment from safe zones? | **There's no separate "danger zone" to treat.** Almost the entire map is PvP by default (round 19 #74–75) — the hub's own baseline look already communicates that. Only **safe zones** need to look different, not the open world. |
+| 120 | What should the default shadow/lighting quality be, given the FPS-vs-look trade-off found before the restart? | **Default to the rich look.** Ship with the full moody/ornate visual on by default in both hubs, same as before the restart; offer the existing quality-setting toggle for players who need the FPS, rather than shipping cheap by default or splitting by hub. |
+
+**Resolved into both art-direction files and the design section below:** the Hole's faction HQs
+are landmarks, not colour-coded; Sorcerer World's are the one place a faction visually owns
+ground; the Academy (also a Sorcerer World safe zone) stays neutral like the Hole, for a
+different reason — it's shared ground, not gang turf.
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -837,6 +858,29 @@ spec attached (defaults to "none" for the launch doors). Hell and any future reg
 (a rank, an item, a quest) instead of bespoke travel scripts each time. The Devil path does not
 depend on Hell existing.
 
+### Visuals
+
+The visual target for each hub is its own file, revised round 28 for Game C's tone:
+[`art-direction/hole.md`](../art-direction/hole.md) and
+[`art-direction/sorcerer-world.md`](../art-direction/sorcerer-world.md). Both predate this
+audit — built from real reference images Jay shared — and are carried over rather than
+redone, with three Game-C-specific rules layered on top (round 28 #118–120):
+
+1. **No separate "danger zone" look.** Nearly the whole map is open PvP by default (round 19
+   #74–75); each hub's baseline look (industrial grit in the Hole, ornate ruin-and-carnival in
+   Sorcerer World) already *is* what danger looks like there. Only **safe zones** need to read
+   as visually different from the rest of the hub — there's no second, extra-hazardous layer to
+   design on top of the open world.
+2. **Faction identity is asymmetric by hub.** The Hole's faction HQs are neutral landmarks —
+   distinctive architecture, no faction colour, "like in Dorohedoro" (round 28 #118). Sorcerer
+   World's faction HQs are the one place in the game a faction visually owns ground, with real
+   colour and banner identity. The Academy (Sorcerer World's other safe zone) stays neutral too,
+   for a different reason — shared tutorial ground, not gang turf.
+3. **Shadows default on, everywhere.** Game C ships with the full rich look (`GlobalShadows` on)
+   by default in both hubs, same as the pre-restart project, with a player-facing quality
+   setting for anyone who needs the FPS — not a cheaper default and not a split by hub (round 28
+   #120).
+
 ### Factions
 
 **En's Family vs. Cross-Eyes** (round 10 #37, confirmed round 21 #83) — canon Dorohedoro
@@ -852,8 +896,10 @@ gang/organization names, allowed under the closed-community rule.
 - **Seats:** a handful of named positions per faction, awarded weekly to the top rep earners —
   not challenged by duel (round 21 #85, supersedes the duel idea in round 10 #38). Seat
   standings are a **faction panel**, not a public leaderboard (round 22 #89).
-- **Turf:** danger zones in both hubs are contested faction territory; a faction's HQ is its
-  only guaranteed-safe ground.
+- **Turf:** the open world in both hubs — everywhere outside a safe zone, not a separate
+  "danger zone" subset (round 28 #119) — is contested faction territory; a faction's HQ is its
+  only guaranteed-safe ground. See Visuals below for how each hub shows (or deliberately
+  doesn't show) that contest.
 - **Clans are removed** (round 10 #39) — factions and parties are the only grouping.
 - **Parties:** members near each other share kill and quest credit and cannot damage one
   another (round 10 #40). No mission queue, no cross-faction parties.
@@ -1358,3 +1404,10 @@ Every **[draft]** figure above, plus:
   branches to fit how each weapon feels.
 - Whether a player who respecs their root pick keeps anything from the old branch (a partial
   Yen refund, a cosmetic memento) or loses it outright — not addressed yet.
+- Whether Sorcerer World's night carnival is always on or tied to an event like Blue Night —
+  raised as an open question in `art-direction/sorcerer-world.md`, not yet asked.
+- Where each faction's two HQs (one per hub) actually sit on the map, and what makes the Hole's
+  specifically read as "defensible" architecturally.
+- Where the raid (round 24 #96) is physically set — neither hub's art-direction file nor the
+  Raids section commits to a location or its own visual identity yet.
+- Both files' existing open questions (prototype order, asset sourcing) carry over unresolved.
