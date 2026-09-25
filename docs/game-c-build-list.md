@@ -16,21 +16,41 @@ mechanic, use the drafted number as a starting value, don't treat it as final.
 dialogue to actually ship, which is called out per item as **needs asset**. Build the system
 first, wire placeholders in, swap real content in later without touching the logic.
 
+## Progress (2026-09-25)
+
+Being built in **Doro**, a new place owned by the Guppy's Shop group. Game A's combat core was
+ported in by reading each script out of the live Map + Combat place, not from the old `.rbxm`
+exports. The Vows, the chrono character system and Game A's unused weapons were left behind.
+Test dummies are now built from blank rigs at runtime, and the save uses a fresh store,
+`GameC_PlayerData_v1`. Playtested in Doro: M1 combo, M2, dodge, block/posture, the Katana
+dummies, and all three movement flags (teleport, flight, noclip). Legit fast movement (sprint,
+fast sprint, dodges, slide long jump) raised no false flags.
+
 ## Combat
 
 The shared kit and everything layered on it. All of this works against a couple of dummy rigs
 on flat ground — no real weapons or Smoke assets needed, just placeholder animations/VFX.
 
-- [ ] **The shared kit**: M1 combo, M2, dodge (i-frames + perfect dodge → counter), block/parry
+- [x] **The shared kit**: M1 combo, M2, dodge (i-frames + perfect dodge → counter), block/parry
       (0.25 s window → 1 s Riposte), feint, air juggle, 0.6 s input buffer. This is Game A's
       existing combat core, kept as-is (round 3 #9) — port it first, everything else hooks in.
-- [ ] **Posture and stagger**: posture 0–100, 15% chip on block, drains after 2 s, guard-break
+      *Ported to Doro.*
+- [x] **Posture and stagger**: posture 0–100, 15% chip on block, drains after 2 s, guard-break
       at 100; stagger from being parried/countered/hit-out-of-a-swing, opens a Finisher window
-      (round 24 combat-depth carryover, unchanged from Game A).
+      (round 24 combat-depth carryover, unchanged from Game A). *Ported with `DamageLogic`.*
 - [ ] **Hyperarmor** on bosses and heavy/slow weapon swings only (round 3 #10) — no clash system.
+      *The hook is in: `DamageLogic` skips flinch and knockback while the target has the
+      `HyperArmor` state. Nothing grants that state yet.* **Next:** neither launch weapon is
+      heavy (Katana and Gauntlets, round 4 #13 — Axe was the "heavy/slow" example and isn't
+      shipping), so there's no player swing to grant it to yet. Grant `HyperArmor` from
+      `BossService` instead — flag it per swing in each boss's phase config, defaulting to "on"
+      for the heavier/slower attacks in whatever boss is being tested (Proctor Dunmore or The
+      Skinner, round 25 #110) — so the hook has something real to prove against. Revisit
+      weapon-side hyperarmor once a heavy weapon ships post-launch.
 - [ ] **The 2.5 s Smoke silence** on a landed M2 (round 3 #11).
-- [ ] **Bare-handed baseline**: the shared kit with no weapon equipped, always available, no
-      signature techniques (round 26 #111).
+- [x] **Bare-handed baseline**: the shared kit with no weapon equipped, always available, no
+      signature techniques (round 26 #111). *Fist is the default weapon. A sheathed Katana
+      falls back to it.*
 - [ ] **The weapon skill tree — mechanical skeleton**: root node (pick Katana or Gauntlets, free,
       granted at rank 1), Foundation (2 nodes, both learnable), Specialization (3 nodes, pick 2
       of 3, exclusive), Capstone (2 nodes, pick 1 of 2, exclusive), cooldown-only activation, no
@@ -57,9 +77,16 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
 
 ### Anti-cheat (build alongside combat, not after)
 
-- [ ] Reach check (45 studs) and hit-speed check in the damage pipeline (kept from Game A).
-- [ ] **New**: movement validation (flight/noclip), warn-then-kick rather than auto-ban (round 25
-      #100, round 26 note). **[draft]** warn count before a kick.
+- [x] Reach check (45 studs) and hit-speed check in the damage pipeline (kept from Game A). The
+      per-player remote rate limits (`RemoteGuard`) came along too.
+- [x] **New**: movement validation (flight/noclip), warn-then-kick rather than auto-ban (round 25
+      #100, round 26 note). **[draft]** warn count before a kick. *`World.MovementGuard` checks
+      teleport (over 60 studs in 0.25 s), sustained speed (over 110 studs/s across 1 s), flight
+      (more than 12 studs off the ground for 3 s without coming down) and noclip (the path
+      between samples passes through a solid part). A flag moves the player back and warns them
+      in chat. The 4th flag inside 60 s kicks (**[draft]** 3 warnings). Studio never kicks. Air
+      combat, paralysis, ragdoll and the first 3 s after spawning are exempt. Before a server
+      teleport, set the player attribute `MoveGuardGraceUntil`.*
 
 ## Events & systems
 

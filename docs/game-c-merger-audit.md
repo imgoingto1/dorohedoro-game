@@ -1438,7 +1438,13 @@ Every **[draft]** figure above, plus:
 - True Devil's exact eligibility thresholds and cooldown length (drafted as roughly double the
   base counters and a 30 min → 12 h-style cooldown jump, unverified).
 - The Gate system's requirement spec for Hell and any place added after launch.
-- Warn/kick thresholds for the new movement anti-cheat (how many warnings before a kick).
+- ~~Warn/kick thresholds for the new movement anti-cheat~~ — **drafted while building** (Doro,
+  2026-09-25): `World.MovementGuard` flags teleport (over 60 studs in 0.25 s), sustained speed
+  (over 110 studs/s across 1 s), flight (12+ studs off the ground for 3 s) and noclip; a flag
+  warns and repositions, the 4th flag inside 60 s kicks (**[draft]** 3 warnings, still untuned).
+  Air combat, paralysis, ragdoll and the first 3 s after spawn are exempt; a server teleport sets
+  `MoveGuardGraceUntil` to avoid a false flag. Playtested clean against legitimate fast movement
+  (sprint, fast sprint, dodges, slide long jump) — see `game-c-build-list.md`.
 - The extended weekend market's exact discount and rotation figures.
 - The identity-roll table itself (marking rarity tiers, per-faction color/callout pool) — blocked
   on faction visual-identity art direction, not a numbers question.
