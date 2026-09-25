@@ -592,8 +592,11 @@ Follow-up idea: show the stagger of the enemy you're fighting (overhead bar or a
 - Data: Humanoid; Smoke attrs; `QuestSync` / `QuestAction`; party attrs `PartyMembersJSON` / `PartyLeader` /
   `PartyInviteFrom` + `Remotes.PartyAction` (PartyService); character attr `State_InCombat` (StateManager
   now mirrors `InCombat`); `CharacterGui.Open` BindableEvent (CharacterTreeClient).
-- Replaced (hidden, not deleted): VitalsHud HEALTH row, SmokeGui bar + ammo line, QuestClient tracker
-  (`SHOW_TRACKER`). VitalsHud GUARD / STAGGER and SmokeGui buffs sit above the new bars.
+- Replaced (hidden, not deleted): VitalsHud HEALTH + GUARD rows (posture bar), SmokeGui bar + ammo line,
+  QuestClient tracker (`SHOW_TRACKER`), `Custom Inventory.hotBar` + `SmokeMovesHud` (the React hotbar:
+  equipped items + Z/X/C Smoke moves with cooldowns), the "Character [T]" / "Quests [J]" buttons (keys still
+  work). VitalsHud STAGGER and SmokeGui buffs sit above the new bars (8 + 198 * scale).
+- Leave (top right) is a placeholder until the main menu exists.
 
 ### Next up
 - **Performance** (measured in Studio 2026-09-23): client 60 FPS steady, worst frame 20 ms, ~131k instances
