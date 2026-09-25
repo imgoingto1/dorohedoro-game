@@ -15,9 +15,11 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (23 rounds, 93 questions), Game C design drafted.
-Everything in the design section is either a direct interview answer or a **[draft]** value
-proposed for Jay to tune from playtesting — nothing is final until he says so.
+**Status:** Phases 1–2 done, interview complete (24 rounds, 102 questions), Game C design
+drafted and updated with round 24's reconsideration of where Game B's approach — not code —
+should lead instead of just filling gaps in Game A's. Everything in the design section is
+either a direct interview answer or a **[draft]** value proposed for Jay to tune from
+playtesting — nothing is final until he says so.
 
 ## Game A — "The Hole" (Map + Combat)
 
@@ -678,6 +680,32 @@ Round 1 covers the decisions everything else depends on. Answers get recorded he
 | 92 | Crafting? | **No crafting.** |
 | 93 | Tag shop contents? | **Accessories and less-rare rerolls, like Game B.** The rarest items (Smoke reroll, devil-buff reroll) stay drop-only. The shop holds accessories for the 10 slots plus minor rerolls (e.g. looks). |
 
+### Round 24 — reconsidering Game B as more than a source of ideas (asked 2026-09-25)
+
+The design so far treats Game A as the default base for how everything *functions*, with Game B
+only supplying ideas retrofitted into A's architecture. This round asked, system by system,
+whether specific Game B *approaches* — not code, never code — should actually lead instead.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 94 | Should transformation be the spine of progression (Game B's branching race path), not just a rank-10 capstone? | **The Devil form itself evolves later.** One capstone unlock at max rank, same as designed, but the Devil form gains a further stage afterward — a "True Devil" — mirroring Game B's Bankai → True Bankai step. |
+| 95 | Should Smoke moves be earned through ranks or loot instead of granted all at once? | **Smoke is Game C's Shikai-tier.** Conceptually it's the first release tier in the same arc as Game B's Shikai → Bankai — but moves are still given all at once the moment a player's Smoke type is rolled/unlocked, unchanged from the current draft. |
+| 96 | Should Game C add a rebuilt raid loop as real endgame PvE? | **Yes — with Game B's actual feature set:** voting, contribution-based credit, and raid-pool loot (not a stripped-down version). |
+| 97 | Should items carry unique build-defining effects instead of flat modifiers? | **Keep it flat.** Confirms the current draft: percentage modifiers scaled by rarity tier, no unique procs. |
+
+**Follow-up — where does raid contribution feed?** Not the 10-rank ladder: **raid contribution
+becomes a fourth Devil-path eligibility counter**, alongside enemy-faction grips, Blue Night
+kills and time at max rank — one more gate besides the top-10-Elo skip, not a parallel route to
+max rank. Grips remain the only thing that moves the rank ladder itself.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 98 | Should each faction have internal divisions (Game B's 13 squads) with their own seats? | **Keep it flat.** One rep ladder and seat list per faction — no change from the current draft. |
+| 99 | Should Game C build a real gated-realm travel system for exploration, now that POIs/secrets are cut? | **Build a gate system now.** Not the full progression-axis version (gates costing rank/items) — just real infrastructure: a Gate object with a requirement spec, so Hell and future places plug into an existing system instead of getting bespoke code each time. Today's Hole ↔ Sorcerer World Smoke doors become the first two gates, with no requirement. |
+| 100 | Should anti-cheat's movement validation match Game B's broader coverage (flight, noclip)? | **Add it, warn/kick only.** Broader movement validation, built fresh — but a violation gets a warn-then-kick response, not a permanent auto-ban, to avoid false-positive bans. |
+| 101 | Should trading launch day one instead of staying deferred? | **Keep it deferred.** No change — still added later, once the loot table and anti-dupe tooling are proven (round 11 #45). |
+| 102 | Should monetization/the market go deeper, closer to Game B's structure? | **Full market structure.** Add the purchase-history ledger and a code-redemption system now (both safe infrastructure, not pay-to-win), and extend the weekend bonus beyond just doubling rare-drop odds into a broader rotating-market/multiplier structure, closer to Game B's Friday–Sunday reward-multiplier pattern. |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -728,8 +756,12 @@ code (`RumorService`, `POIIndexService`, `POIGuideClient`, `GrudgeService`) is n
 **zone-tracking** half of `WorldService` (danger/safe zone attributes) is kept — zoned safety
 still depends on it.
 
-**Hell and the Sorcerer world's other regions** are future places, built and revealed later
-(round 8 #32). The Devil path does not depend on Hell existing.
+**A real gate system, built now** (round 24 #99): every place-to-place transition — today's two
+Hole ↔ Sorcerer World Smoke doors included — goes through one `Gate` object with a requirement
+spec attached (defaults to "none" for the launch doors). Hell and any future region are future
+*content*, not future *code*: they plug into the same Gate object with their own requirement
+(a rank, an item, a quest) instead of bespoke travel scripts each time. The Devil path does not
+depend on Hell existing.
 
 ### Factions
 
@@ -776,6 +808,10 @@ max rank for an average player (round 6 #24).
 | 9 | Ghoul-Killer | 50 grips, first-clear on a story boss | 5 attribute points, cosmetic |
 | 10 | Devil's Door | 75 grips, 10 Blue Night kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
 
+Rank 10 unlocks *eligibility* for the Devil trial, not the Devil form itself — reaching it opens
+the counters described under The Devil path below, which is its own, longer arc on top of the
+rank ladder, not a further rank.
+
 Attribute total at max rank: 30 points (30-point pool), matching the round 5 #18 call to keep
 the 4 attributes but pull the ceiling from ~70% down to **~30%** at max, so skill matters more
 than the grind. **[draft]** 0.01/rank (was 0.02–0.035 in Game A) keeps the same shape at a lower
@@ -820,6 +856,22 @@ the existing roll odds (Split 20, Gun 20, Regen 18, Mushroom 18, Curse 12, Lizar
 but rebalance every type's numbers to be equally viable (round 4 #16) — this is what removes the
 round 2 tension between a permanent roll and weapons being an equal partner, without needing
 weapon mastery to compensate.
+
+**Smoke is Game C's Shikai-tier** (round 24 #95): conceptually the first stage in the same
+transformation arc as the Devil form's Bankai/True Bankai-style progression below — but
+mechanically nothing changes from the paragraph above. A rolled type still hands over its full
+move kit immediately; there is no separate unlock step for Smoke itself.
+
+### Anti-cheat
+
+Game A's existing reach (45-stud) and hit-speed checks in `DamageLogic.Processed`, plus
+`RemoteGuard`'s rate limiting, stay as the baseline. **New: movement validation** — flight and
+noclip detection, built fresh rather than ported from Game B — because so much money and rank
+progress is always at risk in Game C that the exploit stakes are much higher than in Game A
+today (round 24 #100). A caught violation gets a **warn, then a kick** on a repeat, not a
+permanent auto-ban, to keep false positives from costing an innocent player their account
+access. This matches `ModerationService`'s existing kick-not-ban convention for Studio testing,
+extended to a live warn/kick flow.
 
 ### Respawn
 
@@ -912,6 +964,17 @@ Smoke reroll bought with Robux (and the Devil reroll bought with Robux, round 17
 rerolls the look**, never the balance-affecting buffs. Buff rerolls need the rare drop item.
 This keeps every paid reroll cosmetic, not power (round 14 note, round 17 #66).
 
+**Full market structure, added round 24 #102:**
+- **Purchase-history ledger.** Every developer-product purchase is recorded per player, mirroring
+  Game B's receipt ledger — support tooling and abuse detection, not a pricing change.
+- **Code redemption.** A `CodeService`-style system players can redeem promo codes through, for
+  community giveaways and events, separate from the Robux store.
+- **Weekend bonus extended.** Beyond the existing rare-drop-odds doubling (round 23 #90), the
+  weekend (Friday–Sunday, real UTC) also raises the Tag shop's rotation frequency and/or adds a
+  temporary discount, closer to Game B's Friday–Sunday reward-multiplier pattern. **[draft]**
+  exact discount/rotation figures are open — the drop-odds doubling is the only part with a
+  confirmed number so far.
+
 ### Events
 
 Two of Game A's twelve random events survive; the rest are cut along with the systems they
@@ -949,16 +1012,42 @@ Both keep `MobScaling`'s per-player scaling and `BossService`'s phase-at-health-
 support unchanged — only their placement and framing move from "field encounter" to "story
 milestone."
 
+### Raids
+
+A rebuilt raid loop, added on top of the "story bosses only" call above — not a reversal of it,
+since a raid is a repeatable group encounter rather than a boss respawning on the field (round
+24 #96). Built fresh in Game A's secured style; none of Game B's raid code is reused, only the
+feature shape:
+
+- **Voting:** the party or a gathered group votes which raid to enter, same idea as Game B's
+  raid-select flow.
+- **Contribution credit:** damage and support actions are tracked per player during the raid
+  (reusing `Mobs.CreditRange`, already a "keep" in the code triage above), and loot/reward share
+  scales with contribution rather than splitting evenly.
+- **Raid-pool loot:** a loot table exclusive to raids, with some drops faction-filtered the same
+  way the Tag shop's `RaidPool`-style tag works (round 20 #80) — so raiding is also where a
+  faction's own gear identity shows up.
+- **Where it does *not* feed:** raid contribution is **not** a second route to the 10-rank
+  ladder — only enemy-faction grips move rank progress (round 6 #22 stands). Instead, raid
+  contribution is a **Devil-path eligibility counter** (see below), one more gate alongside the
+  top-10-Elo skip, not a parallel path to max rank (round 24 follow-up).
+
+**[draft]** one repeatable raid at launch, built around either Proctor Dunmore or The Skinner's
+existing kit rather than a third boss from scratch — exact encounter design, party size and
+contribution formula are open until the raid is prototyped.
+
 ### The Devil path (endgame)
 
 The proposed structure from round 15, confirmed as-is in round 16 #62, with round 17–20's
-refinements folded in:
+refinements folded in, plus round 24's addition of a fourth eligibility counter and a
+post-unlock evolution stage:
 
-1. **Eligibility:** max rank (10) **and** three counters — enemy-faction grips, Blue Night
-   kills, and time spent at max rank (field-boss kills dropped from the original four-counter
-   list once field bosses were removed, round 20 #79) — **plus** the endgame Yen exchange
-   (above). **Top-10 Elo players skip the three counters** but still need max rank and the
-   exchange (round 16 #63).
+1. **Eligibility:** max rank (10) **and** four counters — enemy-faction grips, Blue Night
+   kills, time spent at max rank (field-boss kills dropped from the original four-counter
+   list once field bosses were removed, round 20 #79), and **raid contribution** (added round
+   24 #96 follow-up, restoring the counter count to four without bringing field bosses back) —
+   **plus** the endgame Yen exchange (above). **Top-10 Elo players skip the four counters** but
+   still need max rank and the exchange (round 16 #63).
 2. **Madame Ise** — the existing trial NPC — is the gatekeeper. Her dialogue hints at whichever
    requirement is still missing, same pattern as Game B's gatekeeper.
 3. **Meet your devil:** a timed inner-world duel against a devil built from the player's own
@@ -968,6 +1057,14 @@ refinements folded in:
 5. **Mastery duel:** a second inner-world fight against the same devil removes the downside.
 6. **Using it:** a toggleable transformation, its own moves on top of the base Smoke kit,
    limited by a meter or cooldown; activation heals a little before the cooldown starts.
+7. **True Devil (round 24 #94):** after the base form is unlocked and mastered, a further
+   evolution stage becomes available — mirroring Game B's Bankai → True Bankai step. **[draft]**
+   gated by the same four counters as base eligibility, at higher thresholds (e.g. double the
+   grip/Blue Night/raid-contribution counts, plus additional time at max rank with the base form
+   already mastered), fought the same way as step 3 (a second, harder inner-world duel). Using
+   it is stronger than the base form but on a **much longer cooldown**, the same shape as Game
+   B's 30 min (Bankai) → 12 h (True Bankai) jump. Exact thresholds and the cooldown length are
+   open until the base form's numbers are playtested.
 
 **Rerolls** (round 16 #65, round 17 #66): the form is never lost. Robux rerolls the **look**
 only. Rerolling the **buffs** needs the rare drop item — keeps the whole path free of
@@ -1008,3 +1105,9 @@ Every **[draft]** figure above, plus:
 - Whether 500 Yen is the right PvE death penalty once the 25%-of-carried execution number is
   felt in practice — the two should probably scale together.
 - The Tag shop's refresh interval and exact `RaidPool`-style faction split.
+- The raid's encounter design, party size and contribution-to-loot-share formula.
+- True Devil's exact eligibility thresholds and cooldown length (drafted as roughly double the
+  base counters and a 30 min → 12 h-style cooldown jump, unverified).
+- The Gate system's requirement spec for Hell and any place added after launch.
+- Warn/kick thresholds for the new movement anti-cheat (how many warnings before a kick).
+- The extended weekend market's exact discount and Tag-shop rotation figures.
