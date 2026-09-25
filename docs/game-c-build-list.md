@@ -89,9 +89,19 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
       - *Root respec: ¥1,000 with a 60 min cooldown. It wipes the branch and equips the
         other weapon.*
       - *All four figures are **[draft]**.*
-- [ ] **Attribute ties**: Strength → stagger dealt, Toughness → posture taken, Vitality → PvE
+- [x] **Attribute ties**: Strength → stagger dealt, Toughness → posture taken, Vitality → PvE
       death Yen resistance, Smoke → regen rate, each layered on the existing flat bonus (round
-      25 #109). **[draft]** values — build the hooks, tune later.
+      25 #109). **[draft]** values — build the hooks, tune later. *Built in Doro
+      (`Config.Attributes`, `Services.Player.Progression`), rebuilt from Game A's
+      AttributeService at Game C's lower ceiling:*
+      - *Flat bonus 1% per point for every attribute, up to 30 points in one.*
+      - *Ties per point: Strength +1.5% stagger dealt (`DamageLogic` now scales stagger by the
+        dealer's `AttrStaggerMult`), Toughness −1% posture taken, Vitality 1% PvE-death Yen kept
+        (`AttrPvEDeathResist`, read by step 5), Smoke +1% pool and +1% regen (player attributes
+        waiting for the Smoke system).*
+      - *Respec as in Game A: first free, then ¥250 with a 10 min cooldown.*
+      - *All values **[draft]**. Playtested: spending, the cap, every effect and respec applied
+        correctly.*
 - [ ] **Movement**: shared base speed for everyone; mobility only from Smoke type or gear, never
       a stat (round 3 #12).
 - [ ] **Smoke moves — framework**: `SmokeMoveService` granting a rolled type's full move set at
@@ -137,7 +147,22 @@ NPCs, and mock data to drive against.
 - [ ] **The rank ladder**: rank-up logic reading from quests/jobs, faction missions, grips, Night
       of the Living Dead kills, Blue Night (carnival) participation, and raid contribution;
       grants a batch of attribute points and gates weapon-tree tiers (round 6, round 21 #82,
-      round 25 #109). **[draft]** the 10 rank names/gates themselves.
+      round 25 #109). **[draft]** the 10 rank names/gates themselves. *Built in Doro:*
+      - *`Config.Ranks` holds the audit's drafted table: names, gates, points (1,1,2,2,3,3,4,4,5,5
+        = 30) and unlocks. Rank 7 reads "Cross-Eyed Blade" for the Cross-Eyes faction.*
+      - *`PlayerData.RankProgress` keeps cumulative counters: Tutorial, SmokeCast, Quests,
+        FactionMissions, Grips, NotLDKills, BossClears. Systems report them through
+        `Progression.AddProgress` or `WorldSignals.RankProgress`. Every report checks the next
+        gates and ranks up as far as they allow, grants points and unlocks, and announces it in
+        chat.*
+      - *The skill tree's tiers now read the real rank. `Progression.ProgressBonus` is the hook
+        temperament fills in.*
+      - *Playtested from Unranked to rank 10 with Studio-only debug counters.*
+      - ***Mismatch to settle:** this item also lists Blue Night carnival participation and raid
+        contribution as rank sources, but the audit's rank table has neither, and round 24 moved
+        raid contribution to the Devil-path counters ("grips remain the only thing that moves
+        the rank ladder"). Built per the audit's table. Add those as counters if they should
+        count.*
 - [ ] **Temperament**: one good + one bad roll, bonus (not gated) progress on favored activities
       (round 5 #19, round 6 #23).
 - [ ] **Faction system**: join on character creation/first Sorcerer World visit, rep from
