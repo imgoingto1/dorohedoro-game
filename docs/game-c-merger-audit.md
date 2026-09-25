@@ -15,10 +15,11 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (24 rounds, 102 questions), Game C design
-drafted and updated with round 24's reconsideration of where Game B's approach — not code —
-should lead instead of just filling gaps in Game A's. Everything in the design section is
-either a direct interview answer or a **[draft]** value proposed for Jay to tune from
+**Status:** Phases 1–2 done, interview complete (25 rounds, 110 questions), Game C design
+drafted and updated through rounds 24–25's reconsideration of where Game B's approach — not
+code — should lead instead of just filling gaps in Game A's, including systems the original
+comparison table had simply marked "Keep A" with no pushback. Everything in the design section
+is either a direct interview answer or a **[draft]** value proposed for Jay to tune from
 playtesting — nothing is final until he says so.
 
 ## Game A — "The Hole" (Map + Combat)
@@ -706,6 +707,34 @@ max rank. Grips remain the only thing that moves the rank ladder itself.
 | 101 | Should trading launch day one instead of staying deferred? | **Keep it deferred.** No change — still added later, once the loot table and anti-dupe tooling are proven (round 11 #45). |
 | 102 | Should monetization/the market go deeper, closer to Game B's structure? | **Full market structure.** Add the purchase-history ledger and a code-redemption system now (both safe infrastructure, not pay-to-win), and extend the weekend bonus beyond just doubling rare-drop odds into a broader rotating-market/multiplier structure, closer to Game B's Friday–Sunday reward-multiplier pattern. |
 
+### Round 25 — pressure-testing the remaining "Keep A" defaults (asked 2026-09-25)
+
+Round 24 reconsidered the systems the comparison table called "Merge" or "Rebuild." This round
+does the same to systems the table marked a plain **"Keep A"** — the ones nobody had pushed
+back on yet — asking specifically where Game B's approach should lead instead of just filling a
+gap.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 103 | Should Game C add a cosmetic identity-roll system (Game B's weapon name/callout, hilt colors, marking chance, clan), separate from weapon type? | **Tied to faction/clan.** The cosmetic roll is flavored by which faction the player joined — markings and colors read as a visible faction identity, not a standalone gacha layer. |
+| 104 | Should missions move from Game A's direct quest-giver model toward Game B's rank-gated queue? | **Full rank-gated queue.** Higher-tier repeatables and the new raid (round 24) go through a queue that rank-gates and matches players, replacing direct pickup for that content. |
+| 105 | Should dying in the new raid scale the respawn timer per death, like Game B's raids, instead of the flat 3 s used everywhere else? | **Scaling, but capped low.** Raids get an escalating per-death respawn timer with a low ceiling — a bad wipe costs time, but never turns into a long bench sit. |
+| 106 | Should any of Game B's actual screen layouts inspire the new raid-vote/market/ledger panels? | **Reference layout only.** Use Game B's screens as a functional reference for what information each panel needs to show, then restyle entirely in Game C's own visual language — a design-concept port, never art or code. |
+| 107 | Should the Yen rotating market and the Tags-only Tag shop (round 20/23) stay separate, or merge into one market? | **Merge, Tags reserved for rares.** One rotating market screen; Yen buys the common/uncommon rotation, Tags are still required for anything rare or above. |
+| 108 | Should a real save-rollback admin tool be built, given how much is now always at risk? | **Don't build it.** Rely on `ProfileService`'s existing versioned migrations and sanitizer — no separate rollback tool for launch. |
+| 109 | Should any attribute get a build-defining mechanical tie (like Game B's Kendo → posture, Speed → flashstep), instead of staying a flat multiplier? | **Tie all four to a system each.** Every attribute gets one specific hook on top of its existing flat bonus, not just Toughness. |
+| 110 | Should the raid boss get genuinely unique per-phase mechanics (Game B's real depth), or reuse existing archetype behaviors? | **Unique mechanics, config-driven.** Real unique phases, written as new `BossService` phase functions/config — not a copy-pasted template, so it stays maintainable. |
+
+**Follow-up — the four attribute ties (from #109), drafted to fit each attribute's existing
+role rather than inventing a new one:**
+
+| Attribute | Existing flat bonus (kept) | New tie |
+| --- | --- | --- |
+| Strength | Damage dealt | **+stagger dealt per hit** — a Strength build breaks guard faster, not just hits harder |
+| Toughness | Damage taken | **−posture damage taken** — a Toughness build resists guard-break, not just raw damage |
+| Vitality | Max HP | **+PvE death Yen-loss resistance** — [draft] a small % reduction to the flat PvE death penalty, since Vitality's flat HP bonus already covers the PvP side |
+| Smoke | Max Smoke pool | **+Smoke regen rate** — compounds with the pool bonus, mirroring how the pool/regen pair already worked in Game A |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -784,6 +813,33 @@ gang/organization names, allowed under the closed-community rule.
 - **Parties:** members near each other share kill and quest credit and cannot damage one
   another (round 10 #40). No mission queue, no cross-faction parties.
 
+### Identity rolls
+
+A cosmetic-only layer, added round 25 #103, distinct from weapon type (which stays
+bought/earned, never rolled, round 4 #13–14): a **faction-flavored** roll — markings, an
+accent color, a callout — themed by whichever faction the player joined, so a Family sorcerer
+and a Cross-Eyes sorcerer read as visibly different at a glance even in the same gear. No power
+attached to any part of the roll; it's rerollable the same way every other cosmetic reroll in
+this design is. **[draft]** exact roll table (marking rarity tiers, color/callout pool per
+faction) is unspecified — this needs faction visual identity work (palettes, iconography)
+before it can be filled in, which is art direction, not a numbers question.
+
+### Quests and missions
+
+**A full rank-gated queue** for the game's harder repeatable content and the new raid (round 25
+#104) — a structural change from Game A's direct give-and-complete quest-giver model, which is
+kept only for the low-tier/tutorial quests that don't need gating:
+
+- **Low-tier quests and Academy-tutorial quests:** unchanged — walk up to an NPC, accept,
+  complete, turn in. Reuses `QuestService`'s existing 7 step types.
+- **Higher-tier repeatables and the raid:** entered through a queue. A player (or a party) opens
+  the queue, the system checks their rank against the content's minimum, and matches them in —
+  no walking to a physical board or NPC for these specifically. **[draft]** whether matching is
+  solo-only, party-only, or fills a party from the queue is unresolved; the raid's own party
+  size (still open, per the Raids section) decides this.
+- **Temperament** still applies the same way (round 6 #23) — bonus progress on favored
+  activities, whichever entry point they're reached through.
+
 ### Progression: 10 named ranks
 
 Named ranks, not levels — no wall-clock timers, a mix of activities per rank, a visible reward
@@ -816,6 +872,20 @@ Attribute total at max rank: 30 points (30-point pool), matching the round 5 #18
 the 4 attributes but pull the ceiling from ~70% down to **~30%** at max, so skill matters more
 than the grind. **[draft]** 0.01/rank (was 0.02–0.035 in Game A) keeps the same shape at a lower
 ceiling; retune from a playtest once the new combat numbers (hyperarmor, silence) are in.
+
+**Each attribute also carries one mechanical tie beyond its flat bonus** (round 25 #109), so a
+build reads as a real identity rather than four interchangeable damage sliders:
+
+| Attribute | Flat bonus (kept) | Added tie |
+| --- | --- | --- |
+| Strength | Damage dealt | +stagger dealt per hit — breaks guard faster |
+| Toughness | Damage taken | −posture damage taken — resists guard-break |
+| Vitality | Max HP | **[draft]** small % resistance to the flat PvE death Yen loss |
+| Smoke | Max Smoke pool | +Smoke regen rate |
+
+The tie values themselves are **[draft]** — small enough at rank 1 that they don't read as a
+second damage stat, scaling to something felt but not build-defining by rank 10, consistent
+with the ~30% overall ceiling above.
 
 **Temperament** replaces quirks (round 5 #19): still one good + one bad roll, but instead of a
 flat stat modifier, it decides which activities give **bonus** rank progress — never a lock,
@@ -875,9 +945,14 @@ extended to a live warn/kick flow.
 
 ### Respawn
 
-Kept as-is: 3 s respawn + spawn grace, but grace now ends the moment you land a hit rather than
-on a timer (round 23 #91) — matches the drop of the old 3 s flat spawn-grace window with an
-action-gated one instead.
+Kept as-is everywhere except the raid: 3 s respawn + spawn grace, but grace now ends the moment
+you land a hit rather than on a timer (round 23 #91) — matches the drop of the old 3 s flat
+spawn-grace window with an action-gated one instead.
+
+**Inside the raid only** (round 25 #105): the respawn timer escalates per death this attempt
+and resets when the raid does. **[draft]** 3 s → 13 s → 23 s, capped at 33 s — a low ceiling
+(Game B's own reference caps far higher, at 30 s + 10/death with no stated cap) so a rough wipe
+never turns into a long bench sit for anyone.
 
 ### Death, PvP and combat log
 
@@ -927,26 +1002,30 @@ rep are the only PvP-consequence systems.
 currency into a **rare Blue-Night-only currency** for the Tag shop (round 11 #42 — attribute
 points now come from rank-ups instead, round 6 #21).
 
-**Yen sinks** (round 11 #43): the gear shop and a rotating market, cosmetics (barber, outfits),
-and an **endgame exchange** — a large Yen-plus-rare-item cost gating part of the Devil path. No
-rank-up toll (Game B charges one; Game C doesn't). **[draft]** endgame exchange = 50,000 Yen +
-1 Devil-eligibility item (see Devil path below); gear shop keeps Game A's existing price bands
-(250–500 Yen per piece) as the launch baseline.
+**Yen sinks** (round 11 #43): the gear shop and the rotating market (see below), cosmetics
+(barber, outfits), and an **endgame exchange** — a large Yen-plus-rare-item cost gating part of
+the Devil path. No rank-up toll (Game B charges one; Game C doesn't). **[draft]** endgame
+exchange = 50,000 Yen + 1 Devil-eligibility item (see Devil path below); gear shop keeps Game
+A's existing price bands (250–500 Yen per piece) as the launch baseline.
 
-**Loot** (round 11 #41, narrowed by round 20 #80 once field bosses were cut): mobs drop Yen,
-Tags and sometimes gear; **rare gear and the rare Smoke-reroll item drop from Blue Night, rare
-mob drops, and the Tag shop** — not from bosses, since bosses are story-only now (see below).
-**[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke reroll ~0.1% (Blue Night kills
-only) — retune once the drop-table sizes below are picked.
+**Loot** (round 11 #41, narrowed by round 20 #80 once field bosses were cut, extended by round
+24's raid): mobs drop Yen, Tags and sometimes gear; **rare gear and the rare Smoke-reroll item
+come from Blue Night drops, rare mob drops, the rotating market (Tags, see below) and now the
+raid's own loot pool** (see Raids below) — not from bosses, since bosses are story-only now (see
+below). **[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke reroll ~0.1% (Blue
+Night kills only) — retune once the drop-table sizes below are picked.
 
 **Equipment: 10 slots** (round 14 #55, matching Game B's loot chase — needs roughly 10 slots ×
 3–4 rarity tiers of gear to fill meaningfully).
 
-**Tag shop** (round 20 #80, round 23 #93): a Game-B-style rotating market — 4 items live at
-once, refreshed on a timer, some slots faction-exclusive (a `RaidPool`-style tag). Holds
-accessories for the 10 equipment slots and **less-rare rerolls only** (cosmetic look rerolls).
-The rarest items — the Smoke reroll and the Devil-buff reroll — **stay drop-only**, never
-purchasable with Tags.
+**One rotating market, split by currency** (round 25 #107 — merges what was a separate Yen
+"rotating market" and a Tags-only "Tag shop" into a single screen): 4 items live at once,
+refreshed on a timer, some slots faction-exclusive (a `RaidPool`-style tag). **Yen buys the
+common/uncommon rotation** (accessories for the 10 equipment slots, minor look rerolls); **Tags
+are still required for anything rare or above** — the market doesn't let Yen substitute for
+Tags at the high end, it just means there's one screen to check instead of two. The rarest
+items — the Smoke reroll and the Devil-buff reroll — **stay drop-only**, never purchasable with
+either currency.
 
 **Black Smoke:** kept, **PvE only** — disabled in PvP zones (round 14 #56).
 
@@ -1032,9 +1111,13 @@ feature shape:
   contribution is a **Devil-path eligibility counter** (see below), one more gate alongside the
   top-10-Elo skip, not a parallel path to max rank (round 24 follow-up).
 
-**[draft]** one repeatable raid at launch, built around either Proctor Dunmore or The Skinner's
-existing kit rather than a third boss from scratch — exact encounter design, party size and
-contribution formula are open until the raid is prototyped.
+**The raid boss gets genuinely unique per-phase mechanics** (round 25 #110), not a reuse of
+existing mob/story-boss archetype behaviors — but written as new `BossService` phase
+functions/config, the same data-driven pattern the story bosses already use, so it stays
+maintainable rather than becoming a Game-B-style hand-copied template. **[draft]** one
+repeatable raid at launch; whether it's a third, purpose-built boss or a harder unique-mechanic
+pass on Proctor Dunmore or The Skinner is open — exact encounter design, party size and the
+contribution formula are all unresolved until the raid is prototyped.
 
 ### The Devil path (endgame)
 
@@ -1091,7 +1174,13 @@ committing further art or content to the rest of the build.
 - **Fresh DataStore at launch.** No migration path for removed fields or systems — old Map +
   Combat saves do not carry over (round 18 #71).
 - **UI is React-only.** `ReactHudClient`/`HudUI` is the one UI generation; no legacy ScreenGui
-  code is ported (round 18 #72).
+  code is ported (round 18 #72). For the new B-inspired panels specifically (raid vote, the
+  rotating market, the purchase ledger) — **reference Game B's screen layouts for what
+  information each needs to show, then restyle entirely in Game C's own visual language**
+  (round 25 #106); no B art, code or exact layout is copied.
+- **No save-rollback admin tool.** Considered and declined for launch (round 25 #108) — relies
+  on `ProfileService`'s existing versioned migrations and sanitizer instead, same as Game A
+  today.
 - **Everything above goes in the public repo**, including the Game B provenance and security
   sections (round 1 #4) — nothing in this document is held back.
 
@@ -1110,4 +1199,13 @@ Every **[draft]** figure above, plus:
   base counters and a 30 min → 12 h-style cooldown jump, unverified).
 - The Gate system's requirement spec for Hell and any place added after launch.
 - Warn/kick thresholds for the new movement anti-cheat (how many warnings before a kick).
-- The extended weekend market's exact discount and Tag-shop rotation figures.
+- The extended weekend market's exact discount and rotation figures.
+- The identity-roll table itself (marking rarity tiers, per-faction color/callout pool) — blocked
+  on faction visual-identity art direction, not a numbers question.
+- Whether the mission queue matches solo, party-only, or fills a party from the queue — tied to
+  the raid's still-open party size.
+- The market's exact rare-vs-non-rare cutoff (which rarity tier requires Tags).
+- The raid respawn curve (drafted 3 s → 13 s → 23 s, capped 33 s) and whether that cap is too
+  low or too high once a real wipe is played out.
+- The four attribute ties' exact values (stagger-per-hit, posture-taken reduction, Vitality's
+  PvE-death resistance %, Smoke regen bonus) — all **[draft]** placeholders pending a playtest.
