@@ -373,7 +373,16 @@ Round 1 covers the decisions everything else depends on. Answers get recorded he
 | 3 | How is a character's power identity decided? | **Rolled and permanent.** Smoke type stays a one-time roll. Rerolls exist only as rare drops, so the roll is a long-term chase. |
 | 4 | What goes in the public GitHub repo? | **Everything**, including the provenance and security sections. |
 
-World size moves to round 2.
+### Round 2 — world, progression, endgame, combat balance (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 5 | How big is the world at launch? | **Hole + Sorcerer World.** Two main hubs from day one, linked by Smoke doors. |
+| 6 | What shape does long-term progression take? | **Named ranks.** About 10 ranks, each unlocked by a mix of activities, no wall-clock timers, a visible reward per rank. |
+| 7 | What is the late-game power fantasy? | **Devil path.** Finishing the Devil Awakening trial transforms you into a devil: rare, hard, lost on death mid-trial. |
+| 8 | Weapon vs Smoke power? | **Equal partners.** Weapons carry melee; Smoke gives 2–3 signature moves. A weak roll stays viable through weapon mastery. |
+
+**Tension to resolve in round 3:** a permanent Smoke roll (answer 3) plus equal weapon power (answer 8) means weapon mastery has to be deep enough to carry a player with a weak roll.
 
 ### Next rounds (planned)
 
