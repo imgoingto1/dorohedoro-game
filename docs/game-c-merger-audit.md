@@ -15,10 +15,11 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (25 rounds, 110 questions), Game C design
-drafted and updated through rounds 24–25's reconsideration of where Game B's approach — not
+**Status:** Phases 1–2 done, interview complete (26 rounds, 116 questions), Game C design
+drafted and updated through rounds 24–26's reconsideration of where Game B's approach — not
 code — should lead instead of just filling gaps in Game A's, including systems the original
-comparison table had simply marked "Keep A" with no pushback. Everything in the design section
+comparison table had simply marked "Keep A" with no pushback, and a previously-undefined gap:
+what a weapon's actual moveset is beyond the shared combat kit. Everything in the design section
 is either a direct interview answer or a **[draft]** value proposed for Jay to tune from
 playtesting — nothing is final until he says so.
 
@@ -735,6 +736,28 @@ role rather than inventing a new one:**
 | Vitality | Max HP | **+PvE death Yen-loss resistance** — [draft] a small % reduction to the flat PvE death penalty, since Vitality's flat HP bonus already covers the PvP side |
 | Smoke | Max Smoke pool | **+Smoke regen rate** — compounds with the pool bonus, mirroring how the pool/regen pair already worked in Game A |
 
+### Round 26 — weapon skills and the Gauntlets rename (asked 2026-09-25)
+
+The design so far said weapons have "no mastery" and are "equal from the start" (round 4 #14),
+which answers *power progression* but never actually said what a weapon's kit *is* beyond the
+shared M1/M2/dodge/parry/feint moveset everyone uses. That gap prompted this round.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 111 | With Fist becoming its own item, what happens to true bare-handed combat? | **Bare-handed stays the free fallback.** Every character can always fight unarmed with the shared kit, no signature techniques. **Fist is renamed Gauntlets** and becomes a real, earned weapon on top of that baseline — fists were only ever the "no weapon equipped" state, which isn't the same thing as a chosen weapon. |
+| 112 | Do weapons get unique special moves beyond the shared kit? | **Yes — a fuller per-weapon moveset.** Resolved into a full skill tree per weapon, not just 1–2 bonus moves (see #115–116). |
+| 113 | How are weapon techniques obtained? | **Taught by Trainer Goro, one technique per quest.** Each technique is its own short lesson/quest; completing it is what teaches the move. |
+| 114 | Do techniques need a minimum rank too? | **Later techniques need rank.** Early techniques are open as soon as their quest is available; deeper ones also gate on hitting a minimum rank. |
+| — | What resource do weapon techniques cost? | **Cooldown only.** No new resource bar — Smoke stays the only meter in the HUD; each technique just has its own cooldown. |
+| 115 | Given weapons now have real depth, should Game C bring back classes (removed in the original triage) instead of just adding moves? | **Neither the old flat list nor classes: a skill tree per weapon, classless.** Smoke type + weapon still define the whole build identity (the original "Remove classes" reasoning holds) — but each weapon's techniques form a real tree, not a fixed checklist, so two players with the same weapon can end up different. |
+| 116 | Should the tree have real exclusive branches, or does everyone eventually learn everything? | **Exclusive branches.** No single player learns every technique in a weapon's tree — real trade-offs, not just pacing. |
+| — | How many technique nodes per weapon? | **7+ nodes.** Full tree depth, not a short list — more quests to build (one per technique, per #113), more balance surface, but the deepest build variety of the options considered. |
+
+**Superseded:** an earlier round in this same conversation asked "how many techniques" as a flat
+count (3–4 / 5–6 / 7+) before the classless-tree question above was asked — that flat-list
+framing is replaced by the tree structure below; only the final "7+ nodes" figure survives into
+the design.
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -853,7 +876,7 @@ max rank for an average player (round 6 #24).
 
 | # | Rank | Gate (mix of activities) | Reward |
 | --- | --- | --- | --- |
-| 1 | Newblood | Finish the Academy tutorial | 1 attribute point, Katana or Fist |
+| 1 | Newblood | Finish the Academy tutorial | 1 attribute point, Katana or Gauntlets |
 | 2 | Streetwise | 5 quests or jobs | 1 attribute point |
 | 3 | Smoke-Touched | 15 quests/jobs, first Smoke move cast | 2 attribute points |
 | 4 | Alley Regular | 30 quests/jobs, 5 faction missions | 2 attribute points, 1 Tag shop slot unlocked |
@@ -914,11 +937,58 @@ scoped narrowly:
 mobility, never a stat (round 3 #12) — this also keeps the lowered attribute ceiling from
 becoming a mobility tax.
 
-**Weapons at launch: Katana and Fist only** (round 4 #13). No mastery — every weapon is equally
-strong from the moment it's equipped; only player skill differentiates them (round 4 #14). More
-weapons (the other five from Game A, or new ones) are a post-launch content update, animated
-properly rather than shipped as placeholders (keeps the "ship 3–4 finished weapons" triage call
-even tighter: 2 finished weapons at launch).
+**Weapons at launch: Katana and Gauntlets** (round 4 #13, renamed round 26 #111 — "Fist" was
+always just the unarmed state, not a chosen weapon; see Bare-handed baseline below). No power
+mastery — a weapon's base kit is equally strong the moment it's equipped; only player skill
+differentiates the base kit (round 4 #14). More weapons (the other five from Game A, or new
+ones) are a post-launch content update, animated properly rather than shipped as placeholders
+(keeps the "ship 3–4 finished weapons" triage call even tighter: 2 finished weapons at launch).
+"No mastery" governs the *shared* kit's power only — it does not apply to the technique trees
+below, which are about kit *breadth*, not raw strength.
+
+**Bare-handed baseline** (round 26 #111): every character can always fight with no weapon
+equipped, using the shared kit (M1/M2/dodge/parry/feint) with no signature techniques — the
+zero-investment fallback everyone has from character creation, distinct from choosing and
+earning Gauntlets as a real weapon.
+
+### Weapon skill trees
+
+Beyond the shared kit, each weapon has its own tree of unique techniques — the depth Game A's
+weapons never had (round 26 #112, #115). Classless: Smoke type and weapon are still the whole
+build identity, the original "remove classes" reasoning stands, but a tree means two players
+carrying the same weapon can end up meaningfully different (round 26 #115).
+
+**Structure, per weapon — [draft] template, same shape for Katana and Gauntlets:**
+
+| Tier | Nodes | Exclusivity | Gate |
+| --- | --- | --- | --- |
+| 1 — Foundation | 2 | None — both learnable | Owning the weapon + that technique's quest |
+| 2 — Specialization | 3 (learn 2 of 3) | **Exclusive** — learning one of the excluded pair's members locks the other | Foundation complete + **[draft]** rank 4–5 + that technique's quest |
+| 3 — Capstone | 2 (learn 1 of 2) | **Exclusive** — a single pick, a real finisher choice | Both Specialization picks made + **[draft]** rank 8+ + that technique's quest |
+
+Seven node slots total; a fully-invested player ends up with **5 of the 7** (2 Foundation + 2 of
+3 Specialization + 1 of 2 Capstone) — real, permanent trade-offs, not a checklist everyone
+finishes identically (round 26 #116).
+
+- **Obtained:** each node is taught by **Trainer Goro**, one technique per quest (round 26
+  #113) — narrative-flavored, not a loot drop or an automatic rank reward. A node's quest only
+  becomes available once its tier's gate (rank + prerequisite picks) is met.
+- **Resource:** every technique is **cooldown-only** — no new resource bar. Smoke stays the
+  single meter in the HUD (round 26 note).
+- **Respec:** **[draft]** a Specialization or Capstone pick can be changed later through Goro for
+  a real Yen cost and a cooldown — mirrors the existing attribute respec (first free, then a fee
+  with a cooldown) so an early build mistake or a balance patch doesn't strand a player.
+
+**[draft] example technique names**, to make the shape concrete — content, not mechanics, so
+these are Jay's to rename or replace entirely:
+
+| Weapon | Foundation (both) | Specialization (pick 2 of 3) | Capstone (pick 1 of 2) |
+| --- | --- | --- | --- |
+| Katana | Iai Opener, Cross-Cut | Riposte Flow, Wind Step, Bleeding Edge | Thousand Cuts *or* Last Word |
+| Gauntlets | Guard Break, Rising Knee | Clinch Throw, Counter Palm, Iron Skin | Devastator *or* Flicker Fist |
+
+Every named technique above is an original name for this design, not lifted from either source
+game — matching the same "inspired, not copied" rule the art-direction work already follows.
 
 **Smoke moves are granted all at once**, same as Game A today — every move of your rolled type
 from the start, no unlock path (round 4 #15). Rarer types are **flashier, not stronger**: keep
@@ -1209,3 +1279,10 @@ Every **[draft]** figure above, plus:
   low or too high once a real wipe is played out.
 - The four attribute ties' exact values (stagger-per-hit, posture-taken reduction, Vitality's
   PvE-death resistance %, Smoke regen bonus) — all **[draft]** placeholders pending a playtest.
+- The weapon skill tree's exact rank gates (drafted rank 4–5 for Specialization, rank 8+ for
+  Capstone) and respec cost/cooldown.
+- Every technique's actual effect, animation and balance numbers — only names and tree position
+  are drafted above; none of the seven-per-weapon techniques has a designed effect yet.
+- Whether the tree template (2 Foundation / 3-pick-2 Specialization / 2-pick-1 Capstone) is the
+  right shape once it's actually played, or whether Katana and Gauntlets need different-shaped
+  trees to fit how each weapon feels.
