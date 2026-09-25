@@ -29,7 +29,8 @@ turn the next sync into one "Update All".
   Also "In Combat" from a real hit, the Travel button, and the Gun ammo text in the Smoke bar.
 
 **Waiting on a decision from Jay**
-- React HUD: the quest and party text is hard to read over bright ground; should the attacker count as "In Combat" too (today only
+- React HUD: the quest and party text is hard to read over bright ground; should the T / J keys go too
+  (only their bottom-left buttons were removed); should the attacker count as "In Combat" too (today only
   the player who gets hit does).
 - Whether the `Adv4` quest chain continues (`Adv5`+) — story call.
 - Zogan's has 0 staffed shops; Academy players have nowhere to spend Yen.
@@ -2068,6 +2069,38 @@ Only the player who gets hit is "In Combat", not the attacker; that's how Damage
 
 Jay: Leave will eventually return to a menu, which isn't built yet. `ReactHudClient` no longer kicks.
 Leave now shows "Main menu coming soon" for 3 s, and the handler is marked as the place to hook the menu in.
-**Applied in Academy** (hash matches the backup in `patches/2026-09-24-react-hud/`). **Map + Combat was
-in Play (Jay's session)**, so it isn't applied there yet; the two places differ by this one script
-until it is.
+Applied in both places (Map + Combat once Jay's Play session had stopped, with the pass below).
+
+### Posture bar, blue Smoke bar, hotbar, bottom UI cleanup (2026-09-24)
+
+Jay: add the posture bar (the orange / yellow one), the blue bar is Smoke, drop the text inside the Smoke
+bar and show only the fill % on hover, restyle the hotbar, and remove the Character / Quest keybind
+buttons and the old bottom-right UI.
+
+- **Posture bar** (orange, with the centre knot, above health): Humanoid attr `Posture`; the bar shows the
+  guard you have left (100 - Posture), the same meaning as the old GUARD row. It turns red at Posture >= 75
+  (VitalsHud's old warning point). Its fill % shows on hover. VitalsHud's GUARD row is now always hidden;
+  STAGGER stays.
+- **Smoke bar**: always the prototype's blue (`Theme.Stamina`), a darker blue while dry or silenced. No text
+  in the bar; the fill % ("73%") shows only while the mouse is over it (`hoverText` on `Primitives.Bar`).
+  The gun readout (AMMO / RELOADING / SILENCED) sits beside the bar, outside it.
+- **Hotbar** (`Widgets.Toolbar`, bottom centre, 70 px slots): the equipped Weapon / Head / Body / Charm
+  from `EquippedJSON` (click = unequip through `ItemAction`, same as the old strip), then the 3 Smoke
+  moves with Z / X / C key tabs, their Smoke cost, and a live cooldown from each move tool's `ReadyAt`
+  (what SmokeMovesHud showed). Replaces `Custom Inventory.hotBar` (hidden; the K inventory window is
+  unchanged) and `SmokeMovesHud` (ScreenGui disabled).
+- **Bottom-left buttons**: "Character [T]" and "Quests [J]" are hidden. **The T and J keys still work.**
+  The unspent-points dot that sat on the Character button is now on the top-right Character icon.
+- **Layout**: the bars now sit on the hotbar, both scaled (`Widgets.HOTBAR_HEIGHT` / `VITALS_HEIGHT`).
+  VitalsHud's STAGGER row and SmokeGui's buff line sit on top at 8 + 198 * scale.
+
+**Tested (Map + Combat, Play):** no console errors. Posture 40 → 60% orange, Posture 85 → 15% red,
+and the old GUARD row stays hidden. Smoke bar blue with no text; hovering showed "73%", and the text
+went away when the mouse left. The hotbar shows Katana / Gas Mask / Cleaner's Coat / Smoke Charm + Spore
+Burst (Z, a 6 s cooldown counting down) / Spore Trap (X) / Cling (C). Clicking the Charm slot unequipped
+it through ItemAction and the hotbar updated; re-equipped afterwards. SmokeMovesHud, the old strip and
+both bottom-left buttons are hidden. `selftest` 38 / 0.
+**Tested (Academy, Play):** the HUD renders the same; `selftest` 37 / 0 / 1 (Rat).
+**Parity:** 2105 scripts identical in both places (hash-checked).
+**Not tested:** casting a move from the hotbar (the slots show moves but only Z/X/C cast, as before),
+the gun ammo text, and posture hover (the Smoke hover used the same code).
