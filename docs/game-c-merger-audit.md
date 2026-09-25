@@ -384,6 +384,261 @@ Round 1 covers the decisions everything else depends on. Answers get recorded he
 
 **Tension to resolve in round 3:** a permanent Smoke roll (answer 3) plus equal weapon power (answer 8) means weapon mastery has to be deep enough to carry a player with a weak roll.
 
+### Round 3 — combat (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 9 | How much of Game A's combat kit stays? | **All of it:** parry → riposte, perfect dodge → counter, stagger → finisher, feints and air juggles. |
+| 10 | Add Game B's hyperarmor and clashes? | **Hyperarmor for bosses and heavies only.** Certain boss swings and slow-weapon attacks (Axe) can't be flinched. No clashes. |
+| 11 | Keep the 2.5 s Smoke silence on a landed M2? | **Keep 2.5 s.** It is melee's main answer to Smoke-heavy players. |
+| 12 | Should mobility vary between builds? | **Through Smoke and gear, not a stat.** Everyone shares the same base movement; some Smoke types or gear add mobility. |
+
+### Round 4 — weapons and Smoke (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 13 | Which weapons ship at launch? | **Katana + Fist only.** More come in later updates. |
+| 14 | How does weapon mastery work? | **No mastery.** Weapons are equal from the start; only player skill matters. |
+| 15 | How are Smoke moves obtained? | **All at once.** Every move of your type from the start, as in Game A now. |
+| 16 | Are rarer Smoke types stronger? | **Rarer = flashier, not stronger.** Keep the roll odds, but balance every type to be equally viable. |
+
+**Resolved:** balancing every type equally (16) takes care of the weak-roll tension from round 2, so mastery isn't needed.
+
+**New tension:** named ranks need a visible reward per rank (6), but moves come all at once (15) and there is no mastery (14). Rank rewards will have to come from somewhere else, such as gear slots, Smoke capacity, access to areas, titles and cosmetics, or Devil-trial eligibility.
+
+### Round 5 — character development (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 17 | Which origins exist? | **Sorcerer only, for now.** Other starting origins may come later, such as a lesser devil or other Dorohedoro-based starts. |
+| 18 | Keep the 4 attributes? | **Keep, but lower the ceiling** from about +70% to about +30% at max, so skill matters more than grind. |
+| 19 | What happens to quirks? | **Turn into temperament.** Like Game B's personalities: the roll decides which activities speed your rank-ups. |
+| 20 | What happens to Vows? | **Remove** the Vow code. |
+
+### Round 6 — progression and ranks (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 21 | Where do attribute points come from? | **Rank-ups.** Each rank grants a batch of points, which also gives every rank a visible reward (resolves the round 4 tension). |
+| 22 | What do rank-ups require? | **PvP required at high ranks.** Like Game B's grips, the top ranks need executions or wins in PvP zones. |
+| 23 | How does temperament affect progression? | **Bonus, not a lock.** Every activity counts; your temperament's favorite activities give extra rank progress. |
+| 24 | How long to max rank? | **About 40–60 hours** for an average player. |
+
+**Note:** PvP is only allowed in danger zones and events (answer 1), so high-rank players must enter them. That makes the danger zones the endgame arena. The design must stop farming friends for executions: no credit for repeat kills on the same victim, and a victim-rank floor.
+
+### Round 7 — content (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 25 | Where does the Academy live? | **Inside Sorcerer World.** The tutorial happens in the Academy district, then players take a door to the Hole. |
+| 26 | Dungeons? | **None.** Events and field bosses carry group PvE. |
+| 27 | Boss types at launch? | **Field + dungeon + story.** With no dungeons (26), this is read as **field bosses + story bosses**. |
+| 28 | Quest balance? | **Mostly repeatables.** Boards, jobs and events, with minimal story. |
+
+### Round 8 — world (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 29 | Bosses: which did you mean? | **Field + story bosses only.** No dungeons (confirms 26 and 27). |
+| 30 | What happens to the 12 world events? | **Keep the best, cut the rest** (about 6). Which ones is asked in round 9. |
+| 31 | How does travel work across two hubs? | **Walk only inside hubs.** Doors only link the Hole and Sorcerer World; no teleporting within a hub. |
+| 32 | What is Hell for? | **Its own separate place later**, like Sorcerer World. Hell is not needed for the Devil progression. |
+
+**Knock-on effects:**
+
+- Removing in-hub toll doors removes a Yen sink (¥30/60 per trip), so the economy needs a replacement.
+- The 8 hidden Hell entrances and the Devil's Mask reward lose their purpose until the Hell place exists. They can stay as a hidden collectible or be switched off until then.
+
+### Round 9 — events and Hell entrances (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 33 | Big events kept | **Blue Night** only. Field Boss, Killing Field and Ashmask Sweep are cut. |
+| 34 | Strange events kept | **Toxic Rain** only. Ghost Night, Rule of the Hour and Party Mishap are cut. |
+| 35 | Small events kept | **None.** Smoke Surge, Supply Cache, Whisper and Cleanup Day are cut. |
+| 36 | Hell entrances and the Devil's Mask | **Remove.** Hell's entrances will be designed fresh with the Hell place. |
+
+**Knock-on effects:**
+
+- **Field bosses (29):** the only field boss today spawns through the Field Boss event. Field bosses now need their own spawn rule, such as a timer or a spot in a danger zone.
+- **Gang rep:** it is earned only from Ashmask raiders. Cutting the Ashmask Sweep leaves En's Gang rep with no source.
+- **Code to remove:** Ghost Night drives the Ghost-shy quirk, and Party Mishap drives the Party Cake buff. Both go with their events.
+- **World feel:** with 2 of 12 events left, the world's life has to come from repeatables, bosses and PvP zones.
+
+### Round 10 — factions and social (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 37 | What are the factions? | **2 rival factions**, such as En's Family and Cross-Eyes. You join one; rep comes from missions and PvP against the other; danger zones are contested turf. |
+| 38 | Limited seats? | **Contested seats.** A few named seats per faction, held by top players and challengeable in duels. This is the social endgame. |
+| 39 | What happens to clans? | **Remove clans.** Factions and parties cover grouping. |
+| 40 | Party changes? | **Shared credit + no friendly fire.** Nearby party members share kill and quest credit and can't damage each other. |
+
+**Resolved:** faction missions and PvP replace the Ashmask Sweep as the source of rep (round 9).
+
+### Round 11 — loot and economy (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 41 | What does loot look like? | **Drop tables with rare gear.** Mobs drop Yen and tags and sometimes gear; bosses have their own tables with rare gear and the rare Smoke reroll item. |
+| 42 | What are the currencies? | **Yen + Tags, Tags repurposed.** Yen for everyday buying; Tags stay a rare Blue Night currency for special items, no longer for attribute points. |
+| 43 | What are the Yen sinks? | Based on how Kan is spent in Game B (table below): **gear shop + rotating market, cosmetics (barber, outfits), and an endgame exchange** (a huge Yen + rare item cost for part of the Devil path). No rank-up fee. |
+| 44 | Which transfers and penalties? | **Combat-log penalty** and **drop/give Yen**. No bounty/jail and no arena betting. |
+| 45 | Trading? | **Not at launch.** Add it later, once loot exists, with anti-dupe safeguards. |
+
+**How Game B spends Kan** (reference for answer 43):
+
+| Kan sink | Cost | Kind |
+| --- | --- | --- |
+| Accessory shop | Up to 40,000 (Legendary) | Gear with stats + cosmetics |
+| Rotating market | Varies; race-locked, some raid-pool items | Rare items |
+| Faction clothing | Per variant | Cosmetic |
+| Barber (custom hair) | 75,000 | Cosmetic |
+| Rank-up fee at an NPC | 1,000 | Progression toll |
+| Fortune/blessing check | 1,500 | Service |
+| True Hogyoku exchange | 8 True Hogyoku + 1,200,000 | Endgame power sink |
+| Arena betting | 10,000 minimum | Gambling between players |
+| Death / combat-log loss | 1,000 / 3,000 | Penalty |
+| Jail bail, manual Kan drops | — | Transfers between players, not sinks |
+
+**Note:** dropping and giving Yen without trading is a way to move value between players, and a common target for scams and alt-account farming. It needs a per-day cap.
+
+### Round 12 — death and PvP (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 46 | What can happen to a downed player? | **Full Game B version.** Carry, execute, and carry captives to a place for bonus rewards. |
+| 47 | How much money drops on execution? | **25% of carried** Yen and Tags. Harsher than the "soft loss" in answer 2; the newest answer wins. |
+| 48 | What happens on a PvE death? | **Small Yen loss.** A flat amount (Game B uses 1,000). Gear and progression are still never lost. |
+| 49 | How is execution-farming prevented? | **Cooldown + rank floor.** No rank credit for executing the same player again within 24 h, and the victim must be within 2 ranks. |
+
+### Round 13 — bank, captives, War meter, Elo (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 50 | Should there be a bank? | **No bank.** All money is always at risk. |
+| 51 | Where do captives go? | **No reward for turning players in.** Carrying stays, but it only moves a downed player (e.g. out of reach of their allies before an execution). This replaces the "bonus rewards" part of answer 46. |
+| 52 | Keep the War meter and Riots? | **Remove.** |
+| 53 | Keep Elo? | **Hidden, as in Game B.** Players never see their exact Elo, but the top 10 are shown with their rank on a leaderboard. |
+
+**Consequences to design around:**
+
+- With no bank, an execution takes 25% of a player's entire Yen and Tags. Big savers become targets, and saving for the endgame exchange (answer 43) is risky. That may be intended: it pushes spending and adds tension.
+- The mitigation is the 24 h per-victim cooldown and 2-rank floor (49). Those limit rank credit, not money drops, so a separate money cooldown per victim may be needed.
+
+### Round 14 — cooldowns, slots, Black Smoke, Robux (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 54 | Does the per-victim cooldown cover money drops? | **Victim cooldown only applies to Elo.** Rank progress and money are not gated by it. The same player can be gripped again after about 1 hour, not 24 h. This replaces the 24 h in answer 49. |
+| 55 | How many equipment slots? | **10, as in Game B.** A big loot chase. |
+| 56 | Keep Black Smoke? | **Keep, but not in PvP zones.** Usable in PvE only. |
+| 57 | What is sold for Robux? | **Cosmetics + QoL, and also Smoke rerolls.** |
+
+**Design notes:**
+
+- **Farming risk:** with a 1-hour regrip and ungated rank credit, two friends could trade executions every hour for rank progress. The 2-rank floor (49) still applies. Options for round 15: count only enemy-faction executions, or cap rank credit from grips per day.
+- **Paid rerolls:** these are softened by answer 16. Every Smoke type is balanced to be equally viable, so a paid reroll buys identity and style rather than power.
+- **10 slots:** the loot tables (41) need enough gear to fill them: roughly 10 slots × 3–4 tiers.
+
+### Round 15 — farming, Devil path, food (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 58 | How is friend-farming stopped? | **Enemy-faction grips only** count toward rank. |
+| 59 | Devil trial structure? | **Copy the structure of Game B's Bankai and Visored unlocks** (see below). This replaces the 4-stage scaffold. |
+| 60 | What does becoming a devil give? | **A devil form on top of Smoke.** A toggleable transformation with its own moves, limited by a meter or cooldown. |
+| 61 | Keep food buffs? | **Remove.** No timed food buffs; the 8 food shops go (Black Smoke stays, per 56). |
+
+**How Game B unlocks Bankai:**
+
+1. **Eligibility:** top rank (Elite Grade) + Shikai already unlocked. Four counters must be met: time served at rank, Hollow kills, player kills, world-boss kills. Being in the global top 200 is an alternative route.
+2. **Talk to the gatekeeper NPC.** Its dialogue hints at what is missing ("the path of bloodshed", "the fall of Hueco Mundo").
+3. **"Discover your zanpakuto":** meditate into your inner world for a 150 s timed duel against your own sword spirit. Every boss state machine has a mode for this.
+4. **Win** unlocks Bankai. **Lose** puts the fight on a cooldown; each player grip cuts 60 minutes off it.
+5. **Using it:** activation heals you and then goes on cooldown (Bankai 30 min, True Bankai 12 h).
+
+**How Game B grants Visored:**
+
+1. **Worthy flag:** a trigger marks the player "worthy" and turns them Visored.
+2. **Rolls:** a random mask, 2 random buffs and 1 downside from {Damage, Defense, Speed, Health, Reiatsu}. There is also a rarer "weak" variant.
+3. **Mastery:** meditate into the inner world for a 120 s fight against a clone of your own inner Hollow.
+4. **Using it:** the mode has a 90 s cooldown and heals 10% on activation.
+
+**Proposed Devil path (maps both):**
+
+1. **Eligibility:** max rank + counters (enemy-faction grips, field-boss kills, Blue Night kills, time at max rank) + the endgame Yen exchange (43).
+2. **Madame Ise** (the existing trial NPC) is the gatekeeper and hints at what is missing.
+3. **Meet your devil:** a timed inner-world duel against a devil built from your own character (Smoke type + weapon). A loss puts it on cooldown; enemy-faction grips shorten the cooldown.
+4. **Devil form roll (Visored-style):** horns/mask look + 2 buffs + 1 downside, rolled once.
+5. **Mastery duel:** a second inner-world fight removes the downside.
+6. **Using it:** a toggleable form with a meter; activation heals a little and then goes on cooldown.
+
+### Round 16 — Devil path details (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 62 | Is the proposed Devil path right? | **Yes, as proposed** (above). |
+| 63 | Leaderboard shortcut? | **Top 10 skip the counters.** Top-10 Elo players go straight to Madame Ise (they still need max rank and the Yen exchange). |
+| 64 | Which eligibility counters? | **All four:** enemy-faction grips, field-boss kills, Blue Night kills, time at max rank. |
+| 65 | Can the form be lost? | **Rerollable.** The devil roll (buffs and downside) can be rerolled with a rare item or Robux, like Smoke. It is never lost. |
+
+### Round 17 — rerolls, contracts, exploration, tumors (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 66 | How do devil rerolls work? | **Robux rerolls the look only.** Rerolling the buffs needs the rare item. This keeps the Devil path free of pay-to-win (replaces the Robux part of answer 65). |
+| 67 | Blue Night contracts? | **Later.** Parked for a future update. |
+| 68 | Which exploration extras stay? | **None.** POI discovery, secrets, the rumor board and the Grudge Monument are all cut. |
+| 69 | Artificial tumor system? | **Remove for now.** Bring it back with future origins. |
+
+**Keep in mind:** cutting discovery removes `RumorService`, `POIIndexService`, `POIGuideClient`, `GrudgeService` and the discovery half of `WorldService`. The **zone-tracking** half of `WorldService` (danger zones, safe zones) must stay, because zoned PvP (answer 1) depends on it.
+
+### Round 18 — technical approach (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 70 | How is Game C built? | **Fresh place, port systems.** A clean new place; Game A's kept modules are copied in one at a time. |
+| 71 | What happens to existing saves? | **Fresh DataStore at launch.** No migration code for removed systems. |
+| 72 | UI plan? | **React only.** Legacy ScreenGuis are not ported. |
+| 73 | When is cleanup done? | **First, before new work.** In a fresh place, "cleanup" means auditing each Game A module before it is ported: port only what's kept, and strip the dead references (JJK kit, removed systems) on the way in. |
+
+### Round 19 — zones and bosses (asked 2026-09-24)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 74 | Where is PvP on in the Hole? | **Whole Hole except safe zones.** This replaces the zoned PvP of answer 1. |
+| 75 | Is Sorcerer World PvP? | **Fully PvP** everywhere outside faction HQs. |
+| 76 | How do field bosses spawn? | **Remove field bosses.** Bosses are story bosses only (updates 29). |
+| 77 | How many field bosses? | **None.** |
+
+**Knock-on effects to resolve in round 20:**
+
+- **Devil counters:** "field-boss kills" (64) no longer exists and needs a replacement.
+- **Loot:** the rare gear and rare reroll item were meant to drop from bosses (41). With story bosses only, those drops need a new home (e.g. Blue Night, rare mob drops, story-boss first clears).
+- **New players:** PvP is now almost everywhere, with 25% money drops and no bank. New players need protection. The Academy tutorial is in Sorcerer World, which is fully PvP.
+- **Safe space:** faction HQs and The Diner are now the only safe places.
+
+### Round 20 — new players, counters, rare drops, safe zones (asked 2026-09-25)
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 78 | How are new players protected? | **No protection.** Hardcore from the start. |
+| 79 | What replaces the field-boss counter? | **Drop it.** The Devil path has 3 counters: enemy-faction grips, Blue Night kills, time at max rank. |
+| 80 | Where do rare gear and reroll items drop? | **Blue Night, rare mob drops, and a Tag shop modeled on Game B's raid shop** (below). |
+| 81 | Which places are safe? | **Faction HQs and the Academy** in Sorcerer World. The Diner is no longer safe. |
+
+**How Game B's raid shop works:**
+
+- **Rotation:** the market holds 4 items, rotated at random.
+- **Faction filter:** items tagged with a faction's `RaidPool` only appear for that faction.
+- **Earning:** raid participation earns contribution points (`RaidPointContribution`).
+- **Codes:** some reroll items point players to codes redeemed there.
+
+**Game C Tag shop (proposed):** a rotating stock of 4 rare items (gear, Smoke reroll, devil-buff reroll) bought with Burial Tags. Some slots are exclusive to each faction. Tags come from Blue Night, so the shop turns Blue Night into the rare-item event.
+
+**Watch:** with no new-player protection, 25% drops, no bank and near-universal PvP, the first hour is the biggest retention risk. It is worth playtesting early.
+
 ### Next rounds (planned)
 
 - **Progression:** named ranks vs levels, how grindy, whether transformations (Sorcerer → Devil) are the endgame.
