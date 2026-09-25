@@ -6,6 +6,10 @@
 
 This doc audits two Roblox codebases and will turn them into one design, Game C. It covers phases 1–2 (audit and comparison) first, then the interview, then the design.
 
+**Ready to start building?** See [`game-c-build-list.md`](game-c-build-list.md) — everything
+below reorganized around what can be prototyped in a fresh baseplate right now, with a
+suggested build order.
+
 | | Game A | Game B |
 | --- | --- | --- |
 | Studio place | "Map + Combat" (placeId 87872916277829) | "animation farm" (placeId 72078340292677) → `ServerStorage.CC` |
