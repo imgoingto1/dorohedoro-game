@@ -76,6 +76,10 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
       - *Playtested: every gate, exclusivity rule and respec path answered correctly, and a
         technique hit a dummy once and then held its cooldown. Number keys couldn't be tested
         with Studio's input tool (it can't send them), so press 1 to confirm by hand.*
+      - **Next:** confirm the 1–5 keys fire the right learned technique by hand (the one thing
+        the automated playtest above couldn't reach). Once Trainer Goro exists (see Quests and
+        missions, below), flip `REQUIRE_QUESTS` back on and wire `SkillTree.CompleteQuest` to
+        his real quest completions instead of the debug call.
 - [x] **Weapon respec**: per-node respec (Yen + cooldown, mirrors the attribute respec) and the
       pricier full root respec (round 27) — build both cost/cooldown hooks even with **[draft]**
       numbers.
