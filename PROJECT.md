@@ -582,6 +582,19 @@ Follow-up idea: show the stagger of the enemy you're fighting (overhead bar or a
 - Academy synced to Map + Combat: 525/525 game scripts identical (fight pit archived there too).
   The shared folders are unpublished Packages - publishing them makes the next sync one "Update All".
 
+### React HUD - 2026-09-24 (both places; details in work-log)
+- `ReplicatedStorage.ReactLua`: react-lua package 15621638430 v5, unlinked, with 9 rebuilt luau-polyfill
+  modules and 14 link stubs changed to `require()` (the published package is broken without them).
+- `ReplicatedStorage.HudUI` (Theme / Assets / HudState / Primitives / Widgets / App) +
+  `StarterPlayerScripts.ReactHudClient` (mounts `PlayerGui.ReactHud`, feeds `HudState`, handles button actions).
+  Widgets: health + Smoke bars, top-right Character / Settings / Leave icons, quest panel, party panel +
+  invite popup, "In Combat" text.
+- Data: Humanoid; Smoke attrs; `QuestSync` / `QuestAction`; party attrs `PartyMembersJSON` / `PartyLeader` /
+  `PartyInviteFrom` + `Remotes.PartyAction` (PartyService); character attr `State_InCombat` (StateManager
+  now mirrors `InCombat`); `CharacterGui.Open` BindableEvent (CharacterTreeClient).
+- Replaced (hidden, not deleted): VitalsHud HEALTH row, SmokeGui bar + ammo line, QuestClient tracker
+  (`SHOW_TRACKER`). VitalsHud GUARD / STAGGER and SmokeGui buffs sit above the new bars.
+
 ### Next up
 - **Performance** (measured in Studio 2026-09-23): client 60 FPS steady, worst frame 20 ms, ~131k instances
   streamed in; server heartbeat 4.2 ms avg / 11 ms worst on a 541k-instance workspace. 101 unanchored map parts

@@ -97,8 +97,10 @@ Tick items off here and log the work in the work log when done.
 - [ ] Item icons: `Items` has no `Icon` field. `InventoryClient` already has the one-line hook. **[gap]** needs asset
 - [ ] Smoke move icons in `SmokeMovesHud`, which currently shows colour swatches. **[gap]** needs asset
 - [x] ~~Decide the final HUD~~: `VitalsHud` replaced jjk's Player_Display bars (2026-09-24).
-- [ ] Party and clan UI, which are chat commands only today. The `PartyLeader` and
-      `PartyMembersJSON` attributes are ready for it. **[idea]**
+- [x] ~~Party UI~~: the React HUD's party panel + invite popup (2026-09-24, `Remotes.PartyAction`).
+      Clan UI is still chat commands only. **[idea]**
+- [ ] React HUD readability: the quest and party text is thin over bright ground. It needs a backing or
+      a heavier stroke. **[idea]**
 - [ ] Buttons are low-contrast since the switch to the blue-grey accent; decide on a call-to-action colour. **[gap]**
 - [ ] Damage numbers and the target's guard/stagger bar. The combo counter already exists
       (`Misc.ComboHit`). **[idea]**

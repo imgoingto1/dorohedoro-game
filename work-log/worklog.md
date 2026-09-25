@@ -8,9 +8,11 @@ carries an inline **Update** note rather than being deleted. For what the repo i
 ## Current state (as of 2026-09-24) — read this first
 
 **Places:** Map + Combat (87872916277829) and Zogan's Academy Grounds (127609270845586), same
-universe (GameId 10766477296), shared DataStores. **Back at code parity on 2026-09-24: 525/525 game
-scripts identical** (hash-checked). Last `selftest`: Map + Combat 38 passed / 0 failed (combat-depth
-pass), Academy 37 passed / 0 failed / 1 warning (the Rat NPC only exists in the Hole). The shared
+universe (GameId 10766477296), shared DataStores. **At code parity after the React HUD import
+(2026-09-24): 2105 scripts identical** (1572 react-lua + 533 game scripts, hash-checked; the
+`ServerStorage.Archive*` folders are place-specific). Last `selftest`: Map + Combat 38 passed / 0 failed,
+Academy 37 passed / 0 failed / 1 warning (the Rat NPC only exists in the Hole). The HUD is now the React
+one (`ReactHudClient` + `ReplicatedStorage.HudUI`; see the last log entry). The shared
 folders are Roblox Packages whose Map + Combat edits were never published — publishing them would
 turn the next sync into one "Update All".
 
@@ -23,8 +25,13 @@ turn the next sync into one "Update All".
 - Blue Night contracts with two real players (only the pure-rule SelfTest covers pairing).
 - The 2026-09-24 lamp pass *by eye* — logic verified in Play, but the Studio viewport rendered blank.
 - Slide after a very brief (~0.05s) movement tap.
+- React HUD with two players: party invite → accept → leave / disband from the panel, and member HP bars.
+  Also "In Combat" from a real hit, the Travel button, and the Gun ammo text in the Smoke bar.
 
 **Waiting on a decision from Jay**
+- React HUD: the quest and party text is hard to read over bright ground; should the top-right Leave
+  icon really kick (it asks for a second click); should the attacker count as "In Combat" too (today only
+  the player who gets hit does).
 - Whether the `Adv4` quest chain continues (`Adv5`+) — story call.
 - Zogan's has 0 staffed shops; Academy players have nowhere to spend Yen.
 - Tags have almost nothing to buy at high levels (Grave Keeper is the only sink).
@@ -1988,3 +1995,72 @@ the reference has them).
 **Tested (Place1, Play):** no console errors; all assets `PreloadAsync` Success; a zoomed capture of
 vitals + toolbar compared against Jay's crop, and a full-screen capture.
 **Not tested:** mobile, other resolutions, a published server.
+
+## React HUD imported into both game places (2026-09-24)
+
+Jay: import the prototype's health UI, the top-right icons, stamina (Smoke in this game), the party and
+quest UI and the combat warning (text only), and make sure they're tied to the systems already in
+the game, so only the UI changes.
+
+**Imported:** the vitals (health bar + Smoke bar), the three top-right icons, the quest panel, the party
+panel with its invite popup, and the "WARNING / In Combat" text. **Not imported:** the parry bar, boss
+bar, player list and toolbar, plus the combat warning's skull, smoke and flecks.
+
+**Package:** react-lua was inserted fresh (asset 15621638430 v5) into `ReplicatedStorage.ReactLua` in
+both places, and the prototype's fix was re-applied: unlinked, the 9 polyfill modules added, and 14
+link stubs changed to `require()`. The fixed copy is 8 MB across 1572 scripts, too big to move by
+hand. Its hash matches the Place1 copy exactly.
+
+**New (both places):** `ReplicatedStorage.HudUI` (Theme, Assets, HudState, Primitives, Widgets, App) and
+`StarterPlayerScripts.ReactHudClient`, which mounts the `ReactHud` ScreenGui (DisplayOrder 6) and feeds it:
+
+| Widget | Reads (the existing system) | Actions |
+|---|---|---|
+| Health bar | Humanoid Health / MaxHealth | - |
+| Smoke bar ("stamina") | player attrs `Smoke`, `SmokeMax`, `SmokeType` (bar colour = the type's colour), `SmokeDryUntil` / `SmokeSilencedUntil` (bar turns dark red), `GunAmmo` / `GunReloading` (the ammo readout moved into the bar text) | - |
+| Quest | `Remotes.QuestSync` (QuestService), the same payload QuestClient's tracker used; earlier steps are struck through, from `Quests.Defs` | `QuestAction` "Travel" / "Abandon" (Abandon asks for a second click) |
+| Party | player attrs `PartyMembersJSON` / `PartyLeader` (PartyService); member HP from their Humanoids | new `Remotes.PartyAction`: invite (the "Invite player..." box), leave, disband (leader only) |
+| Invite popup | new player attr `PartyInviteFrom` | PartyAction accept / reject |
+| In Combat | character attr `State_InCombat` | - |
+| Top-right icons | - | Character → toggles the Character window (T); Settings → opens Stats scrolled to the settings rows; Leave → "Click again to leave", then `Player:Kick` |
+
+**Backend hooks (small, same code paths as before):**
+- `PartyService`: `Remotes.PartyAction` runs the existing chat commands. Two commands are new: `reject`, and
+  `disband` (leader only, everyone leaves). Both are also available as `!party reject` / `!party disband`.
+  A pending invite is mirrored to `PartyInviteFrom` and cleared on accept, reject or expiry (120 s).
+  Rate limit: RemoteGuard default bucket.
+- `Packages.Bind.StateManager`: `InCombat` added to `MIRRORED`, so DamageLogic's 60 s InCombat state
+  (set on whoever gets hit) shows on the client. Nothing on the client checked `InCombat` before this.
+- `CharacterTreeClient`: a `CharacterGui.Open` BindableEvent for the top-right icons.
+
+**Old UI switched off (hidden, not deleted; each spot is commented with how to undo it):** VitalsHud's
+HEALTH row (GUARD / STAGGER stay and now sit just above the new health bar), SmokeGui's bar + ammo line
+(buffs and burial tags stay; buffs moved above the bars), QuestClient's tracker (`SHOW_TRACKER = false`;
+the J quest log and quest offers are unchanged). The FPS counter moved down to y 108 so it doesn't
+cover the icons. UIThemeClient skips `ReactHud`.
+
+**Gotcha:** Luau already drops the first newline after `[==[`, so the `:sub(2)` I used when writing the
+new scripts cut their first `-`. That was a parse error on line 1, caught on the first Play run and
+fixed. The memory note on cross-place sync already said to prefix long strings with "|".
+
+**Tested (Map + Combat, Play):** no new console errors. Every widget renders from live data: health
+230/230, then 138/230 with the damage-lag fill; Smoke 328/328 in the Mushroom colour; the active
+Proctor Rematch quest (away → Travel + Abandon). `applyState InCombat` through Cmdr's remote → the
+real StateManager → `State_InCombat` → "In Combat" appears. The party panel and invite render from
+the attributes. Clicked Reject → PartyAction → the server cleared the invite. Clicked Settings → Stats
+opens at the settings rows. Clicked the Character icon → the window closes. One click on Abandon →
+"Sure? Click again", which reverts after 3 s (not clicked twice, so the real quest wasn't abandoned).
+`selftest` 38 passed / 0 failed.
+**Tested (Academy, Play):** the HUD mounts with the live quest; `selftest` 37 / 0 / 1 warning (Rat).
+**Parity:** the 15 changed or new scripts hash identically in both places. All 2105 scripts outside
+`ServerStorage.Backup_*` / `Archive*` match (1572 react-lua + 533 game scripts). The archive folders
+were already place-specific.
+**Not tested:** a real two-player party (invite → accept → leave / disband, member HP bars), a real
+hit starting In Combat (only Cmdr's applyState went through the same StateManager), Travel (it would
+teleport), Leave's second click (it kicks), the Gun ammo text, other resolutions (only Studio's
+1090x497 viewport, i.e. the 0.6 minimum scale), mobile, and a published server.
+**Seen, not investigated:** during `selftest` in both places, `ReplicatedStorage.Functions.LinearVelocity:31:
+attempt to index nil with 'LinearStore'`. None of the HUD code touches it.
+**Open for Jay:** the quest and party text is small and hard to read over bright ground (the grass in
+Academy). The icons are "Character / Settings / Leave". Whether Leave should kick at all is Jay's call.
+Only the player who gets hit is "In Combat", not the attacker; that's how DamageLogic already tagged it.
