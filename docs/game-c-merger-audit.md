@@ -15,12 +15,13 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (26 rounds, 116 questions), Game C design
-drafted and updated through rounds 24–26's reconsideration of where Game B's approach — not
+**Status:** Phases 1–2 done, interview complete (27 rounds, 116 questions), Game C design
+drafted and updated through rounds 24–27's reconsideration of where Game B's approach — not
 code — should lead instead of just filling gaps in Game A's, including systems the original
 comparison table had simply marked "Keep A" with no pushback, and a previously-undefined gap:
-what a weapon's actual moveset is beyond the shared combat kit. Everything in the design section
-is either a direct interview answer or a **[draft]** value proposed for Jay to tune from
+what a weapon's actual moveset is beyond the shared combat kit, now built out as one tree rooted
+at the weapon choice itself. Everything in the design section is either a direct interview
+answer or a **[draft]** value proposed for Jay to tune from
 playtesting — nothing is final until he says so.
 
 ## Game A — "The Hole" (Map + Combat)
@@ -758,6 +759,27 @@ count (3–4 / 5–6 / 7+) before the classless-tree question above was asked �
 framing is replaced by the tree structure below; only the final "7+ nodes" figure survives into
 the design.
 
+### Round 27 — one tree, rooted at the weapon choice (instructed 2026-09-25)
+
+Not a Q&A round — a direct build instruction. Jay: build out the two weapon trees, but as **one
+large tree that opens on picking a weapon**, not two independent trees living side by side, and
+decide for the design whether that root pick costs a point; treat everything past the node
+names as placeholder.
+
+**Resolved into the design (see "The weapon skill tree" below):**
+- The tree has a single root node — choose Katana or Gauntlets — with the rest of round 26's
+  7-node structure (2 Foundation / pick-2-of-3 Specialization / pick-1-of-2 Capstone) hanging
+  off whichever branch was picked, not duplicated as two separate standalone trees.
+- **The root pick costs nothing** — **[draft]** 0 points, 0 Yen, granted at rank 1 — the same
+  free, identity-defining spirit as the Smoke type roll, rather than a spent investment. This
+  also **replaces** buying Katana/Gauntlets at the gear shop for these two launch weapons
+  specifically; the root pick *is* how a player gets their first weapon now.
+- A full weapon respec (changing the root pick, not just a Specialization/Capstone node) is a
+  bigger commitment than the existing per-node respec, since it invalidates the whole branch —
+  **[draft]** costs more and cools down longer than a normal respec, exact figures open.
+- Everything below the node names — technique effects, animations, balance numbers — is
+  explicitly placeholder, as instructed, and stays flagged in Open Numbers.
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -942,45 +964,92 @@ always just the unarmed state, not a chosen weapon; see Bare-handed baseline bel
 mastery — a weapon's base kit is equally strong the moment it's equipped; only player skill
 differentiates the base kit (round 4 #14). More weapons (the other five from Game A, or new
 ones) are a post-launch content update, animated properly rather than shipped as placeholders
-(keeps the "ship 3–4 finished weapons" triage call even tighter: 2 finished weapons at launch).
-"No mastery" governs the *shared* kit's power only — it does not apply to the technique trees
-below, which are about kit *breadth*, not raw strength.
+(keeps the "ship 3–4 finished weapons" triage call even tighter: 2 finished weapons at launch;
+future weapons stay on the normal gear-shop model, round 27 note). "No mastery" governs the
+*shared* kit's power only — it does not apply to the technique tree below, which is about kit
+*breadth*, not raw strength.
 
 **Bare-handed baseline** (round 26 #111): every character can always fight with no weapon
 equipped, using the shared kit (M1/M2/dodge/parry/feint) with no signature techniques — the
-zero-investment fallback everyone has from character creation, distinct from choosing and
-earning Gauntlets as a real weapon.
+zero-investment fallback everyone has from character creation, distinct from picking a weapon
+at the skill tree's root (below).
 
-### Weapon skill trees
+### The weapon skill tree
 
-Beyond the shared kit, each weapon has its own tree of unique techniques — the depth Game A's
-weapons never had (round 26 #112, #115). Classless: Smoke type and weapon are still the whole
-build identity, the original "remove classes" reasoning stands, but a tree means two players
-carrying the same weapon can end up meaningfully different (round 26 #115).
+**One tree, not two side-by-side ones** (round 27) — it opens on a single root node that *is*
+the weapon choice, then branches into whichever weapon was picked. Classless: Smoke type and
+weapon are still the whole build identity, the original "remove classes" reasoning stands, but
+the tree means two players carrying the same weapon can end up meaningfully different (round 26
+#115–116).
 
-**Structure, per weapon — [draft] template, same shape for Katana and Gauntlets:**
+```mermaid
+flowchart TD
+    Root["Root: choose your weapon<br/>free — 0 points, granted at rank 1<br/>(replaces the old separate gear-shop pick)"]
+    Root -->|Katana| KF1["Foundation: Iai Opener"]
+    Root -->|Katana| KF2["Foundation: Cross-Cut"]
+    Root -->|Gauntlets| GF1["Foundation: Guard Break"]
+    Root -->|Gauntlets| GF2["Foundation: Rising Knee"]
+
+    KF1 --> KSpec{"Specialization<br/>pick 2 of 3 — rank 4-5"}
+    KF2 --> KSpec
+    KSpec --> KS1["Riposte Flow"]
+    KSpec --> KS2["Wind Step"]
+    KSpec --> KS3["Bleeding Edge"]
+
+    GF1 --> GSpec{"Specialization<br/>pick 2 of 3 — rank 4-5"}
+    GF2 --> GSpec
+    GSpec --> GS1["Clinch Throw"]
+    GSpec --> GS2["Counter Palm"]
+    GSpec --> GS3["Iron Skin"]
+
+    KS1 --> KCap{"Capstone<br/>pick 1 of 2 — rank 8+"}
+    KS2 --> KCap
+    KS3 --> KCap
+    KCap --> KC1["Thousand Cuts"]
+    KCap --> KC2["Last Word"]
+
+    GS1 --> GCap{"Capstone<br/>pick 1 of 2 — rank 8+"}
+    GS2 --> GCap
+    GS3 --> GCap
+    GCap --> GC1["Devastator"]
+    GCap --> GC2["Flicker Fist"]
+```
+
+**The root pick is free** — **[draft]** 0 points and no Yen cost, granted the moment a
+character hits rank 1 (Newblood), the same identity-defining, no-cost spirit as the Smoke
+type roll. It **replaces** the earlier framing of Katana/Gauntlets as a gear-shop purchase for
+these two launch weapons specifically; other weapons added post-launch (round 4 note) can stay
+on the normal gear-shop model, since they won't be tree roots.
+
+**Structure below the root — same shape down both branches:**
 
 | Tier | Nodes | Exclusivity | Gate |
 | --- | --- | --- | --- |
-| 1 — Foundation | 2 | None — both learnable | Owning the weapon + that technique's quest |
+| Root | 1 (Katana *or* Gauntlets) | **Exclusive** — the whole rest of the tree depends on this pick | Reach rank 1 |
+| 1 — Foundation | 2 | None — both learnable | That branch chosen + that technique's quest |
 | 2 — Specialization | 3 (learn 2 of 3) | **Exclusive** — learning one of the excluded pair's members locks the other | Foundation complete + **[draft]** rank 4–5 + that technique's quest |
 | 3 — Capstone | 2 (learn 1 of 2) | **Exclusive** — a single pick, a real finisher choice | Both Specialization picks made + **[draft]** rank 8+ + that technique's quest |
 
-Seven node slots total; a fully-invested player ends up with **5 of the 7** (2 Foundation + 2 of
-3 Specialization + 1 of 2 Capstone) — real, permanent trade-offs, not a checklist everyone
-finishes identically (round 26 #116).
+A fully-invested player ends up with the root pick plus **5 of its branch's 7 nodes** (2
+Foundation + 2 of 3 Specialization + 1 of 2 Capstone) — real, permanent trade-offs down a tree
+they committed to from the very first node, not a checklist everyone finishes identically.
 
-- **Obtained:** each node is taught by **Trainer Goro**, one technique per quest (round 26
-  #113) — narrative-flavored, not a loot drop or an automatic rank reward. A node's quest only
-  becomes available once its tier's gate (rank + prerequisite picks) is met.
+- **Obtained:** every non-root node is taught by **Trainer Goro**, one technique per quest
+  (round 26 #113) — narrative-flavored, not a loot drop or an automatic rank reward. A node's
+  quest only becomes available once its tier's gate (rank + prerequisite picks) is met.
 - **Resource:** every technique is **cooldown-only** — no new resource bar. Smoke stays the
   single meter in the HUD (round 26 note).
-- **Respec:** **[draft]** a Specialization or Capstone pick can be changed later through Goro for
-  a real Yen cost and a cooldown — mirrors the existing attribute respec (first free, then a fee
-  with a cooldown) so an early build mistake or a balance patch doesn't strand a player.
+- **Respec:** **[draft]**, two tiers of commitment —
+  - A Specialization or Capstone pick can be changed later through Goro for a real Yen cost and
+    a cooldown, mirroring the existing attribute respec (first free, then a fee with a cooldown).
+  - The **root pick itself** is the bigger commitment (it decides which branch the rest of the
+    tree even exists on), so a full weapon respec — wiping the whole branch and starting the
+    other one from Foundation — should cost noticeably more and carry a longer cooldown than a
+    normal Specialization/Capstone respec. Exact figures for both are open.
 
-**[draft] example technique names**, to make the shape concrete — content, not mechanics, so
-these are Jay's to rename or replace entirely:
+**[draft] placeholder content beyond this point** — everything past the node names is
+unbuilt. Structure and names only; no technique has a designed effect, animation, or balance
+number yet:
 
 | Weapon | Foundation (both) | Specialization (pick 2 of 3) | Capstone (pick 1 of 2) |
 | --- | --- | --- | --- |
@@ -1280,9 +1349,12 @@ Every **[draft]** figure above, plus:
 - The four attribute ties' exact values (stagger-per-hit, posture-taken reduction, Vitality's
   PvE-death resistance %, Smoke regen bonus) — all **[draft]** placeholders pending a playtest.
 - The weapon skill tree's exact rank gates (drafted rank 4–5 for Specialization, rank 8+ for
-  Capstone) and respec cost/cooldown.
+  Capstone), per-node respec cost/cooldown, and the full weapon-respec (root pick) cost/cooldown
+  — drafted only as "noticeably more than a normal respec," no figure yet.
 - Every technique's actual effect, animation and balance numbers — only names and tree position
-  are drafted above; none of the seven-per-weapon techniques has a designed effect yet.
+  are drafted above; none of the seven-per-branch techniques has a designed effect yet.
 - Whether the tree template (2 Foundation / 3-pick-2 Specialization / 2-pick-1 Capstone) is the
   right shape once it's actually played, or whether Katana and Gauntlets need different-shaped
-  trees to fit how each weapon feels.
+  branches to fit how each weapon feels.
+- Whether a player who respecs their root pick keeps anything from the old branch (a partial
+  Yen refund, a cosmetic memento) or loses it outright — not addressed yet.
