@@ -144,10 +144,11 @@ NPCs, and mock data to drive against.
       can be built now; what a contract actually grants is still unspecified (round 29) — stub
       it as a no-op flag until that's answered.
 - [ ] **Toxic Rain**: kept exactly as Game A had it (round 22 #87) — port as-is, Hole-only.
-- [ ] **The rank ladder**: rank-up logic reading from quests/jobs, faction missions, grips, Night
-      of the Living Dead kills, Blue Night (carnival) participation, and raid contribution;
-      grants a batch of attribute points and gates weapon-tree tiers (round 6, round 21 #82,
-      round 25 #109). **[draft]** the 10 rank names/gates themselves. *Built in Doro:*
+- [x] **The rank ladder**: rank-up logic reading from the Academy tutorial, quests/jobs, the
+      first Smoke cast, faction missions, enemy-faction grips, Night of the Living Dead kills,
+      and a story-boss first-clear (the audit's actual rank table, corrected below); grants a
+      batch of attribute points and gates weapon-tree tiers (round 6, round 21 #82, round 25
+      #109). **[draft]** the 10 rank names/gates themselves. *Built in Doro:*
       - *`Config.Ranks` holds the audit's drafted table: names, gates, points (1,1,2,2,3,3,4,4,5,5
         = 30) and unlocks. Rank 7 reads "Cross-Eyed Blade" for the Cross-Eyes faction.*
       - *`PlayerData.RankProgress` keeps cumulative counters: Tutorial, SmokeCast, Quests,
@@ -158,10 +159,15 @@ NPCs, and mock data to drive against.
       - *The skill tree's tiers now read the real rank. `Progression.ProgressBonus` is the hook
         temperament fills in.*
       - *Playtested from Unranked to rank 10 with Studio-only debug counters.*
-      - ***Mismatch to settle:** this item also lists Blue Night carnival participation and raid
-        contribution as rank sources, but the audit's rank table has neither, and round 24 moved
-        raid contribution to the Devil-path counters ("grips remain the only thing that moves
-        the rank ladder"). Built per the audit's table. Add those as counters if they should
+      - **Resolved:** this bullet's own description used to list Blue Night carnival
+        participation and raid contribution as rank sources — that was wrong, a slip when this
+        build list was written. The audit's rank table has neither: round 24's follow-up
+        explicitly moved raid contribution to the Devil-path counters instead ("grips remain the
+        only thing that moves the rank ladder"), and carnival participation was never a rank
+        source at all. Built correctly per the audit's real table; the description above is now
+        fixed to match. If Blue Night carnival or raid contribution should count toward rank
+        after all, that's a new design decision for the audit to record first, not something to
+        build from a stray line in this list.
         count.*
 - [ ] **Temperament**: one good + one bad roll, bonus (not gated) progress on favored activities
       (round 5 #19, round 6 #23).
