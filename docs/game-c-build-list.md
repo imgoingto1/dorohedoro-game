@@ -51,16 +51,44 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
 - [x] **Bare-handed baseline**: the shared kit with no weapon equipped, always available, no
       signature techniques (round 26 #111). *Fist is the default weapon. A sheathed Katana
       falls back to it.*
-- [ ] **The weapon skill tree — mechanical skeleton**: root node (pick Katana or Gauntlets, free,
+- [x] **The weapon skill tree — mechanical skeleton**: root node (pick Katana or Gauntlets, free,
       granted at rank 1), Foundation (2 nodes, both learnable), Specialization (3 nodes, pick 2
       of 3, exclusive), Capstone (2 nodes, pick 1 of 2, exclusive), cooldown-only activation, no
       new resource bar (round 26–27). Buildable now with the 14 placeholder names already
       drafted — wire each node to a stub ability (a damage number + a generic VFX) so the
       tree's gating/exclusivity logic can be tested end-to-end. **needs asset** for real
-      technique effects/animations later.
-- [ ] **Weapon respec**: per-node respec (Yen + cooldown, mirrors the attribute respec) and the
+      technique effects/animations later. *Built in Doro:*
+      - *`Config.SkillTree` holds the tree, gates and stub numbers. Each tier's stub gives
+        Damage/Posture/Cooldown: Foundation 8/20/8 s, Specialization 11/28/12 s, Capstone
+        16/40/25 s (**[draft]**). Specialization needs rank 4 and Capstone rank 8
+        (**[draft]**).*
+      - *`Services.Player.SkillTree` is the server authority over the `SkillTreeRequest`
+        remote (PickRoot, Learn, RespecNode, RespecRoot).*
+      - *Every node runs one stub `Technique` action: the weapon's heavy swing, a hitbox and
+        the generic critical flash. Keys 1–5 fire learned techniques in tree order, and the
+        default backpack is off so it doesn't take those keys.*
+      - *Gauntlets now exists as a real weapon. It borrows the Fist animations and heavy
+        until it has its own (**needs asset**).*
+      - *Goro's quests aren't required yet (`REQUIRE_QUESTS = false`). They mark nodes
+        through `SkillTree.CompleteQuest`.*
+      - *`Rank` is a save field until step 4 builds the ladder. Studio-only `Debug_SetRank`
+        and `Debug_AddYen` actions exist for testing.*
+      - *Playtested: every gate, exclusivity rule and respec path answered correctly, and a
+        technique hit a dummy once and then held its cooldown. Number keys couldn't be tested
+        with Studio's input tool (it can't send them), so press 1 to confirm by hand.*
+      - **Next:** confirm the 1–5 keys fire the right learned technique by hand (the one thing
+        the automated playtest above couldn't reach). Once Trainer Goro exists (see Quests and
+        missions, below), flip `REQUIRE_QUESTS` back on and wire `SkillTree.CompleteQuest` to
+        his real quest completions instead of the debug call.
+- [x] **Weapon respec**: per-node respec (Yen + cooldown, mirrors the attribute respec) and the
       pricier full root respec (round 27) — build both cost/cooldown hooks even with **[draft]**
       numbers.
+      - *Node respec (Specialization/Capstone only): the first is free, then ¥250 with a
+        10 min cooldown. Dropping a Specialization pick also drops the Capstone that needed
+        it.*
+      - *Root respec: ¥1,000 with a 60 min cooldown. It wipes the branch and equips the
+        other weapon.*
+      - *All four figures are **[draft]**.*
 - [ ] **Attribute ties**: Strength → stagger dealt, Toughness → posture taken, Vitality → PvE
       death Yen resistance, Smoke → regen rate, each layered on the existing flat bonus (round
       25 #109). **[draft]** values — build the hooks, tune later.
