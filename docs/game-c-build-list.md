@@ -131,18 +131,56 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
 Backend logic and state machines — none of this needs real art, just trigger volumes, dummy
 NPCs, and mock data to drive against.
 
-- [ ] **Blue Night — global clock**: one timer (**[draft]** ~15 min real cooldown, both factions
-      need players online, ~5 min duration, round 22 #86) that fires two manifestations at once
-      (round 29).
-- [ ] **Night of the Living Dead** (the Hole's manifestation): a zombie spawn wave against dummy
-      rigs is enough to prototype — kills feed rank, the Devil-path counter, and Tags/rare-gear
-      drops (round 29).
-- [ ] **Blue Night carnival** (Sorcerer World's manifestation): a lighting/prop on-off toggle is
+- [x] **Blue Night — the clock**: one timer (**[draft]** ~15 min real cooldown, both factions
+      need players online, ~5 min duration, round 22 #86) that fires both manifestations (round
+      29). *Built in Doro (`World.BlueNight`, `Config.BlueNight`):*
+      - *Each server keeps its own clock (round 33 #140). It checks every 60 s, starts once 15 min
+        have passed since the last one (or since the server started), and only if both factions
+        are in the server. Studio skips the faction check, since one tester can't be in both.*
+      - *While it runs, workspace attributes `BlueNight` and `BlueNightEndsAt` are set. The
+        workspace attribute `Hub` (`Hole` / `SorcererWorld`) picks which manifestation a server
+        hosts; unset (the baseplate) runs both.*
+      - *`WorldSignals.ForceBlueNight` / `EndBlueNight` start or end it on demand (Studio and admin
+        testing); `BlueNightStarted` / `BlueNightEnded` fire for other systems.*
+- [x] **Night of the Living Dead** (the Hole's manifestation): kills feed rank, the Devil-path
+      counter, and Tags/rare-gear drops (round 29). *Built in Doro:*
+      - *Game A's NPC AI stack is ported as `Services.AI` (round 33 #135), checked line for line
+        against Map + Combat. Only the unused `chrono` hooks were dropped, and rigs are now built
+        at runtime instead of cloned from a stored model.*
+      - *Zombies use Game A's look and numbers (Fist, M1 only, 60 HP). They spawn at
+        `WorldMarkers.ZombieSpots` and top back up to 12 every 45 s (**[draft]**, #141).*
+      - *Every player who damaged a zombie gets `NotLDKills` +1 (#136); `AI.GetHitters` tracks
+        them. Each zombie drops one Burial Tag anyone can take (#137).*
+      - *Zombies down and grip players as round 30 #124 says. Two fixes came out of the first real
+        mob fight: NPCs no longer damage each other (their swings clipped each other in a crowd,
+        which cancelled grips), and a mob whose grip is cancelled tries again.*
+      - *Rare gear and Smoke-reroll drops wait for step 9 (loot).*
+      - *Playtested: 12 zombies swarm and hit, kills credit the counter, tags pick up, a downed
+        player is gripped and executed, and dawn clears everything.*
+- [x] **Blue Night carnival** (Sorcerer World's manifestation): a lighting/prop on-off toggle is
       the whole mechanic for now — no zombies, no combat (round 29). **needs asset** for the
-      actual carnival props (Ferris wheel, roller coaster).
-- [ ] **Blue Night contracts**: the pairing mechanic itself (record two players as contracted)
-      can be built now; what a contract actually grants is still unspecified (round 29) — stub
-      it as a no-op flag until that's answered.
+      actual carnival props (Ferris wheel, roller coaster). *Built in Doro:*
+      - *Anything tagged `BlueNight` switches on: Lights, Beams, ParticleEmitters and Trails are
+        enabled, and parts take their `NightMaterial` / `NightTransparency` attributes.*
+      - *On the client (`Controllers.World.BlueNight`), `BlueNightSpin` parts turn and
+        `BlueNightSweep` parts swing. The lighting eases into Game A's blue night and back at
+        dawn.*
+      - *The baseplate has a blockout `Carnival`: a Ferris wheel, a coaster stand-in, string
+        lights and two searchlights. There's no aurora yet (needs asset).*
+- [x] **Blue Night contracts**: the pairing mechanic itself (record two players as contracted);
+      what a contract actually grants is still unspecified (round 29), so it's a no-op flag.
+      *Built in Doro (`Services.Player.Contract`):*
+      - *The Broker appears at `WorldMarkers.Broker` only during Blue Night. The first player signs
+        for the partner standing beside them (#138), and the partner signs back within 20 s. That
+        prompt stands in for choosing a partner until the UI exists;
+        `Remotes.ContractRequest("Sign", userId)` is ready for that panel.*
+      - *A pact is saved on both players (`PlayerData.Contract`, the same id on both). It is
+        permanent until either player breaks it (`"Break"`), one at a time (#139), and is mirrored
+        to the `ContractPartner` attribute.*
+      - *Breaking a pact while the partner is offline is recorded in `GameC_ContractBreaks_v1`, and
+        their side clears on their next join.*
+      - *Tested solo (the remote's refusals are correct). The two-player signing still needs a
+        2-player Studio test.*
 - [ ] **Toxic Rain**: kept exactly as Game A had it (round 22 #87) — port as-is, Hole-only.
 - [x] **The rank ladder**: rank-up logic reading from the Academy tutorial, quests/jobs, the
       first Smoke cast, faction missions, enemy-faction grips, Night of the Living Dead kills,

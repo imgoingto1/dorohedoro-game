@@ -870,6 +870,21 @@ stand except where B's behavior replaced them:
 | 133 | Get-up health (B heals +10% of max HP; round 30 said 25%)? | **Game B: +10% of max HP.** |
 | 134 | Grip length (B kills on the grip animation's keyframe; round 30 said 3 s)? | **Animation-driven, like B:** the kill lands on the grip animation's `EventFrame` keyframe; about 3 s, and exactly 3 s until real grip animations exist. |
 
+### Round 33 — Blue Night's details (asked while building, 2026-09-25)
+
+Asked during build list step 7 (Blue Night), where round 29 said what each hub's manifestation is
+but not how the zombies run, who gets the kill, how tags drop, or how a contract is signed.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 135 | Doro has no mob AI. What runs the zombies? | **Port Game A's NPC AI stack** (NPCController, Behaviors, Actions, Movement, Swarm, Navigation, Ranged), which later mobs and raids reuse too. |
+| 136 | Who gets credit for a Night of the Living Dead kill? | **Everyone who damaged that zombie.** |
+| 137 | How do Burial Tags come out of zombies? | **A physical pickup, anyone can take it** (Game A): one tag drops where the zombie dies. |
+| 138 | How is a contract formed? | **At the Broker, with a chosen partner.** The Broker only appears during Blue Night, and both players sign together as a pair. |
+| 139 | How long does a contract last? | **Permanent until either player breaks it.** One at a time, and it can only be formed at the Broker during Blue Night. |
+| 140 | What does "both factions online" mean when the hubs are separate places? | **In the same server.** Each server keeps its own clock, so the Hole and Sorcerer World can drift apart. |
+| 141 | How do the zombies arrive over the ~5 minutes? | **Waves topping up** to a cap, so the streets stay under siege all night (**[draft]** 12 alive, every 45 s). |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -1356,12 +1371,22 @@ This also answers the open question in `art-direction/sorcerer-world.md`: the ni
 isn't always running — it's specifically what Blue Night looks like there, so it's on exactly
 as often as the event fires.
 
-**Timing** copies Game B's real-time event pattern (round 22 #86, #92 note), and now governs
-both manifestations at once: **[draft]** can start once ~15 minutes of real time have passed
-since the last one (checked every 60 s, a jump from Game B's 12.5 min since Game C only has one
-event doing this job), only if both factions have players online, and lasts about **5
-minutes** — during which Sorcerer World is carnival-lit and the Hole is under siege,
-simultaneously.
+**Timing** copies Game B's real-time event pattern (round 22 #86, #92 note): **[draft]** can
+start once ~15 minutes of real time have passed since the last one (checked every 60 s, a jump
+from Game B's 12.5 min since Game C only has one event doing this job), only if both factions
+have players **in that server** (round 33 #140), and lasts about **5 minutes**. Each server keeps
+its own clock, so the two hubs, being separate places, don't fire in lockstep. A server that hosts
+both manifestations (today's Doro baseplate) runs them together.
+
+**Night of the Living Dead** (round 33): zombies run on Game A's NPC AI stack, ported (#135), Fist
+and M1 only. They arrive in waves that top back up to a cap (**[draft]** 12 alive, every 45 s)
+(#141). Every player who damaged a zombie gets the kill (#136), and each zombie drops one Burial
+Tag anyone can pick up (#137). A zombie that knocks a player out grips them, as round 30 #124 says
+for all mobs.
+
+**Blue Night contracts** (round 33): the Broker stands in Sorcerer World only while Blue Night
+runs. Two players sign his book together as a chosen pair (#138). The pact is permanent until
+either breaks it, one at a time (#139).
 
 **Toxic Rain is kept exactly as it is today** in Game A (round 22 #87) — no changes, and stays
 Hole-only; it was never a Sorcerer World event and round 29 didn't touch it.
@@ -1452,8 +1477,9 @@ pay-to-win.
 
 **No longer parked:** Blue Night partner contracts (round 17 #67) are reactivated as of round
 29 — see Events, above — now that they have a real home in the Sorcerer World side of Blue
-Night. What forming a contract actually *does* mechanically is still unspecified; see Open
-numbers.
+Night. Round 33 settled how one is formed and how long it lasts (a chosen pair at the Broker,
+permanent until broken). What a contract actually *does* mechanically is still unspecified; see
+Open numbers.
 
 **Still parked for later, not in this design:** the artificial tumor system (round 17 #69,
 revisited if/when a new origin needs it), and Hell as a place (round 8 #32 — the Devil path
@@ -1537,7 +1563,10 @@ Every **[draft]** figure above, plus:
   round 29:** tied to Blue Night specifically.
 - **What a Blue Night contract actually does mechanically** (round 29) — a buff for the pair, a
   cosmetic bond, a matchmaking flag for a future party/duel feature, something else entirely.
-  Reactivating the system only answered where and when it happens.
+  Reactivating the system only answered where and when it happens; round 33 answered how it's
+  formed and how long it lasts (#138–139), not what it grants.
+- Night of the Living Dead's zombie cap and wave interval (**[draft]** 12 alive, topped up every
+  45 s, 60 HP each, round 33 #141) once a real crowd plays it.
 - Where each faction's two HQs (one per hub) actually sit on the map, and what makes the Hole's
   specifically read as "defensible" architecturally.
 - Where the raid (round 24 #96) is physically set — neither hub's art-direction file nor the
