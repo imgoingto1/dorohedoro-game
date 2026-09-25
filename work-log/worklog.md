@@ -29,8 +29,7 @@ turn the next sync into one "Update All".
   Also "In Combat" from a real hit, the Travel button, and the Gun ammo text in the Smoke bar.
 
 **Waiting on a decision from Jay**
-- React HUD: the quest and party text is hard to read over bright ground; should the top-right Leave
-  icon really kick (it asks for a second click); should the attacker count as "In Combat" too (today only
+- React HUD: the quest and party text is hard to read over bright ground; should the attacker count as "In Combat" too (today only
   the player who gets hit does).
 - Whether the `Adv4` quest chain continues (`Adv5`+) — story call.
 - Zogan's has 0 staffed shops; Academy players have nowhere to spend Yen.
@@ -2057,10 +2056,18 @@ opens at the settings rows. Clicked the Character icon → the window closes. On
 were already place-specific.
 **Not tested:** a real two-player party (invite → accept → leave / disband, member HP bars), a real
 hit starting In Combat (only Cmdr's applyState went through the same StateManager), Travel (it would
-teleport), Leave's second click (it kicks), the Gun ammo text, other resolutions (only Studio's
+teleport), the Gun ammo text, other resolutions (only Studio's
 1090x497 viewport, i.e. the 0.6 minimum scale), mobile, and a published server.
 **Seen, not investigated:** during `selftest` in both places, `ReplicatedStorage.Functions.LinearVelocity:31:
 attempt to index nil with 'LinearStore'`. None of the HUD code touches it.
 **Open for Jay:** the quest and party text is small and hard to read over bright ground (the grass in
-Academy). The icons are "Character / Settings / Leave". Whether Leave should kick at all is Jay's call.
+Academy). The icons are "Character / Settings / Leave".
 Only the player who gets hit is "In Combat", not the attacker; that's how DamageLogic already tagged it.
+
+### Leave icon is a placeholder (2026-09-24)
+
+Jay: Leave will eventually return to a menu, which isn't built yet. `ReactHudClient` no longer kicks.
+Leave now shows "Main menu coming soon" for 3 s, and the handler is marked as the place to hook the menu in.
+**Applied in Academy** (hash matches the backup in `patches/2026-09-24-react-hud/`). **Map + Combat was
+in Play (Jay's session)**, so it isn't applied there yet; the two places differ by this one script
+until it is.
