@@ -6,6 +6,10 @@
 
 This doc audits two Roblox codebases and will turn them into one design, Game C. It covers phases 1–2 (audit and comparison) first, then the interview, then the design.
 
+**Ready to start building?** See [`game-c-build-list.md`](game-c-build-list.md) — everything
+below reorganized around what can be prototyped in a fresh baseplate right now, with a
+suggested build order.
+
 | | Game A | Game B |
 | --- | --- | --- |
 | Studio place | "Map + Combat" (placeId 87872916277829) | "animation farm" (placeId 72078340292677) → `ServerStorage.CC` |
@@ -15,10 +19,16 @@ This doc audits two Roblox codebases and will turn them into one design, Game C.
 
 **Method:** scripts were read directly from Studio through the MCP bridge. Vendored libraries (React, Packages, Cmdr) are noted but not audited line by line. Backup and archive folders are skipped unless live code depends on them.
 
-**Status:** Phases 1–2 done, interview complete (24 rounds, 102 questions), Game C design
-drafted and updated with round 24's reconsideration of where Game B's approach — not code —
-should lead instead of just filling gaps in Game A's. Everything in the design section is
-either a direct interview answer or a **[draft]** value proposed for Jay to tune from
+**Status:** Phases 1–2 done, interview complete (29 rounds, 120 questions), Game C design
+drafted and updated through rounds 24–29's reconsideration of where Game B's approach — not
+code — should lead instead of just filling gaps in Game A's, including systems the original
+comparison table had simply marked "Keep A" with no pushback, a previously-undefined gap in
+what a weapon's actual moveset is (now one tree rooted at the weapon choice), the visual
+target for both hubs (see [`art-direction/`](../art-direction/)), and Blue Night's split into a
+Sorcerer World carnival/contract event and the Hole's renamed Night of the Living Dead.
+Everything in the design
+section is either a direct interview
+answer or a **[draft]** value proposed for Jay to tune from
 playtesting — nothing is final until he says so.
 
 ## Game A — "The Hole" (Map + Combat)
@@ -706,6 +716,120 @@ max rank. Grips remain the only thing that moves the rank ladder itself.
 | 101 | Should trading launch day one instead of staying deferred? | **Keep it deferred.** No change — still added later, once the loot table and anti-dupe tooling are proven (round 11 #45). |
 | 102 | Should monetization/the market go deeper, closer to Game B's structure? | **Full market structure.** Add the purchase-history ledger and a code-redemption system now (both safe infrastructure, not pay-to-win), and extend the weekend bonus beyond just doubling rare-drop odds into a broader rotating-market/multiplier structure, closer to Game B's Friday–Sunday reward-multiplier pattern. |
 
+### Round 25 — pressure-testing the remaining "Keep A" defaults (asked 2026-09-25)
+
+Round 24 reconsidered the systems the comparison table called "Merge" or "Rebuild." This round
+does the same to systems the table marked a plain **"Keep A"** — the ones nobody had pushed
+back on yet — asking specifically where Game B's approach should lead instead of just filling a
+gap.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 103 | Should Game C add a cosmetic identity-roll system (Game B's weapon name/callout, hilt colors, marking chance, clan), separate from weapon type? | **Tied to faction/clan.** The cosmetic roll is flavored by which faction the player joined — markings and colors read as a visible faction identity, not a standalone gacha layer. |
+| 104 | Should missions move from Game A's direct quest-giver model toward Game B's rank-gated queue? | **Full rank-gated queue.** Higher-tier repeatables and the new raid (round 24) go through a queue that rank-gates and matches players, replacing direct pickup for that content. |
+| 105 | Should dying in the new raid scale the respawn timer per death, like Game B's raids, instead of the flat 3 s used everywhere else? | **Scaling, but capped low.** Raids get an escalating per-death respawn timer with a low ceiling — a bad wipe costs time, but never turns into a long bench sit. |
+| 106 | Should any of Game B's actual screen layouts inspire the new raid-vote/market/ledger panels? | **Reference layout only.** Use Game B's screens as a functional reference for what information each panel needs to show, then restyle entirely in Game C's own visual language — a design-concept port, never art or code. |
+| 107 | Should the Yen rotating market and the Tags-only Tag shop (round 20/23) stay separate, or merge into one market? | **Merge, Tags reserved for rares.** One rotating market screen; Yen buys the common/uncommon rotation, Tags are still required for anything rare or above. |
+| 108 | Should a real save-rollback admin tool be built, given how much is now always at risk? | **Don't build it.** Rely on `ProfileService`'s existing versioned migrations and sanitizer — no separate rollback tool for launch. |
+| 109 | Should any attribute get a build-defining mechanical tie (like Game B's Kendo → posture, Speed → flashstep), instead of staying a flat multiplier? | **Tie all four to a system each.** Every attribute gets one specific hook on top of its existing flat bonus, not just Toughness. |
+| 110 | Should the raid boss get genuinely unique per-phase mechanics (Game B's real depth), or reuse existing archetype behaviors? | **Unique mechanics, config-driven.** Real unique phases, written as new `BossService` phase functions/config — not a copy-pasted template, so it stays maintainable. |
+
+**Follow-up — the four attribute ties (from #109), drafted to fit each attribute's existing
+role rather than inventing a new one:**
+
+| Attribute | Existing flat bonus (kept) | New tie |
+| --- | --- | --- |
+| Strength | Damage dealt | **+stagger dealt per hit** — a Strength build breaks guard faster, not just hits harder |
+| Toughness | Damage taken | **−posture damage taken** — a Toughness build resists guard-break, not just raw damage |
+| Vitality | Max HP | **+PvE death Yen-loss resistance** — [draft] a small % reduction to the flat PvE death penalty, since Vitality's flat HP bonus already covers the PvP side |
+| Smoke | Max Smoke pool | **+Smoke regen rate** — compounds with the pool bonus, mirroring how the pool/regen pair already worked in Game A |
+
+### Round 26 — weapon skills and the Gauntlets rename (asked 2026-09-25)
+
+The design so far said weapons have "no mastery" and are "equal from the start" (round 4 #14),
+which answers *power progression* but never actually said what a weapon's kit *is* beyond the
+shared M1/M2/dodge/parry/feint moveset everyone uses. That gap prompted this round.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 111 | With Fist becoming its own item, what happens to true bare-handed combat? | **Bare-handed stays the free fallback.** Every character can always fight unarmed with the shared kit, no signature techniques. **Fist is renamed Gauntlets** and becomes a real, earned weapon on top of that baseline — fists were only ever the "no weapon equipped" state, which isn't the same thing as a chosen weapon. |
+| 112 | Do weapons get unique special moves beyond the shared kit? | **Yes — a fuller per-weapon moveset.** Resolved into a full skill tree per weapon, not just 1–2 bonus moves (see #115–116). |
+| 113 | How are weapon techniques obtained? | **Taught by Trainer Goro, one technique per quest.** Each technique is its own short lesson/quest; completing it is what teaches the move. |
+| 114 | Do techniques need a minimum rank too? | **Later techniques need rank.** Early techniques are open as soon as their quest is available; deeper ones also gate on hitting a minimum rank. |
+| — | What resource do weapon techniques cost? | **Cooldown only.** No new resource bar — Smoke stays the only meter in the HUD; each technique just has its own cooldown. |
+| 115 | Given weapons now have real depth, should Game C bring back classes (removed in the original triage) instead of just adding moves? | **Neither the old flat list nor classes: a skill tree per weapon, classless.** Smoke type + weapon still define the whole build identity (the original "Remove classes" reasoning holds) — but each weapon's techniques form a real tree, not a fixed checklist, so two players with the same weapon can end up different. |
+| 116 | Should the tree have real exclusive branches, or does everyone eventually learn everything? | **Exclusive branches.** No single player learns every technique in a weapon's tree — real trade-offs, not just pacing. |
+| — | How many technique nodes per weapon? | **7+ nodes.** Full tree depth, not a short list — more quests to build (one per technique, per #113), more balance surface, but the deepest build variety of the options considered. |
+
+**Superseded:** an earlier round in this same conversation asked "how many techniques" as a flat
+count (3–4 / 5–6 / 7+) before the classless-tree question above was asked — that flat-list
+framing is replaced by the tree structure below; only the final "7+ nodes" figure survives into
+the design.
+
+### Round 27 — one tree, rooted at the weapon choice (instructed 2026-09-25)
+
+Not a Q&A round — a direct build instruction. Jay: build out the two weapon trees, but as **one
+large tree that opens on picking a weapon**, not two independent trees living side by side, and
+decide for the design whether that root pick costs a point; treat everything past the node
+names as placeholder.
+
+**Resolved into the design (see "The weapon skill tree" below):**
+- The tree has a single root node — choose Katana or Gauntlets — with the rest of round 26's
+  7-node structure (2 Foundation / pick-2-of-3 Specialization / pick-1-of-2 Capstone) hanging
+  off whichever branch was picked, not duplicated as two separate standalone trees.
+- **The root pick costs nothing** — **[draft]** 0 points, 0 Yen, granted at rank 1 — the same
+  free, identity-defining spirit as the Smoke type roll, rather than a spent investment. This
+  also **replaces** buying Katana/Gauntlets at the gear shop for these two launch weapons
+  specifically; the root pick *is* how a player gets their first weapon now.
+- A full weapon respec (changing the root pick, not just a Specialization/Capstone node) is a
+  bigger commitment than the existing per-node respec, since it invalidates the whole branch —
+  **[draft]** costs more and cools down longer than a normal respec, exact figures open.
+- Everything below the node names — technique effects, animations, balance numbers — is
+  explicitly placeholder, as instructed, and stays flagged in Open Numbers.
+
+### Round 28 — visuals: lighting, atmosphere, faction identity (asked 2026-09-25)
+
+The two hubs already had real art-direction briefs from before the restart, built from
+reference images Jay shared — [`art-direction/hole.md`](../art-direction/hole.md) and
+[`art-direction/sorcerer-world.md`](../art-direction/sorcerer-world.md). This round decided
+whether to reuse them and closed the visual gaps Game C's new systems opened up (faction
+identity, PvP-everywhere zoning) that neither brief had addressed.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 117 | Should Game C reuse the old Hole/Sorcerer World briefs as-is, revise them, or start fresh? | **Carry over, revise for the new tone.** Both briefs' core look rules stay; both are updated (this round) for the harsher, near-universal-PvP identity Game C has now that they didn't have when written. |
+| 118 | Should faction identity show up in the world itself, beyond player cosmetics? | **Split by hub, "like in Dorohedoro."** The Hole stays **completely neutral** — no faction colour anywhere, including HQs. Sorcerer World's faction HQs **do** get real colour/banner identity; everywhere else in Sorcerer World stays neutral too. |
+| 119 | Should PvP areas get a distinct visual treatment from safe zones? | **There's no separate "danger zone" to treat.** Almost the entire map is PvP by default (round 19 #74–75) — the hub's own baseline look already communicates that. Only **safe zones** need to look different, not the open world. |
+| 120 | What should the default shadow/lighting quality be, given the FPS-vs-look trade-off found before the restart? | **Default to the rich look.** Ship with the full moody/ornate visual on by default in both hubs, same as before the restart; offer the existing quality-setting toggle for players who need the FPS, rather than shipping cheap by default or splitting by hub. |
+
+**Resolved into both art-direction files and the design section below:** the Hole's faction HQs
+are landmarks, not colour-coded; Sorcerer World's are the one place a faction visually owns
+ground; the Academy (also a Sorcerer World safe zone) stays neutral like the Hole, for a
+different reason — it's shared ground, not gang turf.
+
+### Round 29 — Blue Night splits into two hub manifestations (instructed 2026-09-25)
+
+Not a Q&A round — a direct build instruction, prompted by an open question round 28 raised
+(does the Sorcerer World carnival run all the time, or tie to an event?). Jay: the carnival
+**is** Blue Night, just experienced in Sorcerer World specifically — same global clock as the
+Hole's Blue Night, but the Hole's version should be renamed **Night of the Living Dead**, and
+the Sorcerer World version is where **Blue Night contracts** (parked since round 17 #67) are
+actually formed.
+
+**Resolved into the design (see Events, Economy and The Devil path, below):**
+- One global clock (round 22 #86's timing, unchanged) fires **both hubs' manifestations at
+  once**, not one event in one place.
+- **Sorcerer World: kept the name "Blue Night."** No zombies — this is the night carnival from
+  `art-direction/sorcerer-world.md`, which only runs during the event rather than every night.
+  This is also where Blue Night contracts are formed, so that system is reactivated, not parked.
+- **The Hole: renamed to "Night of the Living Dead."** The zombie-combat event Game A always
+  had, unchanged in substance — every existing "Blue Night kills" reference in this design
+  (rank rewards, the Devil-path counter, Tags/rare-gear drops) meant this side specifically,
+  since the carnival side has nothing to kill. Renamed throughout for clarity.
+- **What a formed contract actually does is still unspecified** — reactivating the system
+  answered *where* it happens, not *what it grants*. Flagged in Open numbers rather than
+  invented here.
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -763,6 +887,29 @@ spec attached (defaults to "none" for the launch doors). Hell and any future reg
 (a rank, an item, a quest) instead of bespoke travel scripts each time. The Devil path does not
 depend on Hell existing.
 
+### Visuals
+
+The visual target for each hub is its own file, revised round 28 for Game C's tone:
+[`art-direction/hole.md`](../art-direction/hole.md) and
+[`art-direction/sorcerer-world.md`](../art-direction/sorcerer-world.md). Both predate this
+audit — built from real reference images Jay shared — and are carried over rather than
+redone, with three Game-C-specific rules layered on top (round 28 #118–120):
+
+1. **No separate "danger zone" look.** Nearly the whole map is open PvP by default (round 19
+   #74–75); each hub's baseline look (industrial grit in the Hole, ornate ruin-and-carnival in
+   Sorcerer World) already *is* what danger looks like there. Only **safe zones** need to read
+   as visually different from the rest of the hub — there's no second, extra-hazardous layer to
+   design on top of the open world.
+2. **Faction identity is asymmetric by hub.** The Hole's faction HQs are neutral landmarks —
+   distinctive architecture, no faction colour, "like in Dorohedoro" (round 28 #118). Sorcerer
+   World's faction HQs are the one place in the game a faction visually owns ground, with real
+   colour and banner identity. The Academy (Sorcerer World's other safe zone) stays neutral too,
+   for a different reason — shared tutorial ground, not gang turf.
+3. **Shadows default on, everywhere.** Game C ships with the full rich look (`GlobalShadows` on)
+   by default in both hubs, same as the pre-restart project, with a player-facing quality
+   setting for anyone who needs the FPS — not a cheaper default and not a split by hub (round 28
+   #120).
+
 ### Factions
 
 **En's Family vs. Cross-Eyes** (round 10 #37, confirmed round 21 #83) — canon Dorohedoro
@@ -778,11 +925,40 @@ gang/organization names, allowed under the closed-community rule.
 - **Seats:** a handful of named positions per faction, awarded weekly to the top rep earners —
   not challenged by duel (round 21 #85, supersedes the duel idea in round 10 #38). Seat
   standings are a **faction panel**, not a public leaderboard (round 22 #89).
-- **Turf:** danger zones in both hubs are contested faction territory; a faction's HQ is its
-  only guaranteed-safe ground.
+- **Turf:** the open world in both hubs — everywhere outside a safe zone, not a separate
+  "danger zone" subset (round 28 #119) — is contested faction territory; a faction's HQ is its
+  only guaranteed-safe ground. See Visuals below for how each hub shows (or deliberately
+  doesn't show) that contest.
 - **Clans are removed** (round 10 #39) — factions and parties are the only grouping.
 - **Parties:** members near each other share kill and quest credit and cannot damage one
   another (round 10 #40). No mission queue, no cross-faction parties.
+
+### Identity rolls
+
+A cosmetic-only layer, added round 25 #103, distinct from weapon type (which stays
+bought/earned, never rolled, round 4 #13–14): a **faction-flavored** roll — markings, an
+accent color, a callout — themed by whichever faction the player joined, so a Family sorcerer
+and a Cross-Eyes sorcerer read as visibly different at a glance even in the same gear. No power
+attached to any part of the roll; it's rerollable the same way every other cosmetic reroll in
+this design is. **[draft]** exact roll table (marking rarity tiers, color/callout pool per
+faction) is unspecified — this needs faction visual identity work (palettes, iconography)
+before it can be filled in, which is art direction, not a numbers question.
+
+### Quests and missions
+
+**A full rank-gated queue** for the game's harder repeatable content and the new raid (round 25
+#104) — a structural change from Game A's direct give-and-complete quest-giver model, which is
+kept only for the low-tier/tutorial quests that don't need gating:
+
+- **Low-tier quests and Academy-tutorial quests:** unchanged — walk up to an NPC, accept,
+  complete, turn in. Reuses `QuestService`'s existing 7 step types.
+- **Higher-tier repeatables and the raid:** entered through a queue. A player (or a party) opens
+  the queue, the system checks their rank against the content's minimum, and matches them in —
+  no walking to a physical board or NPC for these specifically. **[draft]** whether matching is
+  solo-only, party-only, or fills a party from the queue is unresolved; the raid's own party
+  size (still open, per the Raids section) decides this.
+- **Temperament** still applies the same way (round 6 #23) — bonus progress on favored
+  activities, whichever entry point they're reached through.
 
 ### Progression: 10 named ranks
 
@@ -797,16 +973,16 @@ max rank for an average player (round 6 #24).
 
 | # | Rank | Gate (mix of activities) | Reward |
 | --- | --- | --- | --- |
-| 1 | Newblood | Finish the Academy tutorial | 1 attribute point, Katana or Fist |
+| 1 | Newblood | Finish the Academy tutorial | 1 attribute point, Katana or Gauntlets |
 | 2 | Streetwise | 5 quests or jobs | 1 attribute point |
 | 3 | Smoke-Touched | 15 quests/jobs, first Smoke move cast | 2 attribute points |
 | 4 | Alley Regular | 30 quests/jobs, 5 faction missions | 2 attribute points, 1 Tag shop slot unlocked |
-| 5 | Blade for Hire | 50 quests/jobs, 10 faction missions, 3 Blue Night kills | 3 attribute points, cosmetic |
+| 5 | Blade for Hire | 50 quests/jobs, 10 faction missions, 3 Night of the Living Dead kills | 3 attribute points, cosmetic |
 | 6 | Marked | 15 faction missions, 5 enemy-faction grips | 3 attribute points |
 | 7 | Family Blade *(or Cross-Eyed Blade)* | 25 faction missions, 15 grips | 4 attribute points, title |
-| 8 | Underboss's Ear | 15 Blue Night kills, 30 grips | 4 attribute points |
+| 8 | Underboss's Ear | 15 Night of the Living Dead kills, 30 grips | 4 attribute points |
 | 9 | Ghoul-Killer | 50 grips, first-clear on a story boss | 5 attribute points, cosmetic |
-| 10 | Devil's Door | 75 grips, 10 Blue Night kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
+| 10 | Devil's Door | 75 grips, 10 Night of the Living Dead kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
 
 Rank 10 unlocks *eligibility* for the Devil trial, not the Devil form itself — reaching it opens
 the counters described under The Devil path below, which is its own, longer arc on top of the
@@ -816,6 +992,20 @@ Attribute total at max rank: 30 points (30-point pool), matching the round 5 #18
 the 4 attributes but pull the ceiling from ~70% down to **~30%** at max, so skill matters more
 than the grind. **[draft]** 0.01/rank (was 0.02–0.035 in Game A) keeps the same shape at a lower
 ceiling; retune from a playtest once the new combat numbers (hyperarmor, silence) are in.
+
+**Each attribute also carries one mechanical tie beyond its flat bonus** (round 25 #109), so a
+build reads as a real identity rather than four interchangeable damage sliders:
+
+| Attribute | Flat bonus (kept) | Added tie |
+| --- | --- | --- |
+| Strength | Damage dealt | +stagger dealt per hit — breaks guard faster |
+| Toughness | Damage taken | −posture damage taken — resists guard-break |
+| Vitality | Max HP | **[draft]** small % resistance to the flat PvE death Yen loss |
+| Smoke | Max Smoke pool | +Smoke regen rate |
+
+The tie values themselves are **[draft]** — small enough at rank 1 that they don't read as a
+second damage stat, scaling to something felt but not build-defining by rank 10, consistent
+with the ~30% overall ceiling above.
 
 **Temperament** replaces quirks (round 5 #19): still one good + one bad roll, but instead of a
 flat stat modifier, it decides which activities give **bonus** rank progress — never a lock,
@@ -844,11 +1034,105 @@ scoped narrowly:
 mobility, never a stat (round 3 #12) — this also keeps the lowered attribute ceiling from
 becoming a mobility tax.
 
-**Weapons at launch: Katana and Fist only** (round 4 #13). No mastery — every weapon is equally
-strong from the moment it's equipped; only player skill differentiates them (round 4 #14). More
-weapons (the other five from Game A, or new ones) are a post-launch content update, animated
-properly rather than shipped as placeholders (keeps the "ship 3–4 finished weapons" triage call
-even tighter: 2 finished weapons at launch).
+**Weapons at launch: Katana and Gauntlets** (round 4 #13, renamed round 26 #111 — "Fist" was
+always just the unarmed state, not a chosen weapon; see Bare-handed baseline below). No power
+mastery — a weapon's base kit is equally strong the moment it's equipped; only player skill
+differentiates the base kit (round 4 #14). More weapons (the other five from Game A, or new
+ones) are a post-launch content update, animated properly rather than shipped as placeholders
+(keeps the "ship 3–4 finished weapons" triage call even tighter: 2 finished weapons at launch;
+future weapons stay on the normal gear-shop model, round 27 note). "No mastery" governs the
+*shared* kit's power only — it does not apply to the technique tree below, which is about kit
+*breadth*, not raw strength.
+
+**Bare-handed baseline** (round 26 #111): every character can always fight with no weapon
+equipped, using the shared kit (M1/M2/dodge/parry/feint) with no signature techniques — the
+zero-investment fallback everyone has from character creation, distinct from picking a weapon
+at the skill tree's root (below).
+
+### The weapon skill tree
+
+**One tree, not two side-by-side ones** (round 27) — it opens on a single root node that *is*
+the weapon choice, then branches into whichever weapon was picked. Classless: Smoke type and
+weapon are still the whole build identity, the original "remove classes" reasoning stands, but
+the tree means two players carrying the same weapon can end up meaningfully different (round 26
+#115–116).
+
+```mermaid
+flowchart TD
+    Root["Root: choose your weapon<br/>free — 0 points, granted at rank 1<br/>(replaces the old separate gear-shop pick)"]
+    Root -->|Katana| KF1["Foundation: Iai Opener"]
+    Root -->|Katana| KF2["Foundation: Cross-Cut"]
+    Root -->|Gauntlets| GF1["Foundation: Guard Break"]
+    Root -->|Gauntlets| GF2["Foundation: Rising Knee"]
+
+    KF1 --> KSpec{"Specialization<br/>pick 2 of 3 — rank 4-5"}
+    KF2 --> KSpec
+    KSpec --> KS1["Riposte Flow"]
+    KSpec --> KS2["Wind Step"]
+    KSpec --> KS3["Bleeding Edge"]
+
+    GF1 --> GSpec{"Specialization<br/>pick 2 of 3 — rank 4-5"}
+    GF2 --> GSpec
+    GSpec --> GS1["Clinch Throw"]
+    GSpec --> GS2["Counter Palm"]
+    GSpec --> GS3["Iron Skin"]
+
+    KS1 --> KCap{"Capstone<br/>pick 1 of 2 — rank 8+"}
+    KS2 --> KCap
+    KS3 --> KCap
+    KCap --> KC1["Thousand Cuts"]
+    KCap --> KC2["Last Word"]
+
+    GS1 --> GCap{"Capstone<br/>pick 1 of 2 — rank 8+"}
+    GS2 --> GCap
+    GS3 --> GCap
+    GCap --> GC1["Devastator"]
+    GCap --> GC2["Flicker Fist"]
+```
+
+**The root pick is free** — **[draft]** 0 points and no Yen cost, granted the moment a
+character hits rank 1 (Newblood), the same identity-defining, no-cost spirit as the Smoke
+type roll. It **replaces** the earlier framing of Katana/Gauntlets as a gear-shop purchase for
+these two launch weapons specifically; other weapons added post-launch (round 4 note) can stay
+on the normal gear-shop model, since they won't be tree roots.
+
+**Structure below the root — same shape down both branches:**
+
+| Tier | Nodes | Exclusivity | Gate |
+| --- | --- | --- | --- |
+| Root | 1 (Katana *or* Gauntlets) | **Exclusive** — the whole rest of the tree depends on this pick | Reach rank 1 |
+| 1 — Foundation | 2 | None — both learnable | That branch chosen + that technique's quest |
+| 2 — Specialization | 3 (learn 2 of 3) | **Exclusive** — learning one of the excluded pair's members locks the other | Foundation complete + **[draft]** rank 4–5 + that technique's quest |
+| 3 — Capstone | 2 (learn 1 of 2) | **Exclusive** — a single pick, a real finisher choice | Both Specialization picks made + **[draft]** rank 8+ + that technique's quest |
+
+A fully-invested player ends up with the root pick plus **5 of its branch's 7 nodes** (2
+Foundation + 2 of 3 Specialization + 1 of 2 Capstone) — real, permanent trade-offs down a tree
+they committed to from the very first node, not a checklist everyone finishes identically.
+
+- **Obtained:** every non-root node is taught by **Trainer Goro**, one technique per quest
+  (round 26 #113) — narrative-flavored, not a loot drop or an automatic rank reward. A node's
+  quest only becomes available once its tier's gate (rank + prerequisite picks) is met.
+- **Resource:** every technique is **cooldown-only** — no new resource bar. Smoke stays the
+  single meter in the HUD (round 26 note).
+- **Respec:** **[draft]**, two tiers of commitment —
+  - A Specialization or Capstone pick can be changed later through Goro for a real Yen cost and
+    a cooldown, mirroring the existing attribute respec (first free, then a fee with a cooldown).
+  - The **root pick itself** is the bigger commitment (it decides which branch the rest of the
+    tree even exists on), so a full weapon respec — wiping the whole branch and starting the
+    other one from Foundation — should cost noticeably more and carry a longer cooldown than a
+    normal Specialization/Capstone respec. Exact figures for both are open.
+
+**[draft] placeholder content beyond this point** — everything past the node names is
+unbuilt. Structure and names only; no technique has a designed effect, animation, or balance
+number yet:
+
+| Weapon | Foundation (both) | Specialization (pick 2 of 3) | Capstone (pick 1 of 2) |
+| --- | --- | --- | --- |
+| Katana | Iai Opener, Cross-Cut | Riposte Flow, Wind Step, Bleeding Edge | Thousand Cuts *or* Last Word |
+| Gauntlets | Guard Break, Rising Knee | Clinch Throw, Counter Palm, Iron Skin | Devastator *or* Flicker Fist |
+
+Every named technique above is an original name for this design, not lifted from either source
+game — matching the same "inspired, not copied" rule the art-direction work already follows.
 
 **Smoke moves are granted all at once**, same as Game A today — every move of your rolled type
 from the start, no unlock path (round 4 #15). Rarer types are **flashier, not stronger**: keep
@@ -875,9 +1159,14 @@ extended to a live warn/kick flow.
 
 ### Respawn
 
-Kept as-is: 3 s respawn + spawn grace, but grace now ends the moment you land a hit rather than
-on a timer (round 23 #91) — matches the drop of the old 3 s flat spawn-grace window with an
-action-gated one instead.
+Kept as-is everywhere except the raid: 3 s respawn + spawn grace, but grace now ends the moment
+you land a hit rather than on a timer (round 23 #91) — matches the drop of the old 3 s flat
+spawn-grace window with an action-gated one instead.
+
+**Inside the raid only** (round 25 #105): the respawn timer escalates per death this attempt
+and resets when the raid does. **[draft]** 3 s → 13 s → 23 s, capped at 33 s — a low ceiling
+(Game B's own reference caps far higher, at 30 s + 10/death with no stated cap) so a rough wipe
+never turns into a long bench sit for anyone.
 
 ### Death, PvP and combat log
 
@@ -924,29 +1213,35 @@ rep are the only PvP-consequence systems.
 ### Economy
 
 **Currencies:** Yen (everyday spending) and Burial Tags, repurposed from an attribute-point
-currency into a **rare Blue-Night-only currency** for the Tag shop (round 11 #42 — attribute
-points now come from rank-ups instead, round 6 #21).
+currency into a **rare currency earned from Night of the Living Dead** (round 29 — the Hole's
+zombie-combat manifestation of the global Blue Night clock, see Events below) for the Tag shop
+(round 11 #42 — attribute points now come from rank-ups instead, round 6 #21).
 
-**Yen sinks** (round 11 #43): the gear shop and a rotating market, cosmetics (barber, outfits),
-and an **endgame exchange** — a large Yen-plus-rare-item cost gating part of the Devil path. No
-rank-up toll (Game B charges one; Game C doesn't). **[draft]** endgame exchange = 50,000 Yen +
-1 Devil-eligibility item (see Devil path below); gear shop keeps Game A's existing price bands
-(250–500 Yen per piece) as the launch baseline.
+**Yen sinks** (round 11 #43): the gear shop and the rotating market (see below), cosmetics
+(barber, outfits), and an **endgame exchange** — a large Yen-plus-rare-item cost gating part of
+the Devil path. No rank-up toll (Game B charges one; Game C doesn't). **[draft]** endgame
+exchange = 50,000 Yen + 1 Devil-eligibility item (see Devil path below); gear shop keeps Game
+A's existing price bands (250–500 Yen per piece) as the launch baseline.
 
-**Loot** (round 11 #41, narrowed by round 20 #80 once field bosses were cut): mobs drop Yen,
-Tags and sometimes gear; **rare gear and the rare Smoke-reroll item drop from Blue Night, rare
-mob drops, and the Tag shop** — not from bosses, since bosses are story-only now (see below).
-**[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke reroll ~0.1% (Blue Night kills
-only) — retune once the drop-table sizes below are picked.
+**Loot** (round 11 #41, narrowed by round 20 #80 once field bosses were cut, extended by round
+24's raid): mobs drop Yen, Tags and sometimes gear; **rare gear and the rare Smoke-reroll item
+come from Night of the Living Dead drops, rare mob drops, the rotating market (Tags, see below)
+and now the raid's own loot pool** (see Raids below) — not from bosses, since bosses are
+story-only now (see below). **[draft]** common gear ~3% per mob kill, rare gear ~0.5%, Smoke
+reroll ~0.1% (Night of the Living Dead kills only, round 29 — the Sorcerer World side of Blue
+Night has no zombies to farm) — retune once the drop-table sizes below are picked.
 
 **Equipment: 10 slots** (round 14 #55, matching Game B's loot chase — needs roughly 10 slots ×
 3–4 rarity tiers of gear to fill meaningfully).
 
-**Tag shop** (round 20 #80, round 23 #93): a Game-B-style rotating market — 4 items live at
-once, refreshed on a timer, some slots faction-exclusive (a `RaidPool`-style tag). Holds
-accessories for the 10 equipment slots and **less-rare rerolls only** (cosmetic look rerolls).
-The rarest items — the Smoke reroll and the Devil-buff reroll — **stay drop-only**, never
-purchasable with Tags.
+**One rotating market, split by currency** (round 25 #107 — merges what was a separate Yen
+"rotating market" and a Tags-only "Tag shop" into a single screen): 4 items live at once,
+refreshed on a timer, some slots faction-exclusive (a `RaidPool`-style tag). **Yen buys the
+common/uncommon rotation** (accessories for the 10 equipment slots, minor look rerolls); **Tags
+are still required for anything rare or above** — the market doesn't let Yen substitute for
+Tags at the high end, it just means there's one screen to check instead of two. The rarest
+items — the Smoke reroll and the Devil-buff reroll — **stay drop-only**, never purchasable with
+either currency.
 
 **Black Smoke:** kept, **PvE only** — disabled in PvP zones (round 14 #56).
 
@@ -986,12 +1281,28 @@ uniquely drove (round 9):
 | Toxic Rain | Ghost Night, Rule of the Hour, Party Mishap | Drove the Ghost-shy quirk and Party Cake buff, both removed with them |
 | — | Smoke Surge, Supply Cache, Whisper, Cleanup Day | No longer fit — the loot table (above) replaces most of what these gave |
 
-**Blue Night timing** copies Game B's real-time event pattern (round 22 #86, #92 note):
-**[draft]** can start once ~15 minutes of real time have passed since the last one (checked
-every 60 s, a jump from Game B's 12.5 min since Game C only has one event doing this job), only
-if both factions have players online, and lasts about **5 minutes**.
+**Blue Night is one global event with two hub manifestations** (round 29), not a single event
+confined to the Hole. One clock, same trigger, fires **both hubs at once**:
 
-**Toxic Rain is kept exactly as it is today** in Game A (round 22 #87) — no changes.
+| | Sorcerer World: **Blue Night** | The Hole: **Night of the Living Dead** |
+| --- | --- | --- |
+| What happens | The night carnival switches on — Ferris wheel, roller coaster, string lights, aurora (`art-direction/sorcerer-world.md`, ref 3). No zombies. | Game A's original zombie event, kept and renamed — a wave of zombies (the "fist-only" fight per the old design) hits the streets. |
+| What it's for | **Blue Night contracts are formed here** (round 17 #67, reactivated — no longer parked). Two players can form a contract during the window. What a contract actually *does* mechanically is still open — see Open numbers. | Kills feed the Devil-path counter, the rank ladder (rank 5/8/10, above) and Tag/rare-gear drops (Economy, above). |
+| Currency/loot | None — this side is a social/contract event, not a farming one. | Tags and rare-gear drops (see Loot, above). |
+
+This also answers the open question in `art-direction/sorcerer-world.md`: the night carnival
+isn't always running — it's specifically what Blue Night looks like there, so it's on exactly
+as often as the event fires.
+
+**Timing** copies Game B's real-time event pattern (round 22 #86, #92 note), and now governs
+both manifestations at once: **[draft]** can start once ~15 minutes of real time have passed
+since the last one (checked every 60 s, a jump from Game B's 12.5 min since Game C only has one
+event doing this job), only if both factions have players online, and lasts about **5
+minutes** — during which Sorcerer World is carnival-lit and the Hole is under siege,
+simultaneously.
+
+**Toxic Rain is kept exactly as it is today** in Game A (round 22 #87) — no changes, and stays
+Hole-only; it was never a Sorcerer World event and round 29 didn't touch it.
 
 ### Bosses
 
@@ -1032,9 +1343,13 @@ feature shape:
   contribution is a **Devil-path eligibility counter** (see below), one more gate alongside the
   top-10-Elo skip, not a parallel path to max rank (round 24 follow-up).
 
-**[draft]** one repeatable raid at launch, built around either Proctor Dunmore or The Skinner's
-existing kit rather than a third boss from scratch — exact encounter design, party size and
-contribution formula are open until the raid is prototyped.
+**The raid boss gets genuinely unique per-phase mechanics** (round 25 #110), not a reuse of
+existing mob/story-boss archetype behaviors — but written as new `BossService` phase
+functions/config, the same data-driven pattern the story bosses already use, so it stays
+maintainable rather than becoming a Game-B-style hand-copied template. **[draft]** one
+repeatable raid at launch; whether it's a third, purpose-built boss or a harder unique-mechanic
+pass on Proctor Dunmore or The Skinner is open — exact encounter design, party size and the
+contribution formula are all unresolved until the raid is prototyped.
 
 ### The Devil path (endgame)
 
@@ -1042,10 +1357,12 @@ The proposed structure from round 15, confirmed as-is in round 16 #62, with roun
 refinements folded in, plus round 24's addition of a fourth eligibility counter and a
 post-unlock evolution stage:
 
-1. **Eligibility:** max rank (10) **and** four counters — enemy-faction grips, Blue Night
-   kills, time spent at max rank (field-boss kills dropped from the original four-counter
-   list once field bosses were removed, round 20 #79), and **raid contribution** (added round
-   24 #96 follow-up, restoring the counter count to four without bringing field bosses back) —
+1. **Eligibility:** max rank (10) **and** four counters — enemy-faction grips, Night of the
+   Living Dead kills (round 29 — the Hole's manifestation of Blue Night; Sorcerer World's
+   carnival side has no kills to count), time spent at max rank (field-boss kills dropped from
+   the original four-counter list once field bosses were removed, round 20 #79), and **raid
+   contribution** (added round 24 #96 follow-up, restoring the counter count to four without
+   bringing field bosses back) —
    **plus** the endgame Yen exchange (above). **Top-10 Elo players skip the four counters** but
    still need max rank and the exchange (round 16 #63).
 2. **Madame Ise** — the existing trial NPC — is the gatekeeper. Her dialogue hints at whichever
@@ -1060,7 +1377,8 @@ post-unlock evolution stage:
 7. **True Devil (round 24 #94):** after the base form is unlocked and mastered, a further
    evolution stage becomes available — mirroring Game B's Bankai → True Bankai step. **[draft]**
    gated by the same four counters as base eligibility, at higher thresholds (e.g. double the
-   grip/Blue Night/raid-contribution counts, plus additional time at max rank with the base form
+   grip/Night-of-the-Living-Dead/raid-contribution counts, plus additional time at max rank
+   with the base form
    already mastered), fought the same way as step 3 (a second, harder inner-world duel). Using
    it is stronger than the base form but on a **much longer cooldown**, the same shape as Game
    B's 30 min (Bankai) → 12 h (True Bankai) jump. Exact thresholds and the cooldown length are
@@ -1070,9 +1388,14 @@ post-unlock evolution stage:
 only. Rerolling the **buffs** needs the rare drop item — keeps the whole path free of
 pay-to-win.
 
-**Parked for later, not in this design:** Blue Night partner contracts (round 17 #67), the
-artificial tumor system (round 17 #69, revisited if/when a new origin needs it), and Hell as a
-place (round 8 #32 — the Devil path doesn't depend on it).
+**No longer parked:** Blue Night partner contracts (round 17 #67) are reactivated as of round
+29 — see Events, above — now that they have a real home in the Sorcerer World side of Blue
+Night. What forming a contract actually *does* mechanically is still unspecified; see Open
+numbers.
+
+**Still parked for later, not in this design:** the artificial tumor system (round 17 #69,
+revisited if/when a new origin needs it), and Hell as a place (round 8 #32 — the Devil path
+doesn't depend on it).
 
 ### New players
 
@@ -1091,7 +1414,13 @@ committing further art or content to the rest of the build.
 - **Fresh DataStore at launch.** No migration path for removed fields or systems — old Map +
   Combat saves do not carry over (round 18 #71).
 - **UI is React-only.** `ReactHudClient`/`HudUI` is the one UI generation; no legacy ScreenGui
-  code is ported (round 18 #72).
+  code is ported (round 18 #72). For the new B-inspired panels specifically (raid vote, the
+  rotating market, the purchase ledger) — **reference Game B's screen layouts for what
+  information each needs to show, then restyle entirely in Game C's own visual language**
+  (round 25 #106); no B art, code or exact layout is copied.
+- **No save-rollback admin tool.** Considered and declined for launch (round 25 #108) — relies
+  on `ProfileService`'s existing versioned migrations and sanitizer instead, same as Game A
+  today.
 - **Everything above goes in the public repo**, including the Game B provenance and security
   sections (round 1 #4) — nothing in this document is held back.
 
@@ -1110,4 +1439,34 @@ Every **[draft]** figure above, plus:
   base counters and a 30 min → 12 h-style cooldown jump, unverified).
 - The Gate system's requirement spec for Hell and any place added after launch.
 - Warn/kick thresholds for the new movement anti-cheat (how many warnings before a kick).
-- The extended weekend market's exact discount and Tag-shop rotation figures.
+- The extended weekend market's exact discount and rotation figures.
+- The identity-roll table itself (marking rarity tiers, per-faction color/callout pool) — blocked
+  on faction visual-identity art direction, not a numbers question.
+- Whether the mission queue matches solo, party-only, or fills a party from the queue — tied to
+  the raid's still-open party size.
+- The market's exact rare-vs-non-rare cutoff (which rarity tier requires Tags).
+- The raid respawn curve (drafted 3 s → 13 s → 23 s, capped 33 s) and whether that cap is too
+  low or too high once a real wipe is played out.
+- The four attribute ties' exact values (stagger-per-hit, posture-taken reduction, Vitality's
+  PvE-death resistance %, Smoke regen bonus) — all **[draft]** placeholders pending a playtest.
+- The weapon skill tree's exact rank gates (drafted rank 4–5 for Specialization, rank 8+ for
+  Capstone), per-node respec cost/cooldown, and the full weapon-respec (root pick) cost/cooldown
+  — drafted only as "noticeably more than a normal respec," no figure yet.
+- Every technique's actual effect, animation and balance numbers — only names and tree position
+  are drafted above; none of the seven-per-branch techniques has a designed effect yet.
+- Whether the tree template (2 Foundation / 3-pick-2 Specialization / 2-pick-1 Capstone) is the
+  right shape once it's actually played, or whether Katana and Gauntlets need different-shaped
+  branches to fit how each weapon feels.
+- Whether a player who respecs their root pick keeps anything from the old branch (a partial
+  Yen refund, a cosmetic memento) or loses it outright — not addressed yet.
+- ~~Whether Sorcerer World's night carnival is always on or tied to an event~~ — **resolved
+  round 29:** tied to Blue Night specifically.
+- **What a Blue Night contract actually does mechanically** (round 29) — a buff for the pair, a
+  cosmetic bond, a matchmaking flag for a future party/duel feature, something else entirely.
+  Reactivating the system only answered where and when it happens.
+- Where each faction's two HQs (one per hub) actually sit on the map, and what makes the Hole's
+  specifically read as "defensible" architecturally.
+- Where the raid (round 24 #96) is physically set — neither hub's art-direction file nor the
+  Raids section commits to a location or its own visual identity yet, and it isn't tied to
+  either Blue Night manifestation.
+- Both files' existing open questions (prototype order, asset sourcing) carry over unresolved.
