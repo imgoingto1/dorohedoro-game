@@ -1,13 +1,5 @@
-# The local project folder is a checkout of this repo. Only the brain files are tracked;
-# everything else in the folder (place/model exports, tools, captures) stays local.
+# Only files listed here are tracked; everything else in the local project folder
+# (place/model exports, captures, tools) stays local. This repo is public.
 /*
 !/.gitignore
 !/README.md
-!/CLAUDE.md
-!/PROJECT.md
-!/work-log/
-!/claude-memory/
-!/todo.md
-!/art-direction/
-!/tasks/
-# Reference images (anime/manga screenshots) stay local in /reference/ - this repo is public.
