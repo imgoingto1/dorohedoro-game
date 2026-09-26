@@ -154,6 +154,12 @@ NPCs, and mock data to drive against.
       - *Zombies down and grip players as round 30 #124 says. Two fixes came out of the first real
         mob fight: NPCs no longer damage each other (their swings clipped each other in a crowd,
         which cancelled grips), and a mob whose grip is cancelled tries again.*
+      - *Round 34 rebuilt the NPC brain to play like Game B's mobs. They grip knocked-out players
+        and never hit a body, one NPC fights a player at a time while the rest wait 25 studs back,
+        and they tick at a fixed 20 Hz and chase with `MoveTo`. Playtested: 1 zombie fights while 11
+        wait, a knocked player is gripped 0.5 s later and never hit, and the full-AI Katana fighter
+        (a new Studio fixture, `AI Fighter`) slides in, strings M1s and uppercuts without tripping
+        the movement guard.*
       - *Rare gear and Smoke-reroll drops wait for step 9 (loot).*
       - *Playtested: 12 zombies swarm and hit, kills credit the counter, tags pick up, a downed
         player is gripped and executed, and dawn clears everything.*

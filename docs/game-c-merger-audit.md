@@ -885,6 +885,28 @@ but not how the zombies run, who gets the kill, how tags drop, or how a contract
 | 140 | What does "both factions online" mean when the hubs are separate places? | **In the same server.** Each server keeps its own clock, so the Hole and Sorcerer World can drift apart. |
 | 141 | How do the zombies arrive over the ~5 minutes? | **Waves topping up** to a cap, so the streets stay under siege all night (**[draft]** 12 alive, every 45 s). |
 
+### Round 34 — Game B's NPC AI (instructed 2026-09-25)
+
+Jay, after round 33's zombies were built on Game A's AI: "npcs shouldnt try to attack knocked
+players, prioritize gripping. also npcs should be most like the npcs in the Game B." B's mob AI
+(its `NPCManager`, `Locate` and `Behavior` modules) was read for how it behaves and the Doro brain
+(`NPCController`) was rebuilt to match. None of B's code is used. What changed:
+
+- **Grip first, never hit a body:** an NPC whose target is knocked out walks over and grips it. If
+  someone is carrying the body, the NPC goes after the carrier; a hit drops the body. A body that
+  someone else is already gripping is left alone.
+- **B's turn-taking ("CurrentAttacker"):** one NPC fights a given player at a time (`MaxAttackers`,
+  default 1). Its turn lasts 8 s after its last landed hit. The rest wait 25 studs back, facing the
+  player. This replaces Game A's swarm tokens and rings.
+- **B's targeting and movement:** each NPC fights back at whoever hit it for 6 s, otherwise it goes
+  for the nearest player in aggro range, otherwise it wanders around home. It runs straight at its
+  target with `MoveTo`, jumping when the target is higher, and uses a path only when stuck or walled
+  off. It faces its target with a rigid `AlignOrientation`.
+- **More efficient, like B:** a fixed 20 Hz tick per NPC (4 Hz when no player is near) replaces
+  per-frame updates, per-frame CFrame writes, strafing and the swarm's crowd maths.
+- **Kept from Game A:** the wind-up tells, full AI's reaction time and guard budget when it blocks,
+  parries or dodges, and the four archetypes (Shield, Rusher, Thrower, Flanker).
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
