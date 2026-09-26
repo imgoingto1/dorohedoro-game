@@ -360,6 +360,7 @@ layout.
 > (M), Faction (Y), Devil path (L), Top 10 (T), plus the raid vote panel. Playtested with screenshots.
 > Not built: the Smoke bar (no Smoke system in Doro yet), a stagger bar, the
 > mission/raid queue, the identity-roll picker, settings.
+
 - [ ] **Core HUD**: health, guard/posture, stagger, and the Smoke bar. *Health and posture bars are built; the stagger and Smoke bars aren't.*
 - [x] **The weapon skill tree screen**: renders the root pick and both branches' 3-tier shape,
       shows locked/available/learned state per node, drives the exclusivity rule visually (round
