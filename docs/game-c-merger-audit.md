@@ -907,6 +907,31 @@ players, prioritize gripping. also npcs should be most like the npcs in the Game
 - **Kept from Game A:** the wind-up tells, full AI's reaction time and guard budget when it blocks,
   parries or dodges, and the four archetypes (Shield, Rusher, Thrower, Flanker).
 
+### Round 35 — Game B-style raids and the Devil path's counters (asked while building, 2026-09-25)
+
+Asked during build list step 8. The individual question wording wasn't kept; these are the
+decisions the build notes and code comments record (#142–149):
+
+| # | Decision | Answer |
+| --- | --- | --- |
+| 142–143 | What is a raid? | **Game B's kind: an in-world faction event, not a boss instance.** Every faction member in the server is pulled into an arena, votes a mode, and the two factions fight. It starts on an automatic per-server timer and **replaces round 24 #96's PvE raid boss**. Modes: King of the Hill, Team Grips, Capture the Flag (**[draft]** 20 min cooldown, 3 members per faction, 30 s vote, 10 min per mode). |
+| 144 | Does playtime count toward the Devil path? | **Yes: time played at rank 10** is the fourth counter (**[draft]** 5 hours). |
+| 145–146 | How is the raid scored and who gets what? | Contribution points from hill time, grips, flag play and damage to enemy raiders; Yen scales with contribution share, and the winners get a bonus and a Burial Tag. |
+| 147 | What does raid contribution do for the Devil path? | **It sums** into `DevilProgress.RaidContribution`, the third counter (**[draft]** 500). |
+| 148 | Where does the exchange item come from? | **A raid reward: the winning faction's top contributor gets a Devil's Seal.** |
+| 149 | What does the placeholder devil look like and do? | **It mirrors your weapon**, with full combat AI. |
+
+### Round 36 — the Devil trial's arena, form and look (asked 2026-09-26)
+
+Asked at the start of a long autonomous session, before building the Devil path's trial.
+
+| # | Question | Answer |
+| --- | --- | --- |
+| 150 | Where does the inner-world duel happen? | **An instanced arena inside Doro:** a sealed arena built far above the map, one slot per duelist, you are teleported in and back out. |
+| 151 | How does the Devil form work in combat? | **A meter and a toggle.** A key turns it on (a heal, then the roll's buffs while a meter drains); when it ends, spent or switched off, a cooldown runs. |
+| 152 | What does the placeholder devil look like? | **A dark clone of you with red horns** (your own appearance, blackened); your own form reuses the horns. |
+| 153 | What should be built after the Devil path? | **In order:** economy/market/loot, the UI panels, record the docs and push, then a playtest and bug-fix pass. |
+
 ### Walkthrough status
 
 Every system in the comparison table now has a decision.
@@ -1492,6 +1517,26 @@ post-unlock evolution stage:
    it is stronger than the base form but on a **much longer cooldown**, the same shape as Game
    B's 30 min (Bankai) → 12 h (True Bankai) jump. Exact thresholds and the cooldown length are
    open until the base form's numbers are playtested.
+
+**Built in Doro (2026-09-26, `Services.Player.DevilPath`, config in `Config.DevilPath`),
+everything **[draft]**:** Madame Ise stands in the world and answers with a hint for whichever
+requirement is still missing, then quotes the price (¥50,000 and a Devil's Seal), then offers the
+trial; each step is confirmed by speaking to her again within 10 s. The duel is a 120 s fight in
+an instanced arena far above the map (one slot per duelist, the player is streamed in before the
+teleport) against a dark, red-horned clone wearing your own look, with your weapon, 1.5× your HP
+(2× in the mastery duel) and full combat AI. A knockout, a death, running out the clock, leaving
+the server or being pulled into a raid ends it: a loss starts a 30 min cooldown and each
+enemy-faction grip takes 2 min off it; a raid cancels without penalty. The first win rolls the
+form once (2 different buffs, 1 downside, a horn look); the mastery win removes the downside.
+Rolled buffs are +10% damage, −10% damage taken, +15% posture damage, +10% max health, +15% Smoke
+regen or +25% on the activation heal; downsides are −10% max health, +10% damage taken, −15%
+posture recovery or a meter that drains 20% faster. The form toggles on **H**: a 10% heal, then a
+90 s meter, then a 5 min cooldown; a knockout switches it off. Buffs reach the combat code as
+player attributes (`FormStrength`, `FormDamageTaken`, `FormPostureMult`, `FormHealthMult`,
+`FormSmokeRegen`, and the Humanoid's `PostureRecoveryMult`). Time at rank 10 is counted every 30 s.
+The buff reroll needs a `DevilReroll` item at Ise (no source for it exists until the economy
+step); the Robux look reroll is `Shared.RerollLook`, waiting for a developer product. **Not built:**
+the True Devil stage, the form's own moveset, and the panel.
 
 **Rerolls** (round 16 #65, round 17 #66): the form is never lost. Robux rerolls the **look**
 only. Rerolling the **buffs** needs the rare drop item — keeps the whole path free of

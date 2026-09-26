@@ -26,6 +26,14 @@ Test dummies are now built from blank rigs at runtime, and the save uses a fresh
 dummies, and all three movement flags (teleport, flight, noclip). Legit fast movement (sprint,
 fast sprint, dodges, slide long jump) raised no false flags.
 
+**2026-09-26:** steps 1–8 are built in Doro: the raid (`World.Raid`) and the Devil path
+(`Services.Player.DevilPath`: Madame Ise, the payment, the instanced duels, the one-time roll,
+the mastery duel, and the H-key form) are done and playtested. Two things the Devil trial's
+first playtest turned up, worth knowing for any later teleport or arena: `MovementGuard` ignores
+`workspace.Live` when it looks for ground, so anything with a floor in it reads as flight (build
+arenas elsewhere), and with streaming on a teleport has to `RequestStreamAroundAsync` first or
+the client falls through the floor before it streams in. Next: step 9 (economy), step 10 (UI).
+
 ## Combat
 
 The shared kit and everything layered on it. All of this works against a couple of dummy rigs
@@ -107,9 +115,12 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
 - [ ] **Smoke moves — framework**: `SmokeMoveService` granting a rolled type's full move set at
       once, Z/X/C casting, a 200-point Smoke bar, 1.5% refund on landed M1s (Game A's existing
       system, kept). Buildable with 2–3 placeholder moves per type before real Smoke VFX exist.
-- [ ] **The Devil form — core toggle**: a meter/cooldown-gated transformation that swaps in a
+- [x] **The Devil form — core toggle**: a meter/cooldown-gated transformation that swaps in a
       second moveset on top of Smoke, heals a little on activation (round 15–16). Buildable as a
-      toggle + stub moveset before the eligibility/trial content around it exists.
+      toggle + stub moveset before the eligibility/trial content around it exists. *Built in Doro
+      (round 36 #151): the H key toggles it, a 10% heal, then the roll's buffs while a 90 s meter
+      drains, then a 5 min cooldown. **The form's own moveset is not built**; a red-horned look
+      stands in until there is art.*
 - [ ] **True Devil — core toggle**: same shape, stronger, much longer cooldown (round 24 #94).
       **[draft]** thresholds and cooldown.
 
@@ -239,16 +250,20 @@ NPCs, and mock data to drive against.
         UI (step 10). Parties aren't in this step either.*
 - [ ] **Mission queue**: rank-gated queue for higher-tier repeatables and the raid; low-tier and
       tutorial quests stay direct-from-NPC (round 25 #104). **[draft]** solo vs. party matching.
-- [ ] **The raid — skeleton**: voting on entry, `CreditRange`-style contribution tracking, a
-      per-death respawn timer inside the raid only (**[draft]** 3 s → 13 s → 23 s, capped 33 s,
-      round 25 #105), and a `BossService`-config-driven boss with unique per-phase mechanics
-      (round 25 #110, round 26 note). Buildable against one placeholder boss before its real
-      encounter design exists.
-- [ ] **The Devil path — trial structure**: eligibility counter tracking (4 counters + a top-10
+- [x] **The raid — skeleton**: built Game B-style rather than as a boss instance (round 35): a
+      per-server timer pulls every faction member into `workspace.RaidArena`, they vote a mode
+      (King of the Hill, Team Grips, Capture the Flag), and rewards go by contribution. *Built in
+      Doro as `World.Raid` (`Config.Raid`) and playtested; raiders respawn on their side; the
+      winning faction's top contributor gets a Devil's Seal; contribution also sums into
+      `DevilProgress.RaidContribution`. The boss with per-phase mechanics from rounds 25–26 is
+      replaced by this design, and the 3 s → 33 s respawn curve is not built.*
+- [x] **The Devil path — trial structure**: eligibility counter tracking (4 counters + a top-10
       Elo skip), the gatekeeper NPC's missing-requirement dialogue branching, the inner-world
       duel (even against a placeholder "devil" built from stub Smoke+weapon data), the one-time
       buff/downside roll, the mastery duel that removes the downside (round 15–17, round 20 #79,
-      round 24 #96 follow-up).
+      round 24 #96 follow-up). *Built in Doro as `Services.Player.DevilPath` and playtested end to
+      end (pay, duel, roll, mastery, form, cooldown): see the audit's "Built in Doro" note under
+      The Devil path. Studio-only `Debug_*` actions on `Remotes.DevilRequest` skip the grind.*
 - [x] **Death/PvP**: the downed state (spare/carry/execute), 25% carried Yen/Tags on execution,
       a flat PvE death Yen loss (**[draft]** 500), a 40% combat-log penalty, the anti-farming
       guards (enemy-faction-only grip credit, 2-rank floor, ~1 h per-victim Elo cooldown, a
