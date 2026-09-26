@@ -123,8 +123,8 @@ on flat ground — no real weapons or Smoke assets needed, just placeholder anim
       (round 36 #151): the H key toggles it, a 10% heal, then the roll's buffs while a 90 s meter
       drains, then a 5 min cooldown. **The form's own moveset is not built**; a red-horned look
       stands in until there is art.*
-- [ ] **True Devil — core toggle**: same shape, stronger, much longer cooldown (round 24 #94).
-      **[draft]** thresholds and cooldown.
+- [x] **True Devil — core toggle**: same shape, stronger, much longer cooldown (round 24 #94).
+      **[draft]** thresholds and cooldown. *Built in Doro (2026-09-26): after the mastery, the same four counters at double (plus 5 more hours at rank 10) unlock a third duel against a 3x-HP devil; the True form raises every rolled buff to the 1.5 power, lasts a 120 s meter, has 40% longer horns and rests 2 h. Playtested end to end; the panel shows the higher counters.*
 
 ### Anti-cheat (build alongside combat, not after)
 

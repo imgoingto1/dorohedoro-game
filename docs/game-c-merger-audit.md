@@ -1561,7 +1561,7 @@ player attributes (`FormStrength`, `FormDamageTaken`, `FormPostureMult`, `FormHe
 `FormSmokeRegen`, and the Humanoid's `PostureRecoveryMult`). Time at rank 10 is counted every 30 s.
 The buff reroll needs a `DevilReroll` item at Ise (no source for it exists until the economy
 step); the Robux look reroll is `Shared.RerollLook`, waiting for a developer product. **Not built:**
-the True Devil stage, the form's own moveset, and the panel.
+the form's own moveset. The True Devil stage is built (double counters plus 5 more hours at rank 10, a 3x-HP duel, buffs raised to the 1.5 power, a 120 s meter, a 2 h rest) and the L panel shows it.
 
 **Rerolls** (round 16 #65, round 17 #66): the form is never lost. Robux rerolls the **look**
 only. Rerolling the **buffs** needs the rare drop item — keeps the whole path free of
