@@ -356,17 +356,16 @@ layout.
 > (Game A's ReactLua is ~8 MB and lives in Map + Combat), so this is a stopgap: each panel is a
 > refresh function over data the server already sends, so a React port rewrites the views only.
 > Built: the resource/rank strip, world banners (raid score, Blue Night, inner-world timer), the
-> Devil form meter, and the panels Rank & attributes (K), Gear (B), Market with ledger and codes
-> (M), Devil path (L), Top 10 (T), plus the raid vote panel. Playtested with screenshots.
-> Not built: the core health/posture/Smoke HUD, the skill tree screen, the faction panel, the
+> Devil form meter, health and posture bars, and the panels Rank & attributes (K), Techniques (J), Gear (B), Market with ledger and codes
+> (M), Faction (Y), Devil path (L), Top 10 (T), plus the raid vote panel. Playtested with screenshots.
+> Not built: the Smoke bar (no Smoke system in Doro yet), a stagger bar, the
 > mission/raid queue, the identity-roll picker, settings.
-
-- [ ] **Core HUD**: health, guard/posture, stagger, and the Smoke bar.
-- [ ] **The weapon skill tree screen**: renders the root pick and both branches' 3-tier shape,
+- [ ] **Core HUD**: health, guard/posture, stagger, and the Smoke bar. *Health and posture bars are built; the stagger and Smoke bars aren't.*
+- [x] **The weapon skill tree screen**: renders the root pick and both branches' 3-tier shape,
       shows locked/available/learned state per node, drives the exclusivity rule visually (round
       26 diagram).
 - [x] **Rank progress panel**: current rank, this rank's gate progress, next rank's reward.
-- [ ] **Faction panel**: rep total, seat standings (a private panel, not a public leaderboard,
+- [x] **Faction panel**: rep total, seat standings (a private panel, not a public leaderboard,
       round 22 #89), the switch-faction flow.
 - [x] **The rotating market / Tag shop screen**: one merged screen, common/uncommon in Yen, rare+
       greyed out until enough Tags (round 25 #107). Reference Game B's layout for what

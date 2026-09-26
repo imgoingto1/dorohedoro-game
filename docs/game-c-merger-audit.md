@@ -1559,8 +1559,8 @@ posture recovery or a meter that drains 20% faster. The form toggles on **H**: a
 90 s meter, then a 5 min cooldown; a knockout switches it off. Buffs reach the combat code as
 player attributes (`FormStrength`, `FormDamageTaken`, `FormPostureMult`, `FormHealthMult`,
 `FormSmokeRegen`, and the Humanoid's `PostureRecoveryMult`). Time at rank 10 is counted every 30 s.
-The buff reroll needs a `DevilReroll` item at Ise (no source for it exists until the economy
-step); the Robux look reroll is `Shared.RerollLook`, waiting for a developer product. **Not built:**
+The buff reroll needs a `DevilReroll` item at Ise (it drops from the raid winners' pool; see
+Economy); the Robux look reroll is `Shared.RerollLook`, waiting for a developer product. **Not built:**
 the form's own moveset. The True Devil stage is built (double counters plus 5 more hours at rank 10, a 3x-HP duel, buffs raised to the 1.5 power, a 120 s meter, a 2 h rest) and the L panel shows it.
 
 **Rerolls** (round 16 #65, round 17 #66): the form is never lost. Robux rerolls the **look**
