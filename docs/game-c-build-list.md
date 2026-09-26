@@ -324,13 +324,25 @@ NPCs, and mock data to drive against.
 This is exactly what a baseplate is good for — build and tune these before the real map exists,
 against placeholder blockout geometry.
 
-- [ ] **The Hole — lighting profile**: `Atmosphere` Density/Haze up, sepia-green colour
+- [x] **The Hole — lighting profile**: `Atmosphere` Density/Haze up, sepia-green colour
       (`rgb(150,150,120)`), darker brown-grey `Decay`; `ColorCorrection` slightly desaturated
       with a warm-green tint; sodium-yellow street lamps (`rgb(255,190,110)`)
       (`art-direction/hole.md`).
-- [ ] **Sorcerer World — lighting profile**: day (low `Atmosphere` density, teal sky, strong
+- [x] **Sorcerer World — lighting profile**: day (low `Atmosphere` density, teal sky, strong
       `SunRays`, gentle `Bloom`, warm sun) and an ordinary night (dark, starry, **no** carnival
       effects — those are Blue-Night-only now, round 29) (`art-direction/sorcerer-world.md`).
+> **Lighting and settings status (2026-09-26):** built in Doro as client controllers, picked by
+> `workspace` attribute `Hub` (`"Hole"` or `"SorcererWorld"`; unset in the baseplate leaves
+> the lighting alone). `Controllers.World.Atmosphere` holds both drafted profiles: the Hole's
+> sepia-green smog with a warm-green grade, and Sorcerer World's server-clock-driven day/night
+> cycle (20 min a day, clear teal and sun rays by day, dark with strong bloom at night) that pauses
+> for Blue Night and resumes after dawn. `Controllers.Gui.Quality` applies the saved Shadows /
+> PostFX / AmbientFX (anything tagged `AmbientFX`) / FPS-counter toggles, and the P panel changes
+> them through `Services.Player.Settings` (saved in `PlayerData.Settings`). The values were
+> checked numerically in play, including the cycle rate and the Blue Night hand-over, but **not by
+> eye**: the screenshots went black (the display was likely asleep), so the colours are untuned.
+> The street lamps of the Hole item aren't built (no street to put them on).
+
 - [ ] **Overhead wires** (the Hole): sagging `Beam`s strung between attachment points on facing
       blockout buildings, using `CurveSize0/1` for the sag. The single biggest visual win per
       hour, and needs nothing but two placeholder walls to test against.
@@ -338,8 +350,8 @@ against placeholder blockout geometry.
       between placeholder ride/building shapes; only active during Blue Night (round 29).
 - [ ] **Searchlights** (Sorcerer World carnival): a few sweeping `SpotLight`/`Beam` cones from a
       tall placeholder landmark, Blue-Night-only.
-- [ ] **Day-night cycle** driver for Sorcerer World's ordinary (non-carnival) day/night swing.
-- [ ] **Shadows on by default**, both hubs, with the existing quality-setting toggle
+- [x] **Day-night cycle** driver for Sorcerer World's ordinary (non-carnival) day/night swing.
+- [x] **Shadows on by default**, both hubs, with the existing quality-setting toggle
       (Shadows/PostFX/AmbientFX/FpsCounter shape) for players who need the FPS (round 28 #120).
 - [ ] **Night of the Living Dead — visual shift**: not designed yet beyond "the Hole, but with
       zombies" — a fog-thickening or colour-correction pass is a good baseplate experiment once
@@ -378,7 +390,7 @@ layout.
       missing (mirrors what the gatekeeper's dialogue says).
 - [ ] **Identity-roll picker**: shows the faction-flavored cosmetic roll result, a reroll button.
 - [x] **Top-10 Elo leaderboard** (public) — separate from the faction seat panel (private).
-- [ ] **Settings panel**: Shadows/PostFX/AmbientFX/FpsCounter toggles, same shape as before the
+- [x] **Settings panel**: Shadows/PostFX/AmbientFX/FpsCounter toggles, same shape as before the
       restart.
 
 ## Suggested build order
