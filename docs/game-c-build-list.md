@@ -343,10 +343,11 @@ against placeholder blockout geometry.
 > eye**: the screenshots went black (the display was likely asleep), so the colours are untuned.
 > The street lamps of the Hole item aren't built (no street to put them on).
 
-- [ ] **Overhead wires** (the Hole): sagging `Beam`s strung between attachment points on facing
+- [x] **Overhead wires** (the Hole): sagging `Beam`s strung between attachment points on facing
       blockout buildings, using `CurveSize0/1` for the sag. The single biggest visual win per
       hour, and needs nothing but two placeholder walls to test against.
-- [ ] **String lights** (Sorcerer World carnival): the same Beam technique, reused, draped
+      *Built in Doro as `Controllers.World.Wires` (both this and the string lights): tag a Folder or Model `WireRun`; its parts, in name order, become anchors and each neighbouring pair gets a sagging strand (a chain of straight beams along a parabola, so no Beam curve maths). `Kind = "StringLight"` makes a warm glowing strand that shows only during Blue Night; every beam is tagged `AmbientFX` for the ambient-effects toggle. Playtested with temporary runs (beam counts, night gating, the toggle), not by eye; the real anchor points wait for the map.*
+- [x] **String lights** (Sorcerer World carnival): the same Beam technique, reused, draped
       between placeholder ride/building shapes; only active during Blue Night (round 29).
 - [ ] **Searchlights** (Sorcerer World carnival): a few sweeping `SpotLight`/`Beam` cones from a
       tall placeholder landmark, Blue-Night-only.
