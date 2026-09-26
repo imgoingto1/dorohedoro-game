@@ -1088,7 +1088,7 @@ max rank for an average player (round 6 #24).
 | 5 | Blade for Hire | 50 quests/jobs, 10 faction missions, 3 Night of the Living Dead kills | 3 attribute points, cosmetic |
 | 6 | Marked | 15 faction missions, 5 enemy-faction grips | 3 attribute points |
 | 7 | Family Blade *(or Cross-Eyed Blade)* | 25 faction missions, 15 grips | 4 attribute points, title |
-| 8 | Underboss's Ear | 15 Night of the Living Dead kills, 30 grips | 4 attribute points |
+| 8 | Underboss's Ear | 15 Night of the Living Dead kills, 30 grips | 4 attribute points, second Tag shop slot (draft) |
 | 9 | Ghoul-Killer | 50 grips, first-clear on a story boss | 5 attribute points, cosmetic |
 | 10 | Devil's Door | 75 grips, 10 Night of the Living Dead kills, eligible for the Devil trial | 5 attribute points, Devil path unlocked |
 
@@ -1393,6 +1393,31 @@ This keeps every paid reroll cosmetic, not power (round 14 note, round 17 #66).
   temporary discount, closer to Game B's Friday–Sunday reward-multiplier pattern. **[draft]**
   exact discount/rotation figures are open — the drop-odds doubling is the only part with a
   confirmed number so far.
+
+**Built in Doro (2026-09-26; `Config.Items`, `Config.Economy`, `Services.Player.Equipment`,
+`.Loot`, `.Market`), everything below is a placeholder draft, chosen while Jay slept, to edit:**
+- **Gear:** 10 slots (Head, Face, Neck, Shoulders, Chest, Back, Hands, Waist, Legs, Feet), one
+  placeholder piece per tier in each (Common, Uncommon, Rare, Legendary; Rare has one variant per
+  faction and only that faction can wear it). Each slot has one stat: Damage (Face, Hands), Guard
+  (Head, Chest, Feet), Health (Neck, Back, Legs) or Posture (Shoulders, Waist), scaled by tier
+  (1/2/3/5% for Damage and Guard, 2/4/6/10% for Health and Posture); Guard and Posture stack to a
+  50% cap. Stats reach the combat code as `EquipStrengthMult`, `EquipDamageTakenMult`,
+  `EquipHealthMult` and `EquipPostureTaken`.
+- **Market:** 4 slots, the same on every server (seeded from the clock), refreshed every 30 min
+  (20 min and 20% off Yen prices Friday–Sunday UTC). Slots 1–2 are Common/Uncommon for ¥250/¥500;
+  slot 3 is a faction Rare for 3 Tags (needs `TagShopSlot1`, rank 4); slot 4 is Rare (80%) or
+  Legendary (20%, 8 Tags) and needs `TagShopSlot2`, which this draft adds to rank 8. The
+  purchase ledger keeps the last 50 purchases and codes per player; promo codes are server-only.
+- **Loot:** each player who hit a Night of the Living Dead zombie rolls ¥10–25, 3% Common/Uncommon
+  gear, 0.5% faction Rare, 0.1% Smoke reroll. Raiders roll when a raid ends: winners 50% Common,
+  15% Rare, 2% Legendary, 2% Devil's Reroll; the losing side 15% Common. Rare drops and the
+  rerolls double on Saturday and Sunday.
+- **Giving Yen** is allowed within 15 studs, capped at ¥5,000 given and ¥10,000 received per
+  player per UTC day. Nothing else can be traded.
+- **Not built:** the Smoke reroll's use (the Smoke system isn't in Doro yet), Black Smoke, barber
+  and outfits, Robux products (the ledger's `Record` is ready for a receipt handler).
+- **Playtested** in Doro with one client: buying, faction gating, wearing/removing gear, drop
+  odds over 1,000 rolls, codes and the ledger. **Not tested:** giving Yen (needs two clients).
 
 ### Events
 

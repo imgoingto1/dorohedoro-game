@@ -32,7 +32,9 @@ the mastery duel, and the H-key form) are done and playtested. Two things the De
 first playtest turned up, worth knowing for any later teleport or arena: `MovementGuard` ignores
 `workspace.Live` when it looks for ground, so anything with a floor in it reads as flight (build
 arenas elsewhere), and with streaming on a teleport has to `RequestStreamAroundAsync` first or
-the client falls through the floor before it streams in. Next: step 9 (economy), step 10 (UI).
+the client falls through the floor before it streams in. Step 9 (economy, loot, market, gear) and
+a first pass at step 10 (a code-built HUD with the key panels) followed the same day: see the
+audit's Economy "Built in Doro" note and the UI status note below.
 
 ## Combat
 
@@ -308,10 +310,11 @@ NPCs, and mock data to drive against.
       cooldown is saved per executioner (`EloCooldowns`). `World.EloBoard` writes ratings to
       the OrderedDataStore `GameC_Elo_v1` and publishes the top 10 as names and rank titles
       only, never the number (workspace attribute `EloTop10`, for the UI step).*
-- [ ] **Economy — loot and the market**: mob/raid drop tables (**[draft]** ~3%/~0.5%/~0.1%
+- [x] **Economy — loot and the market**: mob/raid drop tables (**[draft]** ~3%/~0.5%/~0.1%
       common/rare/Smoke-reroll odds), the merged rotating market (Yen for common/uncommon, Tags
       required for rare+), the weekend rare-drop-odds doubling, the purchase ledger and code
       redemption (round 11, round 20 #80, round 23 #90, round 24 #102, round 25 #107).
+      *Built in Doro (drafts, see the audit's Economy "Built in Doro" note): `Config.Items` (10 slots, 50 placeholder pieces), `Config.Economy`, `Services.Player.Equipment` / `.Loot` / `.Market`; the raid pays into the loot pool and Night of the Living Dead kills roll drops. The Yen transfer cap is done. Not built: the Smoke reroll's use, Black Smoke, cosmetics, Robux products; giving Yen is untested (needs two clients).*
 - [ ] **Identity rolls**: the cosmetic roll mechanic itself (markings/color/callout tied to
       faction), even before the real roll table exists (round 25 #103). **needs asset** for the
       actual table.
@@ -348,23 +351,33 @@ React-only (round 18 #72). Every panel below can be built and tested against moc
 the systems behind it are finished — the UI doesn't need real backend numbers to prove its
 layout.
 
+> **UI status (2026-09-26):** the first HUD is built in Doro as `Controllers.Gui.Hud`, from code
+> with a small kit, **not React**. Round 18 #72 says React-only, but Doro has no React package
+> (Game A's ReactLua is ~8 MB and lives in Map + Combat), so this is a stopgap: each panel is a
+> refresh function over data the server already sends, so a React port rewrites the views only.
+> Built: the resource/rank strip, world banners (raid score, Blue Night, inner-world timer), the
+> Devil form meter, and the panels Rank & attributes (K), Gear (B), Market with ledger and codes
+> (M), Devil path (L), Top 10 (T), plus the raid vote panel. Playtested with screenshots.
+> Not built: the core health/posture/Smoke HUD, the skill tree screen, the faction panel, the
+> mission/raid queue, the identity-roll picker, settings.
+
 - [ ] **Core HUD**: health, guard/posture, stagger, and the Smoke bar.
 - [ ] **The weapon skill tree screen**: renders the root pick and both branches' 3-tier shape,
       shows locked/available/learned state per node, drives the exclusivity rule visually (round
       26 diagram).
-- [ ] **Rank progress panel**: current rank, this rank's gate progress, next rank's reward.
+- [x] **Rank progress panel**: current rank, this rank's gate progress, next rank's reward.
 - [ ] **Faction panel**: rep total, seat standings (a private panel, not a public leaderboard,
       round 22 #89), the switch-faction flow.
-- [ ] **The rotating market / Tag shop screen**: one merged screen, common/uncommon in Yen, rare+
+- [x] **The rotating market / Tag shop screen**: one merged screen, common/uncommon in Yen, rare+
       greyed out until enough Tags (round 25 #107). Reference Game B's layout for what
       information to show, restyle entirely in Game C's own look (round 25 #106).
-- [ ] **Purchase ledger screen** (round 24 #102) — reference B's layout the same way.
+- [x] **Purchase ledger screen** (round 24 #102) — reference B's layout the same way.
 - [ ] **Mission/raid queue screen**: rank-gated entry, a queue-position or matchmaking state.
-- [ ] **Raid vote panel**: reference B's layout the same way (round 25 #106).
-- [ ] **The Devil path panel**: the four eligibility counters' progress, which one is still
+- [x] **Raid vote panel**: reference B's layout the same way (round 25 #106).
+- [x] **The Devil path panel**: the four eligibility counters' progress, which one is still
       missing (mirrors what the gatekeeper's dialogue says).
 - [ ] **Identity-roll picker**: shows the faction-flavored cosmetic roll result, a reroll button.
-- [ ] **Top-10 Elo leaderboard** (public) — separate from the faction seat panel (private).
+- [x] **Top-10 Elo leaderboard** (public) — separate from the faction seat panel (private).
 - [ ] **Settings panel**: Shadows/PostFX/AmbientFX/FpsCounter toggles, same shape as before the
       restart.
 
